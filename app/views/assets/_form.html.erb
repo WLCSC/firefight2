@@ -1,8 +1,17 @@
+<%
+	@options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
+	@models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
+%>
 <%= form_for @asset, :html => { :class => 'form-horizontal' } do |f| %>
+<%
+	if params[:room_id] 
+		@asset.room_id = params[:room_id]
+	end
+%>
   <div class="control-group">
     <%= f.label :room_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :room_id, :class => 'number_field' %>
+	    <%= f.text_field :room_name, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s, :value => (@asset.room ? "#{@asset.room.building.name} - #{@asset.room.name}" : "" ) %>
     </div>
   </div>
   <div class="control-group">
@@ -20,7 +29,7 @@
   <div class="control-group">
     <%= f.label :model_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :model_id, :class => 'number_field' %>
+	    <%= f.text_field :model_id, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "" %>
     </div>
   </div>
   <div class="control-group">
@@ -32,7 +41,7 @@
   <div class="control-group">
     <%= f.label :purchase, :class => 'control-label' %>
     <div class="controls">
-      <%= f.date_select :purchase, :class => 'date_select' %>
+	    <%= f.text_field :purchase_date, :value => (@asset.purchase ? @asset.purchase.strftime("%m/%d/%Y") : "" ) %>
     </div>
   </div>
   <div class="control-group">
@@ -44,7 +53,7 @@
   <div class="control-group">
     <%= f.label :vendor_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :vendor_id, :class => 'number_field' %>
+	    <%= f.select :vendor_id, Vendor.all.map{|v| [v.name, v.id]} %>
     </div>
   </div>
   <div class="control-group">
@@ -71,4 +80,10 @@
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 assets_path, :class => 'btn' %>
   </div>
+<% end %>
+
+<%= javascript_tag do %>
+	$(document).ready(function() {
+	$('#asset_purchase_date').datepicker();
+	});
 <% end %>
