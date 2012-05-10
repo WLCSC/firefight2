@@ -92,4 +92,15 @@ class AssetsController < ApplicationController
 		redirect_to params[:return]
 	end
   end
+
+  def move
+	r = params[:room_name].split(' - ')
+	@room = Room.where(:name => r[1]).where(:building_id => Building.where(:name => r[0]).first.id).first
+	params[:tags].each_line do |t|
+		a = Asset.where(:tag => t).first
+		a.room = @room
+		a.save
+	end
+	redirect_to @room, :notice => 'Moved assets.'
+  end
 end
