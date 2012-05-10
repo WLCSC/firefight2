@@ -1,0 +1,47 @@
+<h1>Tickets</h1>
+<% content_for :filter do %>
+	<%= form_tag '/tickets', :method => :get do %>
+		<%= select_tag :status, options_for_select({"All Tickets" => 'a', "Incomplete Tickets" => 'i', "Complete Tickets" => 'c'}) %>
+		<%= select_tag :queue_id, options_for_select([''] + Ticketqueue.all.map{|q| [q.name, q.id]})%>
+		<%= submit_tag "Go!", :class => "btn btn-large btn-success" %>
+	<% end %>
+<% end %>
+
+<%= content_for :list do %>
+	<table class="table table-striped datatableable">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Room</th>
+				<th>Building</th>
+				<th>Queue</th>
+				<th>Submitter</th>
+				<th>Due</th>
+				<th>Created</th>
+				<th>Comment</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @tickets.each do |ticket| %>
+				<tr>
+					<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
+					<td><%= link_to ticket.room.name, ticket.room %></td>
+					<td><%= link_to ticket.room.building.name, ticket.room.building %></td>
+					<td><%= link_to ticket.ticketqueue.name, ticket.ticketqueue %></td>
+					<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
+					<td><%= ticket.due ? ticket.due : "-" %></td>
+					<td><%= ticket.created_at %></td>
+					<td><%= ticket.comments.first.content %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+<% if current_user.admin? && params[:commit] == "Go!" %>
+	<% content_for :params do %>
+       <pre><%= params.inspect %></pre>
+	<% end %>
+<% end %>
+
+<%= tabify(list: "Tickets", filter: "Filter", params: "Filter Parameters") %>

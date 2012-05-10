@@ -1,0 +1,74 @@
+<%
+	parents = (Building.all + Ticketqueue.all - @ticketqueue.ticketqueues).map{|x| x.name}
+%>
+
+<h1><%= @ticketqueue.name %></h1>
+
+<% if @ticketqueue.parent %>
+	<p>Belongs to <%= link_to @ticketqueue.parent.name, @ticketqueue.parent %></p>
+<% end %>
+<p>
+<i><%= @ticketqueue.notes %></i>
+</p>
+
+<% content_for :tickets do %>
+	<% @tickets = @ticketqueue.tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% content_for :open do %>
+	<% @tickets = @tickets.incomplete %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% if current_user.admin? %>
+	<% content_for :permissions do %>
+		<table class="table table-striped">
+			<tr>
+				<th>You?</th>
+				<th>Principal</th>
+				<th>Priority</th>
+				<th>Access?</th>
+				<th>Actions</th>
+			</tr>
+
+			<% @ticketqueue.permissions.order('priority').each do |p| %>
+				<tr>
+					<td><%= p.authorizes?(current_user) ? '<i class="icon-ok"></i>'.html_safe : '<i class="icon-remove"></i>'.html_safe %></td>
+					<td><%= p.principal ? p.principal.nice_name : 'nil' %></td>
+					<td><%= p.priority %></td>
+					<td><%= p.see ? "R" : 'x' %><%= p.submit ? "W" : 'x' %><%= p.admin ? "A" : 'x' %></td>
+					<td><%= link_to "Remove", permission_path(p), :method => 'delete', :class => 'btn btn-mini btn-danger' %></td>
+				</tr>
+			<% end %>
+
+		</table>
+		<%= render :partial => 'permissions/form' %>
+	<% end %>
+
+	<% content_for :children do %>
+		<h3>My Parent</h3>
+		<% if @ticketqueue.parent %>
+			<p>I belong to <%= link_to @ticketqueue.parent.name, @ticketqueue.parent %></p>
+		<% end %>
+		<%= form_for @ticketqueue do |f| %>
+			<p>Change parent to <%= f.text_field :parent_name, :'data-provide' => 'typeahead', :'data-items' => parents.length, :'data-source' => parents.to_s %><%= f.submit "OK", :class => 'btn btn-primary' %></p>
+		<% end %>
+		<h3>This Queue's Children:</h3>
+		<ul>
+			<% @ticketqueue.ticketqueues.each do |q| %>
+				<li><%= link_to q.name, q %></li>
+			<% end %>
+		</ul>
+	<% end %>
+<% end %>
+
+<%= tabify open: 'Open Tickets', tickets: 'All Tickets', permissions: 'Queue Permissions', children: "Subqueues & Superqueues" %>
+
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li>
+		<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %>
+	<% end %>
+<% end %>

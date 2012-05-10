@@ -1,0 +1,25 @@
+<h1>Manufacturers</h1>
+<table class="table table-striped datatableable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Notes</th>
+      <th>Assets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @manufacturers.each do |manufacturer| %>
+      <tr>
+        <td><%= link_to manufacturer.name, manufacturer %></td>
+        <td><%= manufacturer.notes %></td>
+	<td><%= manufacturer.assets.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to 'New Manufacturer', new_manufacturer_path %></li>
+	<% end %>
+<% end %>

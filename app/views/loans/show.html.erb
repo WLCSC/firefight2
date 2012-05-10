@@ -1,0 +1,70 @@
+<table class="table">
+	<tr>
+		<td>
+			<h2>Loan Information</h2>
+			<p>
+			<b>Start date:</b>
+			<%= @loan.start_date %>
+			</p>
+
+			<p>
+			<b>End date:</b>
+			<%= @loan.end_date %>
+			</p>
+
+			<p><b>Status:</b><%= @loan.statusify %>
+			</p>
+
+			<p>
+			<b>Use:</b>
+			<%= @loan.use %>
+			</p>
+
+			<p>
+			<b>Approved:</b>
+			<%= @loan.approved ? "Yes" : "No" %>
+			</p>
+
+			<p>
+			<b>User:</b>
+			<%= link_to @loan.user.name, @loan.user %>
+			</p>
+			</td><td>
+			<h2>Equipment</h2>
+			<% if @loan.approved  %>
+				<% if current_user.admin? %>
+					<%= form_tag return_loan_path(@loan) do %>
+						<% @loan.returns.each do |r| %>
+							<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><% if @loan.active %><% if r.returned  %><b>Returned</b> <% else %><label>Return <%= check_box_tag 'rx[]', r.id %></label><% end %><% end %></p>
+						<% end %>
+						<% if @loan.active %><%= submit_tag "Submit Returns" %>
+						<% end %><% end %>
+				<% else %>
+					<% @loan.returns.each do |r| %>
+						<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><%= !r.returned ? "Out" : "Returned" %></p>
+					<% end %>
+				<% end %>
+			<% else %>
+				<% if current_user.admin? %>
+					<%= form_tag approve_loan_path(@loan) do %>
+						<% @loan.rtypes.each do |rtype| %>
+							<p><%= rtype.name %> <%= select :asset,  rtype.name, rtype.assets.map{|a| ["#{a.tag} - #{a.room.building.name} - #{a.room.name}", a.id]} %></p>
+						<% end %>
+						<%= submit_tag "Approve" %>
+					<% end %>
+				<% else %>
+					<% @loan.rtypes.each do |rtype| %>
+						<p><%= rtype.name %></p>
+					<% end %>
+				<% end %>
+			<% end %>
+		</td>
+	</tr>
+</table>
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to 'Edit Loan', edit_loan_path(@loan) %> </li>
+	<% end %>
+<% end %>
+
+

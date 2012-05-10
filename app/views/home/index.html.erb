@@ -1,0 +1,28 @@
+<h2>Submit Ticket for <%= @building.name %></h2>
+<% if current_user.building %>
+	<% content_for :your_building do %>
+		<%= render :partial => 'buildings/roomtable' %>
+	<% end %>
+<% else %>
+	<% content_for :set_building do %>
+	<%= form_for current_user do |f| %>
+		<p>You do not currently have a default building set.  Please choose one now.</p>
+		<%= f.select :building_id, Building.all.map{|b| [b.name, b.id]} %>
+		<%= f.submit "Set default building", :class => 'btn btn-primary' %>
+	<% end %>
+<% end %>
+<% end %>
+
+<% content_for :your_tickets do %>
+	<%= render :partial => 'users/tickettable' %>
+<% end %>
+
+<% if current_user.admin? %>
+	<%= content_for :open_tickets do %>
+		<%= render :partial => 'tickets/unassignedtable' %>
+	<% end %>
+<% end %>
+
+<%= tabify open_tickets: "Unassigned Tickets", set_building: "Pick your default building", your_building: "Submit a ticket for #{@building.name}", your_tickets: "Your tickets" %>
+
+

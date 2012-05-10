@@ -1,10 +1,50 @@
 Firefight2::Application.routes.draw do
+  resources :shortcuts do
+	collection do
+		get 'quick'
+		post 'sort'
+	end
+  end
+
+  resources :ticketqueues
+  resources :comments
+  get "home/index"
+
+  get "home/tools"
+
   post "sessions/create"
+
+  get 'tickets/tagchange'
+
+  post 'tags/destroy'
 
   resources :permissions
 
   resources :groups
 
+  resources :manufacturers do
+	resources :models
+  end
+  resources :buildings
+  resources :loans do
+	member do
+		post 'approve'
+		post 'return'
+	end
+  end
+  resources :maps
+  resources :tickets
+  resources :rooms
+  resources :users
+  resources :rtypes
+  resources :models
+  resources :assets do
+	collection do
+		post 'quick'
+	end
+  end
+  resources :vendors
+  resources :tags
   get "principals/index"
 
   get "principals/edit"
@@ -12,14 +52,6 @@ Firefight2::Application.routes.draw do
   get "principals/update"
 
   get "principals/destroy"
-
-  get "users/index"
-
-  get "users/edit"
-
-  get "users/update"
-
-  get "users/destroy"
 
   get "sessions/new"
 
@@ -76,7 +108,7 @@ Firefight2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'home#index'
 
   # See how all your routes lay out with "rake routes"
 

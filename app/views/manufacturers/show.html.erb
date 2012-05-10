@@ -1,0 +1,33 @@
+<h1><%= @manufacturer.name %></h1>
+
+<% content_for :assets do %>
+	<% @assets = @manufacturer.assets %>
+	<%= render :partial => 'assets/assettable' %>
+<% end %>
+
+<% content_for :tickets do %>
+	<% @tickets = @manufacturer.tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% content_for :models do %>
+	<% @models = @manufacturer.models %>
+	<%= render :partial => 'models/modeltable' %>
+<% end %>
+
+
+<p>
+<i><%= @manufacturer.notes %></i>
+</p>
+<p>	
+	<%= badge_row @tickets %>
+</p>
+
+<%= tabify assets: "Assets", tickets: "Open Tickets", models: "Models" %>
+
+<% if current_user.admin? %>
+      <% content_for :sidebar do %>
+	      <li><%= link_to "Edit Manufacturer", edit_manufacturer_path(@manufacturer) %></li>
+	      <li><%= link_to "Add New Model", new_manufacturer_model_path(@manufacturer) %></li>
+      <% end %>
+<% end %>

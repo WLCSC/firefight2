@@ -1,4 +1,5 @@
 class PermissionsController < ApplicationController
+	before_filter :check_for_admin
   # GET /permissions
   # GET /permissions.json
   def index
@@ -44,8 +45,8 @@ class PermissionsController < ApplicationController
 
     respond_to do |format|
       if @permission.save
-        format.html { redirect_to @permission, notice: 'Permission was successfully created.' }
-        format.json { render json: @permission, status: :created, location: @permission }
+        format.html { redirect_to @permission.securable, notice: 'Permission was successfully created.' }
+        format.json { render json: @permission.securable, status: :created, location: @permission }
       else
         format.html { render action: "new" }
         format.json { render json: @permission.errors, status: :unprocessable_entity }

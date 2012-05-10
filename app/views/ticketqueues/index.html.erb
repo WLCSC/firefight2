@@ -1,0 +1,27 @@
+<h1>Ticket Queues</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Notes</th>
+      <th>Parent</th>
+      <th>Tickets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ticketqueues.each do |ticketqueue| %>
+      <tr>
+        <td><%= link_to ticketqueue.name, ticketqueue %></td>
+        <td><%= ticketqueue.notes %></td>
+        <td><%= ticketqueue.parent ? link_to(ticketqueue.parent.name, ticketqueue.parent) : "No Parent" %></td>
+	<td><%= badge_row ticketqueue.tickets %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "New Queue", new_ticketqueue_path %></li>
+	<% end %>
+<% end %>

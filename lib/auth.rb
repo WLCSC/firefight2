@@ -17,13 +17,13 @@ def ldap_login user,pass
 	end
 end
 
-def ldap_populate user, pass
+def ldap_populate user, pass, obj=nil
 	if l = SimpleLdapAuthenticator.valid?(user,pass)[0]
-		u = User.new
+		u = obj || User.new
 		u.username = user
 		u.name = l['givenname'][0].to_s + " " + l['sn'][0].to_s
 		u.administrator = true if(l[:memberof].include? APP_CONFIG[:ldap_domain_administrator_ou])
-		
+
 		Group.all.each do |group|
 			group.users << u if(l[group.auth_attribute.to_sym].include? group.auth_value)
 		end
@@ -45,7 +45,7 @@ end
 def ldap_regroup user, pass
 	if l = SimpleLdapAuthenticator.valid?(user,pass)[0]
 		u = User.new
-		
+
 		Group.all.each do |group|
 			group.users << u if(l[group.auth_attribute.to_sym].include? group.auth_value)
 		end

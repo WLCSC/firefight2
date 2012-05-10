@@ -1,0 +1,27 @@
+<h1><%= @vendor.name %></h1>
+
+<% content_for :tickets do %>
+<% @tickets = @vendor.tickets %>
+<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% content_for :assets do %>
+<% @assets = @vendor.assets %>
+<%= render :partial => 'assets/assettable' %>
+<% end %>
+
+<p>
+	<%= badge_row @vendor.tickets %>
+</p>
+<p>
+<i><%= @vendor.notes %></i>
+</p>
+
+<%= tabify assets: "Assets", tickets: "Open Tickets" %>
+
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to 'Edit Vendor', edit_vendor_path(@vendor) %>
+      <% end %>
+      <% end %>

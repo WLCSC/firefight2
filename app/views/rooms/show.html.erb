@@ -1,0 +1,29 @@
+<%- model_class = @room.class -%>
+
+<% content_for :assets do %>
+	<%= render :partial => 'assettable'%>
+<% end %>
+
+<% content_for :open_tickets do %>
+	<%= render :partial => 'tickettable'%>
+<% end %>
+
+<h1><%= @room.building.name %> - <%= @room.name %></h1>
+
+<p>
+  <strong><%= model_class.human_attribute_name(:notes) %>:</strong><br>
+  <%= @room.notes %>
+</p>
+
+<% if current_user.admin? %>
+	<%= tabify(open_tickets: "Open Tickets", assets: "Assets") %>
+<% else %>
+	<%= tabify(assets: "Assets", open_tickets: "Open Tickets") %>
+<% end %>
+
+<% if current_user.admin? %>
+<% content_for :sidebar do %>
+	<li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
+	<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %>
+<% end %>
+<% end %>

@@ -1,0 +1,48 @@
+<h1>Asset #<%= @asset.tag %></h1>
+<% content_for :info do %>
+
+<table class="table-condensed" width="100%" >
+	<tr>
+		<td><%= @asset.building ? link_to(@asset.building.name, @asset.building) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
+		<td><%= @asset.room ? link_to(@asset.room.name, @asset.room) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
+		<td><%= @asset.model ? link_to(@asset.model.name, @asset.model) : "UNDEFINED" %></td>
+		<td><%= @asset.manufacturer ? link_to(@asset.manufacturer.name, @asset.manufacturer) : "UNKNOWN" %></td>
+	</tr>
+	<tr>
+		<td><%= @asset.rtype ? @asset.rtype.name : "UNDEFINED" %></td>
+		<td><%= @asset.name ? @asset.name : "No Name" %></td>
+		<td><%= @asset.os %></td>
+		<td><%= @asset.serial %></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><%= link_to @asset.vendor.name, @asset.vendor %></td>
+		<td><%= @asset.purchase %></td>
+		<td>$<%= @asset.cost %></td>
+	</tr>
+</table>
+<% end %>
+<% @room = @asset %>
+<% content_for :open_tickets do %>
+	<%= render :partial => 'rooms/tickettable' %>
+<% end %>
+
+<% content_for :closed_tickets do %>
+	<%= render :partial => 'rooms/completetickets' %>
+<% end %>
+
+<% content_for :new_ticket do %>
+	<% if @asset.super %>
+		<p>This is a super asset, and tickets can't be directly submitted for it.</p>
+	<% else %>
+		<%= render :partial => 'tickets/form' %>
+	<% end %>
+<% end %>
+
+<%= tabify new_ticket: 'New Ticket', info: 'Asset Information', open_tickets: 'Open Tickets', closed_tickets: 'Closed Tickets' %>
+
+
+<% content_for :sidebar do %>
+	<li><%= link_to "Move Asset", :action => 'move', :id => @asset.id %></li>
+	<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>
+<% end %>

@@ -1,0 +1,29 @@
+<h1>Models</h1>
+<table class="table table-striped datatableable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Manufacturer</th>
+      <th>Notes</th>
+      <th>Asset Type</th>
+      <th>Assets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @models.each do |model| %>
+      <tr>
+        <td><%= link_to model.name, model %></td>
+        <td><%= link_to model.manufacturer.name, model.manufacturer %></td>
+        <td><%= model.notes %></td>
+        <td><%= link_to model.rtype.name, model.rtype %></td>
+	<td><%= model.assets.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "New Model", new_model_path %></li>
+	<% end %>
+<% end %>	

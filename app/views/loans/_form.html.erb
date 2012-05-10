@@ -1,0 +1,86 @@
+<%= form_for(@loan) do |f| %>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+	<% if @loan.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@loan.errors.count, "error") %> prohibited this loan from being saved:</h2>
+
+			<ul>
+				<% @loan.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+	<h2>Loan Information</h2>
+	<table width="100%">
+		<tr>
+			<td>
+				<div class="field">
+					<%= f.label :start_date %><br />
+					<%= f.text_field :start %>
+				</div>
+				<div class="field">
+					<%= f.label :end_date %><br />
+					<%= f.text_field :end %>
+				</div>
+			</td>
+			<td>
+				<div class="field">
+					<%= f.label :use %><br />
+					<%= f.text_area :use, :placeholder => "What do you need this stuff for?", :size => "60x3" %>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<% if @loan.id %>
+		<% if @loan.approved %>
+			<p>This loan has been approved.</p>
+		<% else %>
+			<% if current_user.admin? %>
+			<% else %>
+				<p>This loan hasn't been approved by the Technology Department yet.</p>
+			<% end %>
+		<% end %>
+	<% else %>
+
+	<% end %>
+
+	<% if !@loan.approved %>
+		<h2>Select Equipment</h2>
+		<% i = 0 %>
+		<table class="table table-striped table-consensed table-bordered" style="width: 100%;">
+			<% Rtype.all.sort{|a,b| a.name <=> b.name}.each do |rtype| %>
+				<% if i == 0 %>
+					<tr>
+					<% end %>
+					<td style="width: 25%" ><%= check_box_tag "loan[rtype_ids][]", rtype.id, @loan.rtypes.include?(rtype) %>
+						<%= f.label rtype.name %></td>
+					<% if i == 5 %>
+					</tr>
+				<% end %>
+				<% i += 1 unless i == 5
+				i = 0 if i == 5 %>
+			<% end %>
+		</table>
+	<% else %>
+		<h2>Requested Equipment</h2>
+		<table>
+			<% @loan.returns.each do |r| %>
+				<td><%= r.asset.tag %></td>
+				<td><%= r.asset.model.name %></td>
+				<td><%= r.asset.model.rtype %></td>
+			<% end %>
+		</table>
+	<% end %>
+</td></tr></table>
+<div class="actions" style="margin: auto; text-align:center; width: 70px;">
+	<%= f.submit "Submit" %>
+</div>
+<% end %>
+<%= javascript_tag do %>
+	$(document).ready(function() {
+	$('#loan_start').datepicker();
+	$('#loan_end').datepicker();
+	});
+<% end %>

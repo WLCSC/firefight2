@@ -1,0 +1,25 @@
+<h1><%= @model.manufacturer.name %> - <%= @model.name %> - <%= @model.rtype.name %></h1>
+
+<% content_for :assets do %>
+	<% @assets = @model.assets %>
+	<%= render :partial => 'assets/assettable' %>
+<% end %>	
+<% content_for :tickets do %>
+	<% @tickets = @model.tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>	
+
+<p>
+<i><%= @model.notes %></i>
+</p>
+<p>
+<%= badge_row @tickets %>
+</p>
+
+<%= tabify assets: "Assets", tickets: "Open Tickets" %>
+
+<% content_for :sidebar do %>
+	<li><%= link_to "Edit Model", edit_model_path(@model) %></li>
+<% end %>
+
+

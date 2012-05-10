@@ -1,0 +1,20 @@
+<table class="table datatableable">
+	<thead>
+		<tr>
+			<td>Room Name</td>
+			<td>Notes</td>
+			<td>Open Tickets</td>
+		</tr>
+	</thead>
+	<tbody>
+		<% @building.rooms.sort_by{|r| r.name}.each do |room| %>
+			<tr>
+				<td><%= link_to room.name, room %></td>
+				<td><%= room.notes ? room.notes : "" %></td>
+				<td><%= room.tickets.incomplete.count %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+

@@ -1,0 +1,98 @@
+<h1>Ticket #<%= @ticket.id %></h1>
+<% @ticketqueue = @ticket.ticketqueue %>
+<% @all_users = User.all.map{|u| u.name} %>
+<% if @ticket.late? %>
+	<p style="text-align: center; font-size: x-large; font-style: italic; color: red;">This ticket is late!!</p>
+<% end %>
+
+
+<table class="table"><tr>
+		<td>
+			<p>Asset <%= link_to @ticket.asset.tag, @ticket.asset %>
+			in room <%= link_to @ticket.room.name, @ticket.room %> at
+			<%= link_to @ticket.room.building.name, @ticket.room.building %>.</p>
+			<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
+			<p>Opened on <%= @ticket.created_at.strftime("%m/%d/%y %I:%M") %> </p>
+			<p>Submitted by <%= @ticket.submitter.name %></p>
+			<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y %I:%M") %> </p><% end %>
+			<p class="<%= @ticket.statusify.downcase %>">Status: <%= @ticket.statusify %></p>
+			<p>Tagged users: <%= @ticket.users.map{|u| link_to(u.name,u)}.join(', ').html_safe %></p>
+			<% if can(:admin) || current_user.admin? %>
+				<%= form_for Tag.new do |f| %>
+					<p>
+					<%= f.hidden_field :ticket_id, :value => @ticket.id %>
+					<%= f.text_field :user_name, :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag someone else" %>
+					<%= f.submit "OK" %>
+					</p>
+				<% end %>
+			<% end %>
+		</td>
+		<td>
+			<%= @ticket.attachment.exists? ? link_to(image_tag(@ticket.attachment.url(:preview)), 'screenshot?id='+@ticket.id.to_s) : ""  %>
+			<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
+			<%= form_for @ticket, :html => {:multipart => true} do |f| %>
+				<p>Add/Overwrite Screenshot<br />
+				<b><i>.PNG or .JPG files only!</i></b><br/>
+				<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %><br/>
+				<%= f.file_field :attachment, :accept=>"image/gif,image/png,image/jpeg"%><br/>
+				<%= f.submit (@ticket.attachment.exists? ? "Update" : "Add"), :class => 'btn' %>
+				</p>
+			<% end %>
+			<% end %>
+</td></tr></table>
+<table class="table table-bordered table-striped">
+	<% @ticket.comments.each do |comment| %>	
+		<tr>
+			<td><%= link_to comment.user.name, comment.user %></td>
+			<td><% if comment.user == current_user || current_user.admin? %><%= link_to "Edit", edit_comment_path(comment) %><% end %></td>
+			<td><%= comment.created_at.strftime("%m/%d/%y %I:%M %p") %></td>
+		</tr>
+		<tr>
+			<td colspan=3><%= comment.content.lines.map{|l| "<p>#{l}</p>"}.join("\n").html_safe%></td>
+		</tr>
+	<% end %>
+	<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
+		<%= form_for Comment.new do |f| %>
+			<tr>
+				<td><%= link_to current_user.name, current_user %></td>
+				<td>&nbsp;</td>
+				<td><%= Time.now.strftime("%m/%d/%y %I:%M %p") %></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<%= f.text_area :content, :size => '80x4', :style => 'width: auto;', :placeholder => 'Add a comment' %>
+					<%= f.hidden_field :user_id, :value => current_user.id %>
+					<%= f.hidden_field :ticket_id, :value => @ticket.id %>
+					<br/>
+					<%= f.submit :value => 'Add Comment', :class => 'btn btn-primary btn-large' %>
+					<%= f.submit :value => "Add Comment & Mark As Complete", :class => 'btn btn-success btn-large' %> 
+				<% end %>
+			<% end %>
+		</table>
+
+
+
+		<% content_for :sidebar do %>
+			<% if can(:submit) || current_user.admin? || @ticket.users.include?(current_user) %>
+				<li>
+				<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), 'tagchange?user='+current_user.id.to_s+'&id='+@ticket.id.to_s %>
+				</li>
+			<% end %>
+			<% if current_user.admin? %>
+				<li><%= link_to "Edit Ticket", edit_ticket_path(@ticket) %></li>
+			<% end %>
+			<% if can(:admin) || (can(:submit) && @ticket.users.include?(current_user)) || current_user.admin? %>
+				<%= form_for @ticket, :class => "form-inline" do |f|  %>
+					<li>
+					Update Status
+					<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3, 'Deferred' => 99, 'Complete' => 100}), :class => 'input-mini' %>
+					<%= f.submit "OK", :class => 'btn btn-mini btn-primary'%>
+					</li>
+				<% end %>
+			<% end %>
+			<% if current_user.admin?  %>
+				<%= form_for @ticket do |f| %>
+					<li>Move ticket to <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]} %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
+				<% end %>
+			<% end %>
+		<% end %>

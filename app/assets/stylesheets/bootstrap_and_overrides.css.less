@@ -1,0 +1,131 @@
+@import "twitter/bootstrap/bootstrap";
+body { padding-top: 60px; padding-bottom: 60px; }
+
+@import "twitter/bootstrap/responsive";
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
+@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
+@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
+@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
+@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
+
+// Font Awesome
+@import "fontawesome";
+
+// Your custom LESS stylesheets goes here
+//
+// Since bootstrap was imported above you have access to its mixins which
+// you may use and inherit here
+//
+// If you'd like to override bootstrap's own variables, you can do so here as well
+// See http://twitter.github.com/bootstrap/less.html for their names and documentation
+//
+// Example:
+// @linkColor: #ff0000;
+
+body {
+	background-color: #A60400;
+}
+
+.content {
+	background-color: #dddddd;
+	padding: 10px;
+	border-radius: 15px;
+	box-shadow: 0px 0px 7px #222;
+}
+
+.well {
+	background-color: #eeaaaa;
+}
+
+.well .nav a {
+	color: #880000;
+}
+
+textarea {
+	width: auto;
+}
+
+.dataTables_filter input {
+	display: inline !important;
+}
+
+tr.odd td {
+	background-color: #eeaaaa !important;
+}
+
+div.dataTables_length label {
+    width: 460px;
+    float: left;
+    text-align: left;
+}
+ 
+div.dataTables_length select {
+    width: 75px;
+}
+ 
+div.dataTables_filter label {
+    float: right;
+    width: 460px;
+}
+ 
+div.dataTables_info {
+    padding-top: 8px;
+}
+ 
+div.dataTables_paginate {
+    float: right;
+    margin: 0;
+}
+ 
+table {
+    margin: 1em 0;
+    clear: both;
+}
+
+.badge a {
+	color: #dddddd;
+}
+
+ul.nav li {
+	text-align: center;
+	
+}	
+
+.nav-tabs > .active > a {
+	background-color: #fcc;
+	color: #880000;
+}
+
+.nav-tabs > li > a:hover {
+	background-color: #fcc;
+	border-color: #888 #888 transparent;
+	color: #880000;
+}
+
+.nav-tabs > .active > a:hover {
+	background-color: #fee;
+	color: #880000;
+}
+
+.nav-tabs > li > a {
+	background-color: #eaa;
+	color: #880000;
+}
+
+.nav-tabs {
+	margin-bottom: 0px;
+}
+
+.table {
+	width: 85%;
+}
+
+ul.nav li a {
+	padding-bottom: 0px !important;
+}

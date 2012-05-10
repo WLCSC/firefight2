@@ -1,0 +1,52 @@
+<% @queues = current_user.queues.map{|b| b.name} %>
+<%= javascript_tag do %>
+	var buildings = '<%= Building.all.map{|b| b.name}.join(',') %>'.split(',');
+	var bc = <%= Building.all.count %>;
+	var rooms = '<%= Room.all.map {|r| r.building.name + '/' + r.name}.join(',') %>'.split(',');
+	var rc = <%= Room.all.count %>;
+	var queues = '<%= @queues.join(',') %>'.split(',');
+	var qc = <%= Ticketqueue.all.count %>;
+	var users = '<%= User.all.map{|u| u.name}.join(',') %>'.split(',');
+	var uc = <%= User.all.count %>;
+<% end %>
+
+<%= form_for @shortcut, :html => { :class => 'form-horizontal' } do |f| %>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+	<div class="control-group">
+		<%= f.label :container_type, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.select :container_type, {'Queue' => 'Ticketqueue', 'Room' => 'Room', 'Building' => 'Building', 'User' => 'User'} %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :container_id, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :container_name, :size => 10, :placeholder => "Container name" %>
+		</div>
+	</div>
+
+	<div class="form-actions">
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")), shortcuts_path, :class => 'btn' %>
+	</div>
+<% end %>
+
+<%= javascript_tag do %>
+jQuery(document).ready(function() {
+        $('#shortcut_container_name').typeahead({source:queues});
+    });
+
+
+$('#shortcut_container_type').change(function() {
+	var t = $('#shortcut_container_type').val();
+	if(t == "Ticketqueue"){
+	$('#shortcut_container_name').data('typeahead').source = queues;
+	}else if(t == "Room"){
+	$('#shortcut_container_name').data('typeahead').source = rooms;
+	}else if(t == "Building"){
+	$('#shortcut_container_name').data('typeahead').source = buildings;
+	}else if(t == "User"){
+	$('#shortcut_container_name').data('typeahead').source = users;
+	}		
+});
+<% end %>

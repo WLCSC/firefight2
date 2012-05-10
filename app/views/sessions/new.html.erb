@@ -1,7 +1,8 @@
     <h1>Log in</h1>  
       
     <%= form_tag '/sessions/create' do %>  
-      <p>  
+	    <p> 
+	    <%= hidden_field_tag :return, params[:return] %> 
         <%= label_tag :username %><br />  
         <%= text_field_tag :username, params[:username] %>  
       </p>  
@@ -9,7 +10,7 @@
         <%= label_tag :password %><br />  
         <%= password_field_tag :password %>  
       </p>  
-      <p class="button"><%= submit_tag %></p>  
+      <p class="button"><%= submit_tag "Log In" %></p>  
     <% end %>  
 	
 	

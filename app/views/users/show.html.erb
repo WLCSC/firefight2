@@ -1,0 +1,45 @@
+<h1><%= @user.name %></h1>
+
+<% content_for :open do %>
+	<% @tickets = @user.tickets.incomplete %>
+	<% render :partial => 'tickets/tickettable' %>
+<% end %>
+
+
+<% content_for :tagged do %>
+	<% @tickets = @user.tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% content_for :submitted do %>
+	<% @tickets = @user.submitted_tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>
+
+<% if current_user.admin? %>
+	<% content_for :permissions do %>
+		<ul>
+			<% @user.queues.each do |q| %>
+				<li><%= link_to q.name, q %><%= '*' unless q.secures current_user %></li>
+
+			<% end %>
+		</ul>
+	<% end %>
+
+	<% content_for :groups do %>
+		<ul>
+			<% @user.groups.uniq.each do |g| %>
+				<li><%= g.name %></li>
+			<% end %>
+		</ul>
+	<% end %>
+<%end%>
+
+<%= tabify open: 'Open Tickets', tagged: "Tagged Tickets", submitted: "Submitted Tickets", permissions: "User Permissions", groups: "Memberships" %>
+
+<% if current_user.admin? %>
+<% content_for :sidebar do %>
+	<li><%= link_to 'Edit User', edit_user_path(@user) %></li>
+	<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'User', :container_id => @user.id) %>
+<% end %>
+<% end %>

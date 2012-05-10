@@ -1,0 +1,28 @@
+<%- model_class = @building.class -%>
+
+<%= content_for :rooms do %>
+<%= render :partial => 'roomtable' %>
+<% end %>
+
+<%= content_for :tickets do %>
+	<% @room = @building %>
+	<%= render :partial => 'rooms/tickettable' %>
+<% end %>
+<h1><%= @building.name %></h1>
+
+<p>
+  <span class="address"><%= @building.address %></span>
+</p>
+
+<% if current_user.admin? %>
+	<%= tabify tickets: "Open Tickets", rooms: "Room List"  %>
+<% else %>
+	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
+<% end %>
+
+<% if current_user.admin? %>
+<% content_for :sidebar do %>
+	<li><%= link_to "Edit Building", edit_building_path(@building) %></li>
+	<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %>
+<% end %>
+<% end %>

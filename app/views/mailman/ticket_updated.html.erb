@@ -1,0 +1,30 @@
+<html>
+<body>
+<p><strong>Firefight Work Order Update</strong></p>
+<p>
+<% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2] : @ticket.comments.last) %>
+Recent comment: <pre>
+<%= c.user.name %> - <%= c.created_at %>
+<%= c.content%>
+</pre>
+</p>
+ <p style="font-size:20px">This is an automated response.  Please do not reply back to this e-mail.  All communication regarding this ticket should take place inside Firefight using one of the links below.  Thank you.</p>
+ <p>Hello <%= @user.name %>, </p>
+ 
+ <p>Your support ticket, #<a href="http://firefight/tickets/<%= @ticket.id %>"><%= @ticket.id %></a>, has been updated.</p>
+ <p><a href="http://firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
+ <hr/>
+ <pre>
+ Status: <%= @ticket.statusify %>
+<% if @ticket.due %>
+ Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
+<% end %> 
+
+ <% @ticket.comments.reverse.each do |comment| %>
+<%= comment.user.name %> - <%= comment.created_at %>
+<%= comment.content%>
+<hr/>
+<%end%>
+</pre>
+</body>
+</html>

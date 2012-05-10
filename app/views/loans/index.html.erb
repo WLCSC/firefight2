@@ -1,0 +1,30 @@
+<table class="table table-striped datatableable">
+	<thead>
+  <tr>
+    <th></th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Use</th>
+    <th>Approved</th>
+    <th>User</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+<% @loans.each do |loan| %>
+  <tr>
+    <td><%= link_to loan.badge.html_safe, loan %></td>
+    <td><%= loan.start_date %></td>
+    <td><%= loan.end_date %></td>
+    <td><%= loan.use %></td>
+    <td><%= loan.approved ? "Yes" : "No" %></td>
+    <td><%= link_to loan.user.name, loan.user %></td>
+    <td><%= loan.statusify %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<% content_for :sidebar do %>
+	<li><%= link_to "Sumbit new Loan Request", new_loan_path %></li>
+<% end %>

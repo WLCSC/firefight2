@@ -1,0 +1,22 @@
+<table class="table table-striped datatableable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Manufacturer</th>
+      <th>Asset Type</th>
+      <th>Assets</th>
+      <th>Tickets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @models.each do |model| %>
+      <tr>
+        <td><%= link_to model.name, model %></td>
+        <td><%= link_to model.manufacturer.name, model.manufacturer %></td>
+        <td><%= link_to model.rtype.name, model.rtype %></td>
+	<td><%= model.assets.count %></td>
+	<td><%= badge_row model.tickets %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

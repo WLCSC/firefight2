@@ -1,0 +1,30 @@
+<%- model_class = Building.new.class -%>
+<h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Building</th>
+      <th>Address</th>
+      <% if current_user.admin? %><th>Tickets</th><% end %>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @buildings.each do |building| %>
+      <tr>
+        <td><%= link_to building.name, building %></td>
+	<td><%= building.address %></td>
+	<% if current_user.admin? %><td> <%= badge_row building.tickets %></td><% end %>
+        <td>
+		<%= link_to 'Submit Ticket', building, :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to 'New Building', new_building_path %></li>
+	<% end %>
+<% end %>

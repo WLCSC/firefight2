@@ -1,0 +1,1 @@
+Principal: <%= select_tag :principal_id, options_for_select(@principals.map{|p| [p.authorizable.name,p.id]}) %>

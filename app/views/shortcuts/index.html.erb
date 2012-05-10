@@ -1,0 +1,42 @@
+<h1>My Shortcuts</h1>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Shortcut</th>
+			<th><%=t '.actions', :default => t("helpers.actions") %></th>
+		</tr>
+	</thead>
+	<tbody id="shortcuts">
+		<% @shortcuts.order(:position).each do |shortcut| %>
+			<tr id="shortcut-<%= shortcut.id %>">
+				<td width="2%"><i class="icon-move"></i></td>
+				<td><%= link_to shortcut.container.name, shortcut.container %></td>
+				<td>
+					<%= link_to "Remove",shortcut_path(shortcut),:method => :delete,:confirm => "Are you sure?", :class => 'btn btn-mini btn-danger' %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),new_shortcut_path,:class => 'btn btn-primary' %>
+
+<%= javascript_tag do %>
+$().ready(function() {
+      $('#shortcuts').tableDnD({
+        onDrop: function(table, row) {
+          $.ajax({
+             type: "POST",
+             url: "<%= url_for(:action => 'sort') %>",
+             processData: false,
+             data: $.tableDnD.serialize() + '&authenticity_token=' + encodeURIComponent('<%= form_authenticity_token if protect_against_forgery? %>'),
+             success: function(msg) {
+               alert("Sorted shortcuts!");
+             }
+           });
+        }
+      })
+    })
+
+<% end %>

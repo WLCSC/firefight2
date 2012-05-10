@@ -1,0 +1,2 @@
+module RtypesHelper
+end
