@@ -24,4 +24,36 @@
 	<% end %>
 <% end %>
 
-<%= tabify indexes: "Master Lists", move: "Mass Move Assets" %>
+<% content_for :generate do %>
+	<% @buildings = [["All", 0]] + Building.all.map{|b| [b.name, b.id]} %>
+	<% @departments = [["All", 0]] + Department.all.map{|d| [d.name, d.id]} %>
+	<%= form_tag mass_tickets_path do %>
+		<%= hidden_field_tag :submitter_id, current_user.id %>
+		<p>Pick a building: <%= select_tag :building_id,  options_for_select(@buildings) %></p>
+		<p>Pick a department: <%= select_tag :department_id,  options_for_select(@departments) %></p>
+		<p>
+		<%= label_tag :comment %><br />
+		<%= text_area_tag :comment,'', :size => '40x5' %>
+		</p>
+		<p>
+		<%= label_tag :queue %><br />
+		<%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
+		</p>
+		<p>
+		<%= label_tag :priority %><br />
+		<%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
+		</p>
+		<p><b><i>Optional</i></b> Event/Due Date</p>
+				<%= text_field_tag :due_at, '', :id => 'dueAt' %>
+				</p>
+				<%= submit_tag "Generate Tickets", :class => 'btn btn-large btn-warning' %>
+	<% end %>
+<% end %>
+
+<%= tabify indexes: "Master Lists", move: "Mass Move Assets", generate: "Mass Generate Tickets" %>
+
+<%= javascript_tag do %>
+	$(document).ready(function() {
+	$('#dueAt').datetimepicker();
+	});
+<% end %>

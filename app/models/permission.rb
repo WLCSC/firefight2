@@ -10,7 +10,7 @@ class Permission < ActiveRecord::Base
 			return true
 		end
 		if self.group_name
-			self.principal = Group.where(:name => self.user_name).first.principal
+			self.principal = Group.where(:name => self.group_name).first.principal
 			return true
 		end
 		nil

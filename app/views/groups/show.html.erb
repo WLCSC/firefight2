@@ -13,7 +13,15 @@
   <strong><%= model_class.human_attribute_name(:auth_value) %>:</strong><br>
   <%= @group.auth_value %>
 </p>
-
+<table class="table table-condensed table-bordered table-striped" %>
+	<% @group.users.in_groups_of(6) do |group| %>
+		<tr>
+			<% group.each do |user| %>
+				<td><%= link_to user.name, user if user %></td>
+			<% end %>
+		</tr>
+	<% end %>
+</table>
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               groups_path, :class => 'btn'  %>

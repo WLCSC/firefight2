@@ -1,4 +1,5 @@
 Firefight2::Application.routes.draw do
+	resources :departments
   resources :shortcuts do
 	collection do
 		get 'quick'
@@ -14,7 +15,7 @@ Firefight2::Application.routes.draw do
 
   post "sessions/create"
 
-  get 'tickets/tagchange'
+  
 
   post 'tags/destroy'
 
@@ -33,7 +34,15 @@ Firefight2::Application.routes.draw do
 	end
   end
   resources :maps
-  resources :tickets
+  resources :tickets do
+	member do
+		match 'tagchange'
+	end
+	collection do
+		post 'mass'
+	end
+  end
+
   resources :rooms
   resources :users
   resources :rtypes

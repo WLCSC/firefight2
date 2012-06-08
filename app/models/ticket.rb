@@ -64,12 +64,12 @@ class Ticket < ActiveRecord::Base
 	end
 
 	def fix_due
-		if self.due_at && self.due_at.is_a?(String)
+		if self.due_at != "" && self.due_at.is_a?(String)
 			self.due_at.match /(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/
 			self.due = DateTime.civil($3.to_i, $1.to_i, $2.to_i, $4.to_i, $5.to_i)
 
-		elsif self.due_at
-			raise self.due_at.inspect
+		elsif self.due_at != ""
+			
 		end
 
 	end

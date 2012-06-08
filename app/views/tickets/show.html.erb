@@ -18,11 +18,11 @@
 			<p class="<%= @ticket.statusify.downcase %>">Status: <%= @ticket.statusify %></p>
 			<p>Tagged users: <%= @ticket.users.map{|u| link_to(u.name,u)}.join(', ').html_safe %></p>
 			<% if can(:admin) || current_user.admin? %>
-				<%= form_for Tag.new do |f| %>
+				<%= form_tag "/tickets/#{@ticket.id}/tagchange" do %>
 					<p>
-					<%= f.hidden_field :ticket_id, :value => @ticket.id %>
-					<%= f.text_field :user_name, :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag someone else" %>
-					<%= f.submit "OK" %>
+					<%= hidden_field_tag :ticket_id, @ticket.id %>
+					<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else" %>
+					<%= submit_tag "OK" %>
 					</p>
 				<% end %>
 			<% end %>
@@ -54,9 +54,9 @@
 	<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
 		<%= form_for Comment.new do |f| %>
 			<tr>
-				<td><%= link_to current_user.name, current_user %></td>
+				<td>Add a comment:</td>
 				<td>&nbsp;</td>
-				<td><%= Time.now.strftime("%m/%d/%y %I:%M %p") %></td>
+				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3">
@@ -75,7 +75,7 @@
 		<% content_for :sidebar do %>
 			<% if can(:submit) || current_user.admin? || @ticket.users.include?(current_user) %>
 				<li>
-				<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), 'tagchange?user='+current_user.id.to_s+'&id='+@ticket.id.to_s %>
+				<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), "/tickets/#{@ticket.id}/tagchange" %>
 				</li>
 			<% end %>
 			<% if current_user.admin? %>
@@ -93,6 +93,7 @@
 			<% if current_user.admin?  %>
 				<%= form_for @ticket do |f| %>
 					<li>Move ticket to <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]} %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
+					<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", '/tickets/'+(@ticket.id+1).to_s %></li><% end %>
 				<% end %>
 			<% end %>
 		<% end %>

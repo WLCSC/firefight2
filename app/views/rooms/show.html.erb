@@ -10,6 +10,16 @@
 
 <h1><%= @room.building.name %> - <%= @room.name %></h1>
 
+<% if current_user.admin? %>
+<p>
+  <strong>Department:</strong><br>
+  <%= @room.department ? link_to(@room.department.name, @room.department) : "Undefined" %>
+</p>
+<p>
+  <strong>Default Asset:</strong><br>
+  <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %>
+</p>
+<% end %>
 <p>
   <strong><%= model_class.human_attribute_name(:notes) %>:</strong><br>
   <%= @room.notes %>

@@ -6,9 +6,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :building_id, :class => 'control-label' %>
+    <%= f.label :building, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :building_id, :class => 'number_field' %>
+	    <%= f.select :building_id, Building.all.map{|b| [b.name, b.id]} %>
     </div>
   </div>
   <div class="control-group">
@@ -18,11 +18,20 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :availability, :class => 'control-label' %>
+    <%= f.label :department, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_area :availability, :class => 'text_area' %>
+	    <%= f.select :department_id, Department.all.map{|d| [d.name, d.id]} %>
     </div>
   </div>
+
+  <% if @room.assets.count > 0 %>
+  <div class="control-group">
+	  <%= f.label :default_asset, :class => 'control-label' %>
+    <div class="controls">
+	    <%= f.select :default_asset_id, @room.assets.all.map{|a| [a.tag, a.id]} %>
+    </div>
+  </div>
+  <% end %>
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>

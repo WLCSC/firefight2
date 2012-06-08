@@ -96,11 +96,20 @@ class AssetsController < ApplicationController
   def move
 	r = params[:room_name].split(' - ')
 	@room = Room.where(:name => r[1]).where(:building_id => Building.where(:name => r[0]).first.id).first
+	bad = []
 	params[:tags].each_line do |t|
-		a = Asset.where(:tag => t).first
+		a = Asset.where(:tag => t.chomp).first
+		if a
 		a.room = @room
 		a.save
+		else
+			bad << t.chomp
+		end
 	end
+	if bad.length == 0
 	redirect_to @room, :notice => 'Moved assets.'
+	else
+		render '/home/tools', :notice => "#{bad.length} bad tags were submitted."
+	end
   end
 end

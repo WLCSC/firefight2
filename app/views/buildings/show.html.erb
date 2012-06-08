@@ -21,7 +21,8 @@
 <% end %>
 
 <% if current_user.admin? %>
-<% content_for :sidebar do %>
+	<% content_for :sidebar do %>
+	<li><%= link_to "New Room", new_room_path(:building_id => @building.id) %>
 	<li><%= link_to "Edit Building", edit_building_path(@building) %></li>
 	<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %>
 <% end %>
