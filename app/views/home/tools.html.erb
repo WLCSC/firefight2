@@ -50,7 +50,74 @@
 	<% end %>
 <% end %>
 
-<%= tabify indexes: "Master Lists", move: "Mass Move Assets", generate: "Mass Generate Tickets" %>
+<% content_for :mass_assets do %>
+<%
+	@options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
+	@models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
+%>
+<%= form_tag mass_assets_path, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= label_tag :room_id, nil, :class => 'control-label' %>
+    <div class="controls">
+	    <%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label :os, "OS", :class => 'control-label' %>
+    <div class="controls">
+      <%= text_field_tag :os, nil, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :model_id, nil, :class => 'control-label' %>
+    <div class="controls">
+	    <%= text_field_tag :model_id, nil, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :purchase, nil, :class => 'control-label' %>
+    <div class="controls">
+	    <%= text_field_tag :purchase_date, nil %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :cost, nil, :class => 'control-label' %>
+    <div class="controls">
+      <%= number_field_tag :cost, nil, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :vendor_id, nil, :class => 'control-label' %>
+    <div class="controls">
+	    <%= select_tag :vendor_id, options_for_select(Vendor.all.map{|v| [v.name, v.id]}) %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :notes, nil, :class => 'control-label' %>
+    <div class="controls">
+      <%= text_area_tag :notes, nil, :class => 'text_area' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= label_tag :pairs, "Tag, Serial (1 per line)", :class => 'control-label' %>
+    <div class="controls">
+      <%= text_area_tag :pairs, nil, :class => 'text_area' %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= submit_tag nil, :class => 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+	$(document).ready(function() {
+	$('#asset_purchase_date').datepicker();
+	});
+<% end %>
+	
+<% end %>
+
+<%= tabify indexes: "Master Lists", move: "Mass Move Assets", generate: "Mass Generate Tickets", mass_assets: "Mass Generate Assets" %>
 
 <%= javascript_tag do %>
 	$(document).ready(function() {

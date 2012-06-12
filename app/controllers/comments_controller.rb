@@ -9,7 +9,6 @@ class CommentsController < ApplicationController
 	def create
 		@comment = Comment.new(params[:comment])
 		if @comment.content != ""
-			
 			if params[:commit] == "Add Comment & Mark As Complete"
 				@comment.ticket.status = 100
 				@comment.ticket.save
@@ -22,6 +21,9 @@ class CommentsController < ApplicationController
 			if @comment.save
 				unless @comment.ticket.users.include? @comment.user
 					@comment.ticket.users << @comment.user
+				end
+				@comment.ticket.users.each do |u|
+					MailMan.ticket_updated(@comment.ticket, u).deliver
 				end
 				format.html { redirect_to @comment.ticket, notice: 'Comment was successfully created.' }
 				format.json { render json: @comment, status: :created, location: @comment }

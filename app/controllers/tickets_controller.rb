@@ -61,6 +61,10 @@ class TicketsController < ApplicationController
 
 		respond_to do |format|
 			if @ticket.save
+				MailMan.ticket_submitted(current_user, @ticket, @ticket.comments.first).deliver
+				User.where(:administrator => true).each do |u|
+					MailMan.tech_submitted(u, @ticket, @ticket.comments.first)
+				end
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 				format.json { render json: @ticket, status: :created, location: @ticket }
 			else
@@ -77,8 +81,19 @@ class TicketsController < ApplicationController
 
 		respond_to do |format|
 			if @ticket.update_attributes(params[:ticket])
+				@ticket.users << current_users unless @ticket.users.include? current_user
 				if params[:commit] = "OK"
 					c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} changed the status of this ticket to #{string_status(@ticket.status)}")
+				end
+
+				if @ticket.status == 100 && !@ticket.assigned?
+					User.where(:administrator => :true).each do |u|
+						MailMan.ticket_updated(@ticket,u)
+					end
+				end
+
+				@ticket.users.each do |u|
+					MailMan.ticket_updated(@ticket, u).deliver
 				end
 
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }

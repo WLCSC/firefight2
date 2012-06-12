@@ -45,6 +45,10 @@ class LoansController < ApplicationController
 		@loan = Loan.new(params[:loan])
 		respond_to do |format|
 			if @loan.save
+				MailMan.loan_submitted(current_user, @loan).deliver
+				User.where(:administrator => true).each do |u|
+					MailMan.tech_loan(u, @loan).deliver
+				end
 				format.html { redirect_to @loan, notice: 'Loan was successfully created.' }
 				format.json { render json: @loan, status: :created, location: @loan }
 			else

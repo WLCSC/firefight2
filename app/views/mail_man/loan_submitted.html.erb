@@ -1,0 +1,21 @@
+<html>
+<body>
+ <p>Hello <%= @user.name %>, </p>
+ 
+
+<p><%= @user == @loan.user ? "You" : @loan.user.name %> submitted a new tech equipment loan request.</p>
+
+<p>Requested equipment:
+<ul>
+<% @loan.rtypes.each do |r| %>
+<li><%= r.name %></li>
+<% end %>
+</ul></p>
+
+<p><b>Use:</b> <%= @loan.use %><p>
+
+<p>From <%= @loan.start_date.to_s %> to <%= @loan.end_date.to_s %></p>
+
+<p>This loan has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "http://firefight/" %>.</p>
+</body>
+</html>

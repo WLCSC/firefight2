@@ -51,6 +51,7 @@ Firefight2::Application.routes.draw do
 	collection do
 		post 'quick'
 		post 'move'
+		post 'mass'
 	end
   end
   resources :vendors
