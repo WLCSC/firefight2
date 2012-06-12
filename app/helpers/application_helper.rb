@@ -22,7 +22,7 @@ module ApplicationHelper
 		when 2
 			"-warning"
 		when 3
-			"-error"
+			"-important"
 		when 99
 			"-inverse"
 		when 100

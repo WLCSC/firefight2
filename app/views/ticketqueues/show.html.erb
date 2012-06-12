@@ -68,7 +68,8 @@
 
 <% if current_user.admin? %>
 	<% content_for :sidebar do %>
-		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li>
-		<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %>
-	<% end %>
+		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li><% end %>
+
+	<% if can(:read) %><li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %></li><% end %>
+	
 <% end %>
