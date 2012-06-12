@@ -2,15 +2,17 @@ class Permission < ActiveRecord::Base
 	belongs_to :principal
 	belongs_to :securable, :polymorphic => true
 	attr_accessor :user_name, :group_name
-	before_create :find_principal
+	after_create :find_principal
 
 	def find_principal
-		if self.user_name
+		if self.user_name != ""
 			self.principal = User.where(:name => self.user_name).first.principal
+			self.save
 			return true
 		end
-		if self.group_name
+		if self.group_name != ""
 			self.principal = Group.where(:name => self.group_name).first.principal
+			self.save
 			return true
 		end
 		nil

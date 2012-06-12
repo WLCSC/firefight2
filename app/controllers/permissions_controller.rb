@@ -42,7 +42,6 @@ class PermissionsController < ApplicationController
   # POST /permissions.json
   def create
     @permission = Permission.new(params[:permission])
-
     respond_to do |format|
       if @permission.save
         format.html { redirect_to @permission.securable, notice: 'Permission was successfully created.' }
@@ -74,10 +73,11 @@ class PermissionsController < ApplicationController
   # DELETE /permissions/1.json
   def destroy
     @permission = Permission.find(params[:id])
+    @queue = @permission.ticketqueue
     @permission.destroy
 
     respond_to do |format|
-      format.html { redirect_to permissions_url }
+      format.html { redirect_to @queue }
       format.json { head :no_content }
     end
   end

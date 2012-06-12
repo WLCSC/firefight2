@@ -20,10 +20,11 @@
 	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
 <% end %>
 
+<% content_for :sidebar do %>
 <% if current_user.admin? %>
-	<% content_for :sidebar do %>
+	
 	<li><%= link_to "New Room", new_room_path(:building_id => @building.id) %>
 	<li><%= link_to "Edit Building", edit_building_path(@building) %></li><% end %>
-	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %>
+	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %></li>
 
 <% end %>
