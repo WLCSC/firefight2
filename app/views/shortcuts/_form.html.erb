@@ -21,7 +21,7 @@
 	<div class="control-group">
 		<%= f.label :container_id, :class => 'control-label' %>
 		<div class="controls">
-			<%= f.text_field :container_name, :size => 10, :placeholder => "Container name" %>
+			<%= f.text_field :container_name, :size => 10, :placeholder => "Container name", :autocomplete => "off" %>
 		</div>
 	</div>
 
@@ -33,7 +33,17 @@
 
 <%= javascript_tag do %>
 jQuery(document).ready(function() {
-        $('#shortcut_container_name').typeahead({source:queues});
+$('#shortcut_container_name').typeahead({source:queues});
+	var t = $('#shortcut_container_type').val();
+	if(t == "Ticketqueue"){
+	$('#shortcut_container_name').typeahead({source:queues});
+	}else if(t == "Room"){
+	$('#shortcut_container_name').typeahead({source:rooms});
+	}else if(t == "Building"){
+	$('#shortcut_container_name').typeahead({source:buildings});
+	}else if(t == "User"){
+	$('#shortcut_container_name').typeahead({source:users});
+	}
     });
 
 

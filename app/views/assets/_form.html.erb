@@ -11,13 +11,13 @@
   <div class="control-group">
     <%= f.label :room_id, :class => 'control-label' %>
     <div class="controls">
-	    <%= f.text_field :room_name, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s, :value => (@asset.room ? "#{@asset.room.building.name} - #{@asset.room.name}" : "" ) %>
+	    <%= f.text_field :room_name, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s, :value => (@asset.room ? "#{@asset.room.building.name} - #{@asset.room.name}" : "" ), :autocomplete => 'off' %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :tag, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :tag, :class => 'text_field' %>
+      <%= f.text_field :tag, :class => 'text_field', :autocomplete => 'off' %>
     </div>
   </div>
   <div class="control-group">
@@ -29,7 +29,7 @@
   <div class="control-group">
     <%= f.label :model_id, :class => 'control-label' %>
     <div class="controls">
-	    <%= f.text_field :model_id, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "" %>
+	    <%= f.text_field :model_id, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "", :autocomplete => 'off' %>
     </div>
   </div>
   <div class="control-group">

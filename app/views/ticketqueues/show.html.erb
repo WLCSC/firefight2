@@ -12,12 +12,12 @@
 </p>
 
 <% content_for :tickets do %>
-	<% @tickets = @ticketqueue.tickets %>
+	<% @tickets = (@ticketqueue.tickets + @ticketqueue.ticketqueues.map{|q| q.tickets}.flatten).flatten.uniq %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
 <% content_for :open do %>
-	<% @tickets = @tickets.incomplete %>
+	<% @tickets = (@ticketqueue.tickets.incomplete + @ticketqueue.ticketqueues.map{|q| q.tickets.incomplete}.flatten).flatten.uniq %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
