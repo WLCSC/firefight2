@@ -21,7 +21,7 @@
 				<%= form_tag "/tickets/#{@ticket.id}/tagchange" do %>
 					<p>
 					<%= hidden_field_tag :ticket_id, @ticket.id %>
-					<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else" %>
+					<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
 					<%= submit_tag "OK" %>
 					</p>
 				<% end %>

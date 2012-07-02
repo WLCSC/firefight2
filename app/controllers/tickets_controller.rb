@@ -31,10 +31,13 @@ class TicketsController < ApplicationController
 	# GET /tickets/1.json
 	def show
 		@ticket = Ticket.find(params[:id])
-
+		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin?
+		redirect_to '/', :error => "You don't have permission to read that." 
+		else
 		respond_to do |format|
 			format.html # show.html.erb
 			format.json { render json: @ticket }
+		end
 		end
 	end
 
@@ -63,7 +66,7 @@ class TicketsController < ApplicationController
 			if @ticket.save
 				MailMan.ticket_submitted(current_user, @ticket, @ticket.comments.first).deliver
 				User.where(:administrator => true).each do |u|
-					MailMan.tech_submitted(u, @ticket, @ticket.comments.first)
+					MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver
 				end
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 				format.json { render json: @ticket, status: :created, location: @ticket }
