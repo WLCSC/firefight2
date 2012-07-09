@@ -12,12 +12,12 @@
 </p>
 
 <% content_for :tickets do %>
-	<% @tickets = @ticketqueue.tickets %>
+	<% @tickets = (@ticketqueue.tickets + @ticketqueue.ticketqueues.map{|q| q.tickets}.flatten).flatten.uniq %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
 <% content_for :open do %>
-	<% @tickets = @tickets.incomplete %>
+	<% @tickets = (@ticketqueue.tickets.incomplete + @ticketqueue.ticketqueues.map{|q| q.tickets.incomplete}.flatten).flatten.uniq %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
@@ -65,10 +65,11 @@
 
 <%= tabify open: 'Open Tickets', tickets: 'All Tickets', permissions: 'Queue Permissions', children: "Subqueues & Superqueues" %>
 
-
+<% content_for :sidebar do %>
 <% if current_user.admin? %>
-	<% content_for :sidebar do %>
-		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li>
-		<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %>
-	<% end %>
+	
+		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li><% end %>
+
+	<% if can(:read) %><li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %></li><% end %>
+	
 <% end %>

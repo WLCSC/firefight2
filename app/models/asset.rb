@@ -11,7 +11,7 @@ class Asset < ActiveRecord::Base
 	before_save :fix_room
 
 	attr_accessor :room_name, :purchase_date, :model_name
-	attr_accessible :room_id, :tag, :rtype_id, :os, :manufacturer_id, :model_id, :serial, :purchase, :cost, :vendor_id, :notes, :super, :name, :room_name
+	attr_accessible :room_id, :tag, :rtype_id, :os, :manufacturer_id, :model_id, :serial, :purchase, :cost, :vendor_id, :notes, :super, :name, :room_name, :purchase_date, :room_name, :model_name
 
 	validates_presence_of :tag
 	validates_uniqueness_of :tag

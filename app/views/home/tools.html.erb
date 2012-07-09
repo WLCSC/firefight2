@@ -4,6 +4,7 @@
 		<li><%= link_to "All Security Groups", groups_path %></li>
 		<li><%= link_to "All Queues", ticketqueues_path %></li>
 		<li><%= link_to "All Buildings", buildings_path %></li>
+		<li><%= link_to "All Room Groups", departments_path %></li>
 		<li><%= link_to "All Tickets", tickets_path %></li>
 		<li><%= link_to "All Asset Types", rtypes_path %></li>
 		<li><%= link_to "All Assets (load at your own risk)", assets_path %></li>
@@ -25,12 +26,12 @@
 <% end %>
 
 <% content_for :generate do %>
-	<% @buildings = [["All", 0]] + Building.all.map{|b| [b.name, b.id]} %>
-	<% @departments = [["All", 0]] + Department.all.map{|d| [d.name, d.id]} %>
+	<% @buildings = [["All buildings", 0]] + Building.all.map{|b| [b.name, b.id]} %>
+	<% @departments = [["All rooms", 0]] + Department.all.map{|d| [d.name, d.id]} %>
 	<%= form_tag mass_tickets_path do %>
 		<%= hidden_field_tag :submitter_id, current_user.id %>
 		<p>Pick a building: <%= select_tag :building_id,  options_for_select(@buildings) %></p>
-		<p>Pick a department: <%= select_tag :department_id,  options_for_select(@departments) %></p>
+		<p>Pick a room group: <%= select_tag :department_id,  options_for_select(@departments) %></p>
 		<p>
 		<%= label_tag :comment %><br />
 		<%= text_area_tag :comment,'', :size => '40x5' %>

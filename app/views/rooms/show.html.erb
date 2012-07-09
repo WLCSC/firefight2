@@ -9,21 +9,23 @@
 <% end %>
 
 <h1><%= @room.building.name %> - <%= @room.name %></h1>
-
+<p>
+<i><%= @room.notes %></i>
+</p>
 <% if current_user.admin? %>
 <p>
   <strong>Department:</strong><br>
   <%= @room.department ? link_to(@room.department.name, @room.department) : "Undefined" %>
 </p>
+
+<% end %>
+
 <p>
   <strong>Default Asset:</strong><br>
-  <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %>
-</p>
-<% end %>
-<p>
-  <strong><%= model_class.human_attribute_name(:notes) %>:</strong><br>
-  <%= @room.notes %>
-</p>
+  <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %><br/>
+  <i><b>Click on this link to submit a ticket if you can't find the appropriate asset below</b></i>
+  </p>
+
 
 <% if current_user.admin? %>
 	<%= tabify(open_tickets: "Open Tickets", assets: "Assets") %>
@@ -34,7 +36,7 @@
 <% if current_user.admin? %>
 <% content_for :sidebar do %>
 	<li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
-	<li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li>
-	<li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %>
-<% end %>
+	<li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li><% end %>
+	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %>
+
 <% end %>
