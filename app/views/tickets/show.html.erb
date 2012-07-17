@@ -92,7 +92,7 @@
 			<% end %>
 			<% if current_user.admin?  %>
 				<%= form_for @ticket do |f| %>
-					<li>Move ticket to <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]} %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
+					<li>Move ticket to <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]} << ['', nil] %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
 					<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", '/tickets/'+(@ticket.id+1).to_s %></li><% end %>
 				<% end %>
 			<% end %>
