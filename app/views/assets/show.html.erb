@@ -43,7 +43,7 @@
 
 <% if current_user.admin? %>
 <% content_for :sidebar do %>
-	<li><%= link_to "Move Asset", '/home/tools' %></li>
+	<li><%= link_to "Move Asset", '/home/tools?t=move&ids='+@asset.id.to_s %></li>
 	<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>
 <% end %>
 <% end %>

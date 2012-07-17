@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120525145622) do
+ActiveRecord::Schema.define(:version => 20120709170236) do
 
   create_table "assets", :force => true do |t|
     t.integer  "room_id"
@@ -49,6 +49,13 @@ ActiveRecord::Schema.define(:version => 20120525145622) do
   end
 
   add_index "comments", ["ticket_id"], :name => "ticket_id"
+
+  create_table "contexts", :force => true do |t|
+    t.string   "tag"
+    t.integer  "ticket_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "departments", :force => true do |t|
     t.string   "name"

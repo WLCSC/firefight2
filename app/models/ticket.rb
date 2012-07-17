@@ -4,6 +4,7 @@ class Ticket < ActiveRecord::Base
 	belongs_to :asset
 	belongs_to :room
 	has_many :comments
+	has_many :contexts
 	belongs_to :ticketqueue
 	belongs_to :submitter, :class_name => 'User'
 	attr_accessor :comment, :due_at 
@@ -21,7 +22,7 @@ class Ticket < ActiveRecord::Base
 
 
 
-	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at
+	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list
 
 	def statusify
 		return 'Low' if status==1
@@ -30,6 +31,10 @@ class Ticket < ActiveRecord::Base
 		return 'Deferred' if status==99
 		return 'Completed' if status==100
 		return 'Undefined'
+	end
+
+	def context_list
+		self.contexts.all.map{|c| c.tag}.join(', ')
 	end
 
 	def assigned?
