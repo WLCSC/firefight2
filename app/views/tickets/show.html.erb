@@ -4,6 +4,7 @@
 <% if @ticket.late? %>
 	<p style="text-align: center; font-size: x-large; font-style: italic; color: red;">This ticket is late!!</p>
 <% end %>
+<% @all_assets = Asset.all.map{|a| a.tag} %>
 
 
 <table class="table"><tr>
@@ -92,8 +93,11 @@
 			<% end %>
 			<% if current_user.admin?  %>
 				<%= form_for @ticket do |f| %>
-					<li>Move ticket to <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]} << ['', nil] %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
-					<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", '/tickets/'+(@ticket.id+1).to_s %></li><% end %>
+					<li>Move to queue: <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]}  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
 				<% end %>
+				<%= form_for @ticket do |f| %>
+					<li>Move to asset: <%= f.text_field :asset_id, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => @ticket.asset.tag  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-warning' %></li>
+				<% end %>
+				<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", '/tickets/'+(@ticket.id+1).to_s %></li><% end %>
 			<% end %>
 		<% end %>
