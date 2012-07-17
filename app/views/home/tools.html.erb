@@ -18,7 +18,7 @@
 	<% @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"} %>
 	<%= form_tag move_assets_path do %>
 		<p>Enter asset tags, 1 per line:</p>
-		<p><%= text_area_tag :tags %></p>
+		<p><%= text_area_tag :tags, params[:tags] %></p>
 		<p>Where are these assets being moved to?</p>
 		<p><%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %></p>
 		<%= submit_tag "Move Assets", :class => 'btn btn-warning btn-large' %>
@@ -110,11 +110,7 @@
   </div>
 <% end %>
 
-<%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#asset_purchase_date').datepicker();
-	});
-<% end %>
+
 	
 <% end %>
 
@@ -125,3 +121,11 @@
 	$('#dueAt').datetimepicker();
 	});
 <% end %>
+
+<%= javascript_tag do %>
+	$(document).ready(function() {
+	$('#purchase_date').datepicker();
+	});
+<% end %>
+
+

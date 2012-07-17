@@ -17,7 +17,7 @@
 					<td><%= asset.rtype ? link_to(asset.rtype.name, asset.rtype) : "-" %></td>
 					<td><%= asset.manufacturer ? link_to(asset.manufacturer.name, asset.manufacturer) : '-' %></td>
 					<td><%= asset.manufacturer ? link_to(asset.model.name, asset.model) : '-' %></td>
-					<td><%= badge_row asset.tickets %> - <%= link_to "Submit New Ticket", asset if qs %></td>
+					<td><%= badge_row asset.tickets %> - <%= link_to "Submit New Ticket", asset_path(asset, :t => 'new_ticket') if qs %></td>
 				</tr>
 			<% end %>
 		<% end %>

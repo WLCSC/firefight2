@@ -77,16 +77,16 @@ module ApplicationHelper
 	end
 
 	def tabify list
-		r = '<ul class="nav nav-tabs">'
+		r = '<ul class="nav nav-tabs" id="tabs">'
 		active = true
 		list.each_pair do |li, str|
 			if content_for? li
 				r << "\n"
 				if active
-					r << '<li class="active"><a data-toggle="tab" href="#'+li.to_s+'">'+str+'</a></li>'
+					r << '<li class="active"><a id="tab-'+ li.to_s + '" data-toggle="tab" href="#'+li.to_s+'">'+str+'</a></li>'
 					active = false
 				else
-					r << '<li><a data-toggle="tab" href="#'+li.to_s+'">'+str+'</a></li>'
+					r << '<li><a id="tab-'+ li.to_s + '" data-toggle="tab" href="#'+li.to_s+'">'+str+'</a></li>'
 				end
 			end
 		end
@@ -109,6 +109,7 @@ module ApplicationHelper
 			end
 		end
 		r << '</div>'
+
 		r.html_safe
 	end
 
