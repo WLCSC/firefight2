@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :check_for_admin, :only => ['new', 'edit', 'create', 'update', 'destroy']
+	before_filter :check_for_admin, :only => ['new', 'create', 'destroy']
   # GET /users
   # GET /users.json
   def index

@@ -2,7 +2,7 @@
   <div class="control-group">
     <%= f.label :username, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :username, :class => 'text_field' %>
+      <%= @user.username ? @user.username : f.text_field(:username, :class => 'text_field') %>
     </div>
   </div>
   <div class="control-group">
@@ -23,12 +23,14 @@
       <%= f.text_field :email, :class => 'text_field' %>
     </div>
   </div>
+  <% if current_user && current_user.admin? %>
   <div class="control-group">
     <%= f.label :administrator, :class => 'control-label' %>
     <div class="controls">
       <%= f.check_box :administrator, :class => 'check_box' %>
     </div>
   </div>
+  <% end %>
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>

@@ -1,6 +1,6 @@
-<h2>Submit Ticket for <%= @building.name %></h2>
 <% if current_user.building %>
 	<% content_for :your_building do %>
+		<h2>Submit Ticket for <%= @building.name %></h2>
 		<%= render :partial => 'buildings/roomtable' %>
 	<% end %>
 <% else %>

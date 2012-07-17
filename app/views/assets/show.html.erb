@@ -1,26 +1,26 @@
 <h1>Asset #<%= @asset.tag %></h1>
 <% content_for :info do %>
 
-<table class="table-condensed" width="100%" >
-	<tr>
-		<td><%= @asset.building ? link_to(@asset.building.name, @asset.building) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
-		<td><%= @asset.room ? link_to(@asset.room.name, @asset.room) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
-		<td><%= @asset.model ? link_to(@asset.model.name, @asset.model) : "UNDEFINED" %></td>
-		<td><%= @asset.manufacturer ? link_to(@asset.manufacturer.name, @asset.manufacturer) : "UNKNOWN" %></td>
-	</tr>
-	<tr>
-		<td><%= @asset.rtype ? @asset.rtype.name : "UNDEFINED" %></td>
-		<td><%= @asset.name ? @asset.name : "No Name" %></td>
-		<td><%= @asset.os %></td>
-		<td><%= @asset.serial %></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><%= link_to @asset.vendor.name, @asset.vendor %></td>
-		<td><%= @asset.purchase %></td>
-		<td>$<%= @asset.cost %></td>
-	</tr>
-</table>
+	<table class="table-condensed" width="100%" >
+		<tr>
+			<td><%= @asset.building ? link_to(@asset.building.name, @asset.building) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
+			<td><%= @asset.room ? link_to(@asset.room.name, @asset.room) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
+			<td><%= @asset.model ? link_to(@asset.model.name, @asset.model) : "UNDEFINED" %></td>
+			<td><%= @asset.manufacturer ? link_to(@asset.manufacturer.name, @asset.manufacturer) : "UNKNOWN" %></td>
+		</tr>
+		<tr>
+			<td><%= @asset.rtype ? @asset.rtype.name : "UNDEFINED" %></td>
+			<td><%= @asset.name ? @asset.name : "No Name" %></td>
+			<td><%= @asset.os %></td>
+			<td><%= @asset.serial %></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><%= link_to @asset.vendor.name, @asset.vendor %></td>
+			<td><%= @asset.purchase %></td>
+			<td>$<%= @asset.cost %></td>
+		</tr>
+	</table>
 <% end %>
 <% @room = @asset %>
 <% content_for :open_tickets do %>
@@ -39,11 +39,14 @@
 	<% end %>
 <% end %>
 
-<%= tabify new_ticket: 'New Ticket', info: 'Asset Information', open_tickets: 'Open Tickets', closed_tickets: 'Closed Tickets' %>
-
 <% if current_user.admin? %>
-<% content_for :sidebar do %>
-	<li><%= link_to "Move Asset", '/home/tools' %></li>
-	<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>
+	<%= tabify open_tickets: 'Open Tickets', new_ticket: 'New Ticket', info: 'Asset Information', closed_tickets: 'Closed Tickets' %>
+<% else %>
+	<%= tabify new_ticket: 'New Ticket', info: 'Asset Information', open_tickets: 'Open Tickets', closed_tickets: 'Closed Tickets' %>
 <% end %>
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Move Asset", '/home/tools?t=move&tags='+@asset.tag %></li>
+		<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>
+	<% end %>
 <% end %>

@@ -61,6 +61,13 @@ class TicketsController < ApplicationController
 	# POST /tickets.json
 	def create
 		@ticket = Ticket.new(params[:ticket])
+		if @ticket.asset == nil 
+			if @ticket.room != nil
+				@ticket.asset = @ticket.room.asset
+			else
+				@ticket.errors << "Something has gone horribly wrong!"
+			end
+		end
 
 		respond_to do |format|
 			if @ticket.save
