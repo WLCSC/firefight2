@@ -50,7 +50,7 @@
 		<h2>Select Equipment</h2>
 		<% i = 0 %>
 		<table class="table table-striped table-consensed table-bordered" style="width: 100%;">
-			<% Rtype.all.sort{|a,b| a.name <=> b.name}.each do |rtype| %>
+			<% Rtype.where(:loanable => true).all.sort{|a,b| a.name <=> b.name}.each do |rtype| %>
 				<% if i == 0 %>
 					<tr>
 					<% end %>
@@ -75,7 +75,7 @@
 	<% end %>
 </td></tr></table>
 <div class="actions" style="margin: auto; text-align:center; width: 70px;">
-	<%= f.submit "Submit" %>
+	<%= f.submit "Submit", :class => "btn btn-primary btn-large" %>
 </div>
 <% end %>
 <%= javascript_tag do %>

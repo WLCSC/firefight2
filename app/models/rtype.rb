@@ -4,5 +4,5 @@ class Rtype < ActiveRecord::Base
 	has_many :requests
 	has_many :loans, :through => :requests
 
-	attr_accessible :name, :notes
+	attr_accessible :name, :notes, :loanable
 end

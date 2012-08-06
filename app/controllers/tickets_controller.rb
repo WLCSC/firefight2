@@ -4,6 +4,7 @@ class TicketsController < ApplicationController
 	# GET /tickets
 	# GET /tickets.json
 	def index
+		if params[:status] || params[:building_id] || params[:queue_id]
 		if params[:status]
 			case params[:status]
 			when 'a'
@@ -16,10 +17,29 @@ class TicketsController < ApplicationController
 		else
 			@tickets = Ticket.where(:status => [1,2,3,99])
 		end
-
-		if params[:queue_id] != ""
+		if params[:rangeStart] && params[:rangeStart] != ''
+			dx = parse_to_datetime(params[:rangeStart])
+			@tickets = @tickets.where('created_at >= ?',dx)
+		end
+		if params[:rangeEnd] && params[:rangeEnd] != ''
+			dx = parse_to_datetime(params[:rangeEnd])
+			@tickets = @tickets.where('created_at <= ?',dx)
+		end
+		if params[:building_id] && params[:building_id] != ""
+			@tickets= @tickets.where(:room_id => Building.find(params[:building_id]).room_ids)
+		end
+		if params[:queue_id] && params[:queue_id] != ""
 			@tickets= @tickets.where(:ticketqueue_id => params[:queue_id])
 		end
+		if params[:match] && params[:match] != ''
+			regex = Regexp.new(params[:match], 1)
+			@tickets.keep_if{|t| t.comments.first.content.match(regex)}  
+		end
+		else
+			@tickets = []
+		end
+
+		
 
 		respond_to do |format|
 			format.html # index.html.erb
@@ -73,7 +93,10 @@ class TicketsController < ApplicationController
 			if @ticket.save
 				MailMan.ticket_submitted(current_user, @ticket, @ticket.comments.first).deliver
 				User.where(:administrator => true).each do |u|
-					MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver
+					MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver unless @ticket.submitter == u
+				end
+				@ticket.room.building.techs.each do |t|
+					@ticket.users << t unless @ticket.users.include?(t)
 				end
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 				format.json { render json: @ticket, status: :created, location: @ticket }
@@ -91,8 +114,8 @@ class TicketsController < ApplicationController
 
 		respond_to do |format|
 			if @ticket.update_attributes(params[:ticket])
-				@ticket.users << current_users unless @ticket.users.include? current_user
-				if params[:commit] = "OK"
+				@ticket.users << current_user unless @ticket.users.include? current_user
+				if params[:commit] = "OK" && params[:status]
 					c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} changed the status of this ticket to #{string_status(@ticket.status)}")
 				end
 
@@ -136,17 +159,22 @@ class TicketsController < ApplicationController
 		else
 			@user = current_user
 		end
+
+		if @user
 		if @ticket.users.include? @user
 			@ticket.users.delete(@user)
 		else
 			@ticket.users << @user
 		end
-		redirect_to ticket_path(@ticket), info: "Tagged user."
+			redirect_to ticket_path(@ticket), info: "Tagged user."
+		else
+			redirect_to ticket_path(@ticket), info: "Could not tag #{params[:user_name] || params[:user]}."
+		end
 	end
 
 	def mass
 		b = (params[:building_id] == '0' ? nil : Building.find(params[:building_id]))
-		d = (params[:department_id] == 0 ? nil : Department.find(params[:department_id]))
+		d = (params[:department_id] == '0' ? nil : Department.find(params[:department_id]))
 		@rooms = []
 		if b
 			if d
@@ -165,10 +193,15 @@ class TicketsController < ApplicationController
 		
 
 		@rooms.each do |r|
-			t = Ticket.create(:room_id => r, :comment => params[:comment], :submitter_id => params[:submitter_id], :ticketqueue_id => params[:ticketqueue_id], :status => params[:status], :due_at => params[:due_at], :asset_id => r.default_asset.id)
+			t = Ticket.create(:room_id => r.id, :comment => params[:comment], :submitter_id => params[:submitter_id], :ticketqueue_id => params[:ticketqueue_id], :status => params[:status], :due_at => params[:due_at], :asset_id => r.default_asset.id)
 			t.save
 		end
 
 		redirect_to '/home/tools', :info => "Generated #{@rooms.count} tickets"
+	end
+
+	def screenshot
+		@ticket = Ticket.find(params[:id])
+		redirect_to @ticket.attachment.url
 	end
 end

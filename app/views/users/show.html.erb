@@ -37,9 +37,9 @@
 
 <%= tabify open: 'Open Tickets', tagged: "Tagged Tickets", submitted: "Submitted Tickets", permissions: "User Permissions", groups: "Memberships" %>
 
-<% if current_user.admin? %>
-<% content_for :sidebar do %>
-	<li><%= link_to 'Edit User', edit_user_path(@user) %></li>
+<% if current_user.admin? || current_user == @user %>
+	<% content_for :sidebar do %>
+		<li><%= link_to 'Edit User', edit_user_path(@user) %></li>
 	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'User', :container_id => @user.id) %>
 <% end %>
 <% end %>

@@ -71,7 +71,7 @@ module ApplicationHelper
 		if current_user.admin?
 			arr.map{|s| '<span class="badge badge' + bootstrap_status(s) + '">' + tickets.where(:status => s).count.to_s + '</span>' }.join("&nbsp;").html_safe 
 		else
-			tickets.count
+			('<span class="badge badge-warning">' + tickets.incomplete.count.to_s + '</span>').html_safe
 
 		end
 	end
@@ -88,7 +88,7 @@ module ApplicationHelper
 				else
 					r << '<li><a id="tab-'+ li.to_s + '" data-toggle="tab" href="#'+li.to_s+'">'+str+'</a></li>'
 				end
-			end
+				end
 		end
 		r << '</ul>'
 		r << "\n\n"
@@ -128,4 +128,8 @@ module ApplicationHelper
 		end
 	end
 
+	def parse_to_datetime str
+		str.match /(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/
+		DateTime.civil($3.to_i, $1.to_i, $2.to_i, $4.to_i, $5.to_i)
+	end
 end

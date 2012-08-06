@@ -12,6 +12,7 @@ class Comment < ActiveRecord::Base
 		if (md = content.match(/#\{(\w+)\}/))
 			uri = URI('http://tonermonkey/orders/quick')
 			res = Net::HTTP.post_form(uri, username: self.user.username, store: self.ticket.room.building.name, item_tag: md[1])
+			content.gsub(/#\{(\w+)\}/,'<a href="http://tonermonkey"><img src="/assets/monkey.png" alt="TonerMonkey"/>\\1</a>')
 		end
 	end
 

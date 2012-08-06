@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120709170236) do
+ActiveRecord::Schema.define(:version => 20120803183754) do
 
   create_table "assets", :force => true do |t|
     t.integer  "room_id"
@@ -32,6 +32,11 @@ ActiveRecord::Schema.define(:version => 20120709170236) do
   add_index "assets", ["room_id"], :name => "room_id"
   add_index "assets", ["tag"], :name => "tag", :unique => true
 
+  create_table "assignments", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "building_id"
+  end
+
   create_table "buildings", :force => true do |t|
     t.string   "name"
     t.text     "address"
@@ -49,13 +54,6 @@ ActiveRecord::Schema.define(:version => 20120709170236) do
   end
 
   add_index "comments", ["ticket_id"], :name => "ticket_id"
-
-  create_table "contexts", :force => true do |t|
-    t.string   "tag"
-    t.integer  "ticket_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "departments", :force => true do |t|
     t.string   "name"
@@ -163,6 +161,7 @@ ActiveRecord::Schema.define(:version => 20120709170236) do
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "loanable"
   end
 
   create_table "shortcuts", :force => true do |t|

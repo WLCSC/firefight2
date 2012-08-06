@@ -4,10 +4,4 @@
 #
 
 
-jQuery ->
-	$('.datatableable').dataTable
-		bPaginate: false
-		bInfo: false
-		sScrollY: winH - 300 
-		sDom: "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>"
 

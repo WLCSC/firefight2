@@ -10,7 +10,7 @@
 
 <h1><%= @room.building.name %> - <%= @room.name %></h1>
 <p>
-<i><%= @room.notes %></i>
+<i><%= @room.notes || "" %></i>
 </p>
 <% if current_user.admin? %>
 <p>
@@ -20,11 +20,16 @@
 
 <% end %>
 
+<% if current_user.admin? %>
 <p>
   <strong>Default Asset:</strong><br>
   <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %><br/>
-  <i><b>Click on this link to submit a ticket if you can't find the appropriate asset below</b></i>
   </p>
+<% else %>
+<%= link_to @room.default_asset do %>
+	<h3><i><b>Click here to submit a ticket if you can't find the appropriate asset below</b></i></h3>
+<% end %>
+<% end %>
 
 
 <% if current_user.admin? %>

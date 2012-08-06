@@ -3,6 +3,7 @@
 	<thead>
 		<tr>
 			<th>Tag</th>
+			<th></th>
 			<th>Type</th>
 			<th>Serial</th>
 			<th>Manufacturer</th>
@@ -15,11 +16,12 @@
 			<% @room.assets.each do |asset| %>
 				<tr>
 					<td><%= link_to asset.tag, asset %></td>
+					<td><%= link_to("Submit Ticket", asset, :class => 'btn btn-mini btn-danger') %></td>
 					<td><%= asset.rtype ? link_to(asset.rtype.name, asset.rtype) : "-" %></td>
 					<td><%= asset.serial ? asset.serial : "-" %></td>
 					<td><%= asset.manufacturer ? link_to(asset.manufacturer.name, asset.manufacturer) : '-' %></td>
 					<td><%= asset.manufacturer ? link_to(asset.model.name, asset.model) : '-' %></td>
-					<td><%= badge_row asset.tickets %> - <%= link_to "Submit New Ticket", asset_path(asset, :t => 'new_ticket') if qs %></td>
+					<td><%= link_to badge_row(asset.tickets), asset, :t => 'open_tickets', :class => 'nounderline' %></td>
 				</tr>
 			<% end %>
 		<% end %>

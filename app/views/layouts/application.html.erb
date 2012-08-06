@@ -64,7 +64,8 @@
 	<div class="container">
 		<div class="content">
 			<div class="row">
-				<div class="span8">
+				<% @skip_sidebar ||= false %>
+				<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
 					<% flash.each do |type, message| %>
 						<div class="alert alert-<%= twitterized_type type %>" data-alert="alert">
 							<a href="#"i class="close" data-dismiss="alert">&times;</a>
@@ -74,7 +75,8 @@
 
 					<%= yield %>
 				</div>
-				<div class="span3" style="margin-left: 60px;">
+				<% unless @skip_sidebar %>
+				<div class="span3" style="margin-left: 90px;">
 					<% if current_user %>
 						<div class="well sidebar-nav">
 							<% if content_for? :sidebar %>
@@ -83,7 +85,7 @@
 									<%= yield :sidebar %>
 								</ul>
 							<% end %>
-							<h3>Submit Ticket</h3>
+							<h3><%= current_user.admin? ? "Jump to Building" : "Submit Ticket" %></h3>
 							<ul class="nav nav-list">
 								<% Building.all.each do |b| %>
 									<li><%= link_to b.name, b %></li>
@@ -94,6 +96,7 @@
 						</div><!--/.well -->
 					<% end %>
 				</div><!--/span-->
+			<% end %>
 			</div><!--/row-->
 		</div><!--/content-->
 
@@ -111,7 +114,7 @@
 						<ul class="nav">
 							<li><%= link_to "Manage Shortcuts", shortcuts_path, :class => 'btn btn-mini btn-inverse', :style => 'width: 50px; padding-top: 3px; padding-bottom: 3px; line-height: 12px;' %></li>
 							<% current_user.shortcuts.order(:position).each do |shortcut| %>
-								<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
+								<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
 							<% end %>
 						</ul>
 					</div><!--/.nav-collapse -->

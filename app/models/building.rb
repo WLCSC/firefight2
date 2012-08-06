@@ -5,6 +5,8 @@ class Building < ActiveRecord::Base
 	has_many :users
 	has_many :ticketqueues, :as => :parent
 	has_one :shortcut, :as => :container
+	has_many :assignments
+	has_many :asignees, :through => :assignments, :source => :user
 
 	attr_accessible :name, :address, :short
 
@@ -15,5 +17,13 @@ class Building < ActiveRecord::Base
 		self.rooms << r
 		r.save
 		r
+	end
+
+	def nice_name
+		self.name
+	end
+
+	def techs
+		self.asignees.where(:administrator => true)
 	end
 end

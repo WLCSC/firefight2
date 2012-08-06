@@ -40,12 +40,16 @@ class Ticketqueue < ActiveRecord::Base
 	end
 
 	def can_submit? user
-		self.permissions.where(:principal_id => user.principal.id).where(:submit => true).count > 0
+		self.secures(user).can?(:submit)
 	end
 
 	def find_parent
 		if self.parent_name
 			self.parent = Ticketqueue.where(:name => self.parent_name).first || Building.where(:name => self.parent_name).first
 		end
+	end
+
+	def nice_name
+		self.name
 	end
 end

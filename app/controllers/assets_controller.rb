@@ -107,7 +107,7 @@ class AssetsController < ApplicationController
 			end
 		end
 		if bad.length == 0
-			redirect_to @room, :notice => 'Moved assets.'
+			redirect_to '/home/tools?t=move', :notice => 'Moved assets.'
 		else
 			render '/home/tools', :notice => "#{bad.length} bad tags were submitted."
 		end
@@ -121,7 +121,7 @@ class AssetsController < ApplicationController
 			asset = Asset.create(:super => false, :name => "")
 			asset.room_name = params[:room_name]
 			asset.os = params[:os]
-			asset.model_name = params[:model_id]
+			asset.model_name = params[:model_name]
 			asset.purchase_date = params[:purchase_date]
 			asset.cost = params[:cost]
 			asset.vendor_id = params[:vendor_id]

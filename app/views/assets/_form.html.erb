@@ -27,9 +27,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :model_id, :class => 'control-label' %>
+    <%= f.label :model_name, :class => 'control-label' %>
     <div class="controls">
-	    <%= f.text_field :model_id, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "", :autocomplete => 'off' %>
+	    <%= f.text_field :model_name, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "", :autocomplete => 'off' %>
     </div>
   </div>
   <div class="control-group">

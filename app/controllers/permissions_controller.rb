@@ -73,7 +73,7 @@ class PermissionsController < ApplicationController
   # DELETE /permissions/1.json
   def destroy
     @permission = Permission.find(params[:id])
-    @queue = @permission.ticketqueue
+    @queue = @permission.securable
     @permission.destroy
 
     respond_to do |format|

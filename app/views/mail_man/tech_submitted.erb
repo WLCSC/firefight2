@@ -1,21 +1,25 @@
 <html>
 <body>
  <p>Hello <%= @user.name %>, </p>
- 
 
- <p>You have submitted a support ticket for <%= @ticket.room.building.name %>, <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  Your ticket number is <%= @ticket.id %>.  This ticket has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "http://firefight/" %>, or you can also <%= link_to "click here", "http://firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
+ <p><%= @ticket.submitter.name %> has submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  <%= link_to "Click here", "http://firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
 
- <pre>
- Status: <%= @ticket.statusify %>
+<pre>
+  Building:	<%= @ticket.room.building.name %>
+  Room:		<%= @ticket.room.name %>
+  Asset:	<%= @ticket.asset.tag %>
+  Submitted By:	<%= @ticket.submitter.name %>
+  Status: 	<%= @ticket.statusify %>
 <% if @ticket.due %>
- Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
+  Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
 <% end %> 
  
- <% @ticket.comments.reverse.each do |comment| %>
+<% @ticket.comments.reverse.each do |comment| %>
 <%= comment.user.name %> - <%= comment.created_at %>
-<td colspan=2><%= comment.content%>
+<%= comment.content%>
 <hr/>
 <%end%>
 
 </body>
 </html>
+

@@ -8,6 +8,7 @@
 		<tr>
 			<th>ID</th>
 			<th>Submitter</th>
+			<th>Building</th>
 			<th>Submitted</th>
 			<th>Due</th>
 			<th>Comment</th>
@@ -19,9 +20,10 @@
 			<tr>
 				<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
 				<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
+				<td><%= link_to ticket.room.building.name, ticket.room.building %></td>
 				<td><%= time_delta ticket.created_at %></td>
 				<td><%= ticket.due ? time_delta(ticket.due) : "-" %></td>
-				<td><%= ticket.comments.first.content %></td>
+				<td><% if ticket.late? %><b><% end %><%= ticket.comments.first.content %><% if ticket.late? %><b><% end %></td>
 			</tr>
 		<% end %>
 	<% else %>

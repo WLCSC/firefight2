@@ -40,6 +40,7 @@ Firefight2::Application.routes.draw do
 	end
 	collection do
 		post 'mass'
+		get 'screenshot'
 	end
   end
 

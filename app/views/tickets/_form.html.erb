@@ -16,11 +16,11 @@
 					<%= f.label :asset_tag%><br/><%= f.text_field :asset_id %></p>
 				<% end %>
 				<p>
-				<%= f.label :queue %><br />
-				<%= f.collection_select :ticketqueue_id, current_user.queues, :id, :name %>
+				<%= f.label :queue %>
+				<%= f.collection_select :ticketqueue_id, current_user.submittable_queues, :id, :name %>
 				</p>
 				<p>
-				<%= f.label :priority %><br />
+				<%= f.label :priority %>
 				<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
 				</p>
 				<p><b><i>Optional</i></b> Screenshot<br />
@@ -39,7 +39,7 @@
 			<td>
 				<p style="margin-left: 20px;">
 				<% if @ticket==nil || @ticket.comments.empty? %>
-					<%= f.label :comment, 'What can we do for you?' %><br />
+					<%= f.label :comment, 'What can we do for you?' %>
 					<%= f.text_area :comment, :size => "60x10" %>
 				<% else %>
 					<%= @ticket.comments.first.content %>

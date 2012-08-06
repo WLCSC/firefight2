@@ -1,5 +1,5 @@
 class LoansController < ApplicationController
-	before_filter :check_for_admin, :only => ['new', 'edit', 'create', 'update', 'destroy']
+	before_filter :check_for_admin, :only => ['edit', 'update', 'destroy']
 	before_filter :check_for_user
 	# GET /loans
 	# GET /loans.json

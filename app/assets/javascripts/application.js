@@ -42,8 +42,30 @@ $.urlParam = function(name){
 	return results[1] || 0;
 }
 
+var tables = [];
+
 $(document).ready(function() {
 	if($.urlParam('t') != 0) {
 		$('#tab-'+$.urlParam('t')).tab('show');
 	}
+
+	tables = ($('.datatableable').dataTable( {
+		"bPaginate": false,
+	       "bLengthChange": false,
+	       "bFilter": true,
+	       "bSort": true,
+	       "bInfo": false,
+	       "bAutoWidth": false,
+	       "sScrollY": winH - 300,
+	       "bScrollCollapse": true
+	} ));
+
+	$('a[data-toggle="tab"]').on('shown', function (e) {
+		tables.map(function(i){
+			i.fnDraw();
+		});
+	})
+
 });
+
+

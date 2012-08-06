@@ -70,9 +70,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= label_tag :model_id, nil, :class => 'control-label' %>
+    <%= label_tag :model_name, nil, :class => 'control-label' %>
     <div class="controls">
-	    <%= text_field_tag :model_id, nil, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s %>
+	    <%= text_field_tag :model_name, nil, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s %>
     </div>
   </div>
   <div class="control-group">
@@ -90,7 +90,7 @@
   <div class="control-group">
     <%= label_tag :vendor_id, nil, :class => 'control-label' %>
     <div class="controls">
-	    <%= select_tag :vendor_id, options_for_select(Vendor.all.map{|v| [v.name, v.id]}) %>
+	    <%= select_tag :vendor_id, options_for_select(Vendor.all.sort_by{|v| v.name}.map{|v| [v.name, v.id]}) %>
     </div>
   </div>
   <div class="control-group">

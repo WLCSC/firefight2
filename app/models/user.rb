@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
 	has_many :returns, :through => :loan
 	after_create :create_principal
 	has_many :shortcuts
+	has_many :assignments
+	has_many :buildings, :through => :assignments
 
 	def create_principal
 		self.build_principal.save
@@ -61,6 +63,10 @@ class User < ActiveRecord::Base
 
 	def ticketqueues
 		submittable_queues.to_a
+	end
+
+	def nice_name
+		self.name
 	end
 
 end

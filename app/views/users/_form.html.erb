@@ -31,6 +31,15 @@
     </div>
   </div>
   <% end %>
+ <div class="control-group">
+    <%= f.label :assignments, :class => 'control-label' %>
+    <div class="controls">
+	    <% Building.all.each do |b| %>
+		    <%= check_box_tag :building_ids, b.id, @user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%= label_tag b.id, b.name %>
+	    <% end %>
+    </div>
+  </div> 
+  
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
