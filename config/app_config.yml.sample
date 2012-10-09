@@ -12,6 +12,9 @@ development:
   email_support_from: support@nowhere
   #who gets exception notifications?
   email_support_recipients: support@nowhere
+  #are you also using TonerMonkey?
+  tonermonkey_integration: false
+  tonermonkey_url: http://tonermonkey
   
 test:
   domain: test.host
