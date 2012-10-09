@@ -6,8 +6,8 @@
 
  <p>Your support ticket, #<%= @ticket.id %>, for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %> has been updated.  <a href="http://firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
 
-<% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2] : @ticket.comments.last) %>
-<p>Recent comment from <%= c.user.name %>:<br/><%= c.content %></p>
+<% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2]: @ticket.comments.last) %>
+<p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>
 
 <pre>
   Building:	<%= @ticket.room.building.name %>
@@ -21,7 +21,7 @@
  
 <% @ticket.comments.reverse.each do |comment| %>
 <%= comment.user.name %> - <%= comment.created_at %>
-<%= comment.content%>
+<%= comment.content.html_safe %>
 <hr/>
 <%end%>
 

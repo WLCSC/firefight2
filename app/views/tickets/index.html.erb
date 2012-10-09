@@ -9,13 +9,13 @@
 				<td>Text Match</td>
 			</tr>
 			<tr>
-				<td><%= select_tag :status, options_for_select({"All Tickets" => 'a', "Incomplete Tickets" => 'i', "Complete Tickets" => 'c'}), :class => 'input-medium' %></td>
+				<td><%= select_tag :status, options_for_select({"All Tickets" => 'a', "Incomplete Tickets" => 'i', "Complete Tickets" => 'c', "Urgent Tickets" => 'u', "Routine Tickets" => 'r', "Low Tickets" => 'l', "Deferred Tickets" => "d"}), :class => 'input-medium' %></td>
 				<td><%= select_tag :queue_id, options_for_select([''] + Ticketqueue.all.map{|q| [q.name, q.id]}) %></td>
 				<td><%= select_tag :building_id, options_for_select([''] + Building.all.map{|q| [q.name, q.id]}), :class => 'input-medium'%></td>
 				<td><%= text_field_tag :match, params[:match] || '', :class => 'input-medium' %></td>
 			</tr>
 			<tr>
-				<td>Submission Date & Time Range:</td>
+				<td>Submission Date &amp; Time Range:</td>
 				<td><%= text_field_tag :rangeStart, params[:rangeStart] || '', :id => 'rangeStart' %></td>
 				<td><%= text_field_tag :rangeEnd, params[:rangeEnd] || '', :id => 'rangeEnd' %></td>
 			</tr>
@@ -50,7 +50,7 @@
 		<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
 		<td><%= ticket.due ? ticket.due : "-" %></td>
 		<td><%= ticket.created_at %></td>
-		<td><%= ticket.comments.first.content %></td>
+		<td><%= ticket.comments.first ? ticket.comments.first.content : "NO COMMENT"  %></td>
 		</tr>
 	<% end %>
 	</tbody>

@@ -13,6 +13,14 @@ class TicketsController < ApplicationController
 				@tickets = Ticket.where(:status => [1,2,3,99])
 			when 'c'
 				@tickets = Ticket.where(:status => 100)
+			when 'l'
+				@tickets = Ticket.where(:status => 1)
+			when 'r'
+				@tickets = Ticket.where(:status => 2)
+			when 'u'
+				@tickets = Ticket.where(:status => 3)
+			when 'd'
+				@tickets = Ticket.where(:status => 99)
 			end
 		else
 			@tickets = Ticket.where(:status => [1,2,3,99])
@@ -81,6 +89,9 @@ class TicketsController < ApplicationController
 	# POST /tickets.json
 	def create
 		@ticket = Ticket.new(params[:ticket])
+		if @ticket.ticketqueue == nil
+			@ticket.ticketqueue = Ticketqueue.first
+		end
 		if @ticket.asset == nil 
 			if @ticket.room != nil
 				@ticket.asset = @ticket.room.asset
@@ -94,9 +105,6 @@ class TicketsController < ApplicationController
 				MailMan.ticket_submitted(current_user, @ticket, @ticket.comments.first).deliver
 				User.where(:administrator => true).each do |u|
 					MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver unless @ticket.submitter == u
-				end
-				@ticket.room.building.techs.each do |t|
-					@ticket.users << t unless @ticket.users.include?(t)
 				end
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 				format.json { render json: @ticket, status: :created, location: @ticket }

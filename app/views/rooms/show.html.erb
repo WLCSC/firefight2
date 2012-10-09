@@ -42,6 +42,5 @@
 <% content_for :sidebar do %>
 	<li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
 	<li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li><% end %>
-	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %>
-
+	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %></li>
 <% end %>

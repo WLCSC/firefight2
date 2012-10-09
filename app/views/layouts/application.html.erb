@@ -63,15 +63,27 @@
 
 	<div class="container">
 		<div class="content">
-			<div class="row">
+			<div class="row-fluid">
 				<% @skip_sidebar ||= false %>
 				<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-					<% flash.each do |type, message| %>
-						<div class="alert alert-<%= twitterized_type type %>" data-alert="alert">
-							<a href="#"i class="close" data-dismiss="alert">&times;</a>
-							<p><%= message %></p>
-						</div>
-					<% end %>
+<% unless flash[:notice].blank? %>
+  <div class="alert alert-info">
+    <%= content_tag :div, flash[:notice] %>
+  </div>
+<% end %>
+
+<% unless flash[:error].blank? %>
+  <div class="alert alert-error">
+    <%= content_tag :div, flash[:error] %>
+  </div>
+<% end %>
+
+<% unless flash[:alert].blank? %>
+  <div class="alert alert-warning">
+    <%= content_tag :div, flash[:alert] %>
+  </div>
+<% end %>
+					
 
 					<%= yield %>
 				</div>

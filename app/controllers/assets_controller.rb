@@ -85,11 +85,11 @@ class AssetsController < ApplicationController
 	def quick
 		@tag = Asset.where(:tag => params[:tag]).first
 		if @tag
-			flash.now[:notice] = "Found asset."
-			redirect_to @tag
+			flash[:notice] = "Found asset."
+			redirect_to @tag, :notice => "Found asset."
 		else
-			flash.now[:alert] = "Can't find asset."
-			redirect_to params[:return]
+			flash[:alert] = "Can't find asset."
+			redirect_to params[:return], :notice => "Can't find asset"
 		end
 	end
 

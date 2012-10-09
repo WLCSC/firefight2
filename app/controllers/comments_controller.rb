@@ -25,6 +25,9 @@ class CommentsController < ApplicationController
 				@comment.ticket.users.each do |u|
 					MailMan.ticket_updated(@comment.ticket, u).deliver
 				end
+				@comment.ticket.room.building.techs.each do |t|
+					MailMan.ticket_updated(@comment.ticket, t).deliver unless @comment.ticket.users.include?(t)
+				end
 				format.html { redirect_to @comment.ticket, notice: 'Comment was successfully created.' }
 				format.json { render json: @comment, status: :created, location: @comment }
 			else

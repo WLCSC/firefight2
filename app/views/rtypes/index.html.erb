@@ -1,30 +1,22 @@
-<%- model_class = Rtype.new.class -%>
-<h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+<h1>Asset Types</h1>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:notes) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+	    <th>Name</th>
+	    <th>Count</th>
+      <th>Notes</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <% @rtypes.each do |rtype| %>
       <tr>
-        <td><%= link_to rtype.id, rtype_path(rtype) %></td>
-        <td><%= rtype.name %></td>
+	      <td><%= link_to rtype.name, rtype %></td>
+	      <td><%= rtype.assets.length %></td>
         <td><%= rtype.notes %></td>
-        <td><%=l rtype.created_at %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+          <%= link_to "Edit",
                       edit_rtype_path(rtype), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      rtype_path(rtype),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
         </td>
       </tr>
     <% end %>

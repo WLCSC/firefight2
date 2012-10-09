@@ -9,14 +9,16 @@
 	<% @room = @building %>
 	<%= render :partial => 'rooms/tickettable' %>
 <% end %>
+
 <h1><%= @building.name %></h1>
 
 <p>
   <span class="address"><%= @building.address %></span>
-</p>
+  </p>
+
 
 <% if current_user.admin? %>
-	<%= tabify tickets: "Open Tickets", rooms: "Room List"  %>
+	<%= tabify({:tickets => "Open Tickets", :rooms => "Room List"})  %>
 <% else %>
 	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
 <% end %>
@@ -29,3 +31,5 @@
 	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %></li>
 
 <% end %>
+
+
