@@ -1,17 +1,17 @@
 class User < ActiveRecord::Base
-	has_many :memberships
+	has_many :memberships, :dependent => :destroy
 	has_many :groups, :through => :memberships
-	has_one :principal, :as => :authorizable
+	has_one :principal, :as => :authorizable, :dependent => :destroy
 	has_many :permissions, :through => :principal
 	belongs_to :building
-	has_many :tags
+	has_many :tags, :dependent => :destroy
 	has_many :tickets, :through => :tags
 	has_many :comments
 	has_many :loans
 	has_many :returns, :through => :loan
 	after_create :create_principal
 	has_many :shortcuts
-	has_many :assignments
+	has_many :assignments, :dependent => :destroy
 	has_many :buildings, :through => :assignments
 
 	def create_principal
@@ -27,6 +27,10 @@ class User < ActiveRecord::Base
 
 	def admin?
 		administrator
+	end
+
+	def support?
+		support
 	end
 
 	def belongs_to? group

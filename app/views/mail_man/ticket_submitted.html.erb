@@ -2,7 +2,7 @@
 <body>
  <p>Hello <%= @user.name %>, </p>
 
- <p>You have submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  Your ticket number is <%= @ticket.id %>.  This ticket has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "http://firefight/" %>, or you can also <%= link_to "click here", "http://firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
+ <p>You have submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  Your ticket number is <%= @ticket.id %>.  This ticket has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "https://apps.wl.k12.in.us/firefight/" %>, or you can also <%= link_to "click here", "https://apps.wl.k12.in.us/firefight/tickets/"+ @ticket.id.to_s %> to go straight to the ticket page.</p>
 
 <pre>
   Building:	<%= @ticket.room.building.name %>

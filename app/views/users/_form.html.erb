@@ -10,14 +10,9 @@
     <div class="controls">
       <%= f.text_field :name, :class => 'text_field' %>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :building_id, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.select :building_id, Building.all.map{|b| [b.name, b.id]},  :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
+	</div>
+
+	<div class="control-group">
     <%= f.label :email, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :email, :class => 'text_field' %>
@@ -30,12 +25,18 @@
       <%= f.check_box :administrator, :class => 'check_box' %>
     </div>
   </div>
+	<div class="control-group">
+    <%= f.label :support, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :support, :class => 'check_box' %>
+    </div>
+  </div>
   <% end %>
- <div class="control-group">
+  <div class="control-group">
     <%= f.label :assignments, :class => 'control-label' %>
     <div class="controls">
 	    <% Building.all.each do |b| %>
-		    <%= check_box_tag :building_ids, b.id, @user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%= label_tag b.id, b.name %>
+				<p><%= check_box_tag :building_ids, b.id, @user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%=  b.name %></p>
 	    <% end %>
     </div>
   </div> 

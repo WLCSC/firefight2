@@ -20,6 +20,13 @@ class Ticket < ActiveRecord::Base
 	scope :completed, where("status = 100")
 	scope :incomplete, where("status != 100")
 
+	def self.readable_by(user)
+		if user.admin?
+			self.where(true)
+		else
+			self.where(:ticketqueue_id => user.queues.map{|q| q.id})
+		end
+	end
 
 
 	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list

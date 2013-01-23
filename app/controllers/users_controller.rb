@@ -36,6 +36,10 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
+		unless current_user.admin? || current_user == @user
+			flash[:alert] = "You aren't authorized to do that."
+			redirect_to root_path
+		end
   end
 
   # POST /users

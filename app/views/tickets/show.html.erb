@@ -19,7 +19,7 @@
 				<p class="<%= @ticket.statusify.downcase %>">Status: <%= @ticket.statusify %></p>
 				<p>Tagged users: <%= @ticket.users.map{|u| link_to(u.name,u)}.join(', ').html_safe %></p>
 				<% if can(:admin) || current_user.admin? %>
-					<%= form_tag "/tickets/#{@ticket.id}/tagchange" do %>
+					<%= form_tag tagchange_ticket_path(@ticket) do %>
 						<p>
 						<%= hidden_field_tag :ticket_id, @ticket.id %>
 						<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
@@ -29,7 +29,7 @@
 				<% end %>
 			</td>
 			<td>
-				<%= @ticket.attachment.exists? ? link_to(image_tag(@ticket.attachment.url(:preview)), 'screenshot?id='+@ticket.id.to_s) : ""  %>
+				<%= @ticket.attachment.exists? ? link_to(image_tag(root_url.gsub(/\/$/, '') + @ticket.attachment.url(:preview)), root_url.gsub(/\/$/, '') + @ticket.attachment.url) : ""  %>
 				<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
 					<%= form_for @ticket, :html => {:multipart => true} do |f| %>
 						<p>Add/Overwrite Screenshot<br />

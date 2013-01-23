@@ -2,17 +2,35 @@
 <% content_for :info do %>
 
 	<table class="table-condensed" width="100%" >
+		<tr style="font-weight: bolder; color: #666;">
+			<td>Building</td>
+			<td>Room</td>
+			<td>Model</td>
+			<td>Manufacturer</td>
+		</tr>
 		<tr>
 			<td><%= @asset.building ? link_to(@asset.building.name, @asset.building) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
 			<td><%= @asset.room ? link_to(@asset.room.name, @asset.room) : (@asset.super ? "Super Asset" : "UNDEFINED") %></td>
 			<td><%= @asset.model ? link_to(@asset.model.name, @asset.model) : "UNDEFINED" %></td>
 			<td><%= @asset.manufacturer ? link_to(@asset.manufacturer.name, @asset.manufacturer) : "UNKNOWN" %></td>
 		</tr>
+		<tr style="font-weight: bolder; color: #666; border-top: thin solid #aaa">
+			<td>Type</td>
+			<td>Name</td>
+			<td>OS</td>
+			<td>Serial</td>
+		</tr>
 		<tr>
-			<td><%= @asset.rtype ? @asset.rtype.name : "UNDEFINED" %></td>
+			<td><%= @asset.rtype ? link_to(@asset.rtype.name, @asset.rtype) : "UNDEFINED" %></td>
 			<td><%= @asset.name ? @asset.name : "No Name" %></td>
 			<td><%= @asset.os %></td>
 			<td><%= @asset.serial %></td>
+		</tr>
+		<tr style="font-weight: bolder; color: #666; border-top: thin solid #aaa">
+			<td></td>
+			<td>Vendor</td>
+			<td>Purchase Date</td>
+			<td>Cost</td>
 		</tr>
 		<tr>
 			<td></td>

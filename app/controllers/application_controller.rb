@@ -15,11 +15,14 @@ class ApplicationController < ActionController::Base
 	end
 
 	def check_for_user
-		redirect_to '/sessions/new?return='+request.original_url unless current_user
+		redirect_to sessions_new_path(:return => request.original_url) unless current_user
 	end
 
 	def check_for_admin
-		redirect_to '/home/index' unless current_user && current_user.admin?
+	unless current_user && current_user.admin?
+		flash[:alert] = "You aren't authorized to do that."
+		redirect_to root_path 	
+	end
 	end
 
 	def grab_url

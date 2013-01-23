@@ -45,9 +45,17 @@ class LoansController < ApplicationController
 		@loan = Loan.new(params[:loan])
 		respond_to do |format|
 			if @loan.save
+				begin
 				MailMan.loan_submitted(current_user, @loan).deliver
+				rescue => exc
+					ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+				end
 				User.where(:administrator => true).each do |u|
+					begin
 					MailMan.tech_loan(u, @loan).deliver
+					rescue => exc
+						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+					end
 				end
 				format.html { redirect_to @loan, notice: 'Loan was successfully created.' }
 				format.json { render json: @loan, status: :created, location: @loan }
@@ -95,7 +103,11 @@ class LoansController < ApplicationController
 		end
 
 		@loan.save
+		begin
 		MailMan.loan_approved(@loan.user, @loan).deliver
+		rescue => exc
+			ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+		end
 		redirect_to @loan, :notice => "Approved loan"
 	end
 
@@ -108,7 +120,11 @@ class LoansController < ApplicationController
 			r.save
 		end
 
+		begin
 		MailMan.loan_return(@loan.user, @loan).deliver
+		rescue => exc
+			ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+		end
 		redirect_to @loan, :notice => "Returned equipment"
 	end
 end

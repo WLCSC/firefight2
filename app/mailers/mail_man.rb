@@ -1,8 +1,8 @@
 class MailMan < ActionMailer::Base
   default :from => "support@wl.k12.in.us"
   
-  def test
-	mail(:to => 'thompsonb@wl.k12.in.us', :subject => 'Firefight Mail Test')
+  def test to
+	mail(:to => to, :subject => 'Firefight Mail Test')
   end
   
   def ticket_submitted user, ticket, comment
@@ -48,6 +48,12 @@ class MailMan < ActionMailer::Base
     @loan = loan
     mail(:to => user.email, :subject => "Tech Equipment Loan ##{loan.id}")
   end
+
+	def loan_remind user, loan
+		@loan = loan
+		@user = user
+		mail(:to => user.email, :subject => "Tech Equipment Loan ##{loan.id}")
+	end
 
 
 end

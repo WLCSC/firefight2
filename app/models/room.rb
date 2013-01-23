@@ -42,4 +42,15 @@ class Room < ActiveRecord::Base
 	def nice_name
 		self.building.short + "-" + self.name
 	end
+
+	def self.to_csv
+		CSV.generate do |csv|
+			all.each do |room|
+				begin
+					csv << [room.name, room.building ? room.building.name : "None", room.department ? room.department.name : "None", room.notes ]
+				rescue
+				end
+			end
+		end
+	end
 end

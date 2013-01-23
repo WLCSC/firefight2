@@ -1,3 +1,4 @@
+require 'csv'
 class RoomsController < ApplicationController
 	before_filter :check_for_admin, :only => ['new', 'edit', 'create', 'update', 'destroy']
   # GET /rooms
@@ -8,6 +9,7 @@ class RoomsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @rooms }
+			format.csv {render text: Room.to_csv}
     end
   end
 

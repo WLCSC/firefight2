@@ -1,6 +1,6 @@
     <h1>Log in</h1>  
       
-    <%= form_tag '/sessions/create' do %>  
+    <%= form_tag sessions_create_path do %>  
 	    <p> 
 	    <%= hidden_field_tag :return, params[:return] %> 
         <%= label_tag :username %><br />  

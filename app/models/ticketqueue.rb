@@ -52,4 +52,5 @@ class Ticketqueue < ActiveRecord::Base
 	def nice_name
 		self.name
 	end
+
 end

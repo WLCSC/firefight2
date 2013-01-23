@@ -1,13 +1,20 @@
 class CommentsController < ApplicationController
+	before_filter :check_for_admin, :only => [:update]
 	# GET /comments/1/edit
 	def edit
 		@comment = Comment.find(params[:id])
+		unless current_user.admin? || @comment.user == current_user
+			redirect_to root_path, :notice => "You don't have permission to do that." 
+		end
 	end
 
 	# POST /comments
 	# POST /comments.json
 	def create
 		@comment = Comment.new(params[:comment])
+		unless current_user.ticketqueues.include?(@comment.ticket.ticketqueue) || current_user.admin? || @comment.ticket.users.include?(current_user)
+			redirect_to root_path, :notice => "You don't have permission to comment on that." 
+		else
 		if @comment.content != ""
 			if params[:commit] == "Add Comment & Mark As Complete"
 				@comment.ticket.status = 100
@@ -17,16 +24,25 @@ class CommentsController < ApplicationController
  		        flash[:error] = "You can't add blank comments."
 			@comment.errors.add :content,  "can't be blank"
 		end
+
 		respond_to do |format|
 			if @comment.save
 				unless @comment.ticket.users.include? @comment.user
 					@comment.ticket.users << @comment.user
 				end
 				@comment.ticket.users.each do |u|
+					begin
 					MailMan.ticket_updated(@comment.ticket, u).deliver
+					rescue => exc
+						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+					end
 				end
 				@comment.ticket.room.building.techs.each do |t|
+					begin
 					MailMan.ticket_updated(@comment.ticket, t).deliver unless @comment.ticket.users.include?(t)
+					rescue => exc
+						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+					end
 				end
 				format.html { redirect_to @comment.ticket, notice: 'Comment was successfully created.' }
 				format.json { render json: @comment, status: :created, location: @comment }
@@ -34,6 +50,7 @@ class CommentsController < ApplicationController
 				format.html { redirect_to @comment.ticket }
 				format.json { render json: @comment.errors, status: :unprocessable_entity }
 			end
+		end
 		end
 	end
 

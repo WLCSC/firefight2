@@ -107,9 +107,9 @@ class AssetsController < ApplicationController
 			end
 		end
 		if bad.length == 0
-			redirect_to '/home/tools?t=move', :notice => 'Moved assets.'
+			redirect_to home_tools_path(:t => 'move'), :notice => 'Moved assets.'
 		else
-			render '/home/tools', :notice => "#{bad.length} bad tags were submitted."
+			render home_tools_path, :notice => "#{bad.length} bad tags were submitted."
 		end
 	end
 
@@ -138,7 +138,7 @@ class AssetsController < ApplicationController
 		end
 
 		if count == 0
-			render 'home/tools', :notice => 'No assets were created.'
+			redirect_to home_tools_path, :notice => 'No assets were created.'
 		else
 			redirect_to final.room, :notice => "Created #{count} assets."
 		end

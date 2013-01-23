@@ -28,7 +28,7 @@
 	<%= render :partial => 'users/tickettable' %>
 <% end %>
 
-<% if current_user.admin? %>
+<% if current_user.support? || current_user.admin? %>
 	<%= content_for :open_tickets do %>
 		<%= render :partial => 'tickets/unassignedtable' %>
 	<% end %>
@@ -67,7 +67,7 @@
 </table>
 	<% end %>
 	<% bmap = {}; current_user.buildings.each {|b| bmap[b.short.to_sym] = "Submit ticket for #{b.name}"} %>
-	<% if current_user.admin? %>
+	<% if current_user.support? || current_user.admin? %>
 		<% tmap = {:your_tickets => "Your Tickets", :open_tickets => "Unassigned Tickets", :set_building => "Pick your default building"}.merge(bmap).merge( {:loans => "Your Loans"}) %>
 	<% else %>
 		<% tmap = {:set_building => "Pick your default building"}.merge(bmap).merge( {:your_tickets => "Your Tickets", :loans => "Your Loans"}) %>

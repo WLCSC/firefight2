@@ -1,23 +1,26 @@
-<%- model_class = @rtype.class -%>
-<h1><%=t '.title', :default => model_class.model_name.human %></h1>
+<h1><%= @rtype.name %></h1>
 
 <p>
-  <strong><%= model_class.human_attribute_name(:name) %>:</strong><br>
-  <%= @rtype.name %>
-</p>
-<p>
-  <strong><%= model_class.human_attribute_name(:notes) %>:</strong><br>
-  <%= @rtype.notes %>
+<i><%= @rtype.notes %></i>
 </p>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              rtypes_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_rtype_path(@rtype), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              rtype_path(@rtype),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
-</div>
+<% content_for :assets do %>
+	<% @assets = @rtype.assets %>
+	<%= render :partial => 'assets/assettable' %>
+<% end %>	
+<% content_for :tickets do %>
+	<% @tickets = @rtype.tickets %>
+	<%= render :partial => 'tickets/tickettable' %>
+<% end %>	
+<% content_for :models do %>
+	<% @models = @rtype.models %>
+	<%= render :partial => 'models/modeltable' %>
+<% end %>
+
+<%= tabify models: "Models", assets: "Assets", tickets: "All Tickets" %>
+
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Edit Asset Type", edit_rtype_path(@rtype) %></li>
+	<% end %>
+<% end %>

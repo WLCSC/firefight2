@@ -1,5 +1,4 @@
 <%= form_for(@loan) do |f| %>
-	<%= f.hidden_field :user_id, :value => current_user.id %>
 	<% if @loan.errors.any? %>
 		<div id="error_explanation">
 			<h2><%= pluralize(@loan.errors.count, "error") %> prohibited this loan from being saved:</h2>
@@ -29,6 +28,14 @@
 					<%= f.label :use %><br />
 					<%= f.text_area :use, :placeholder => "What do you need this stuff for?", :size => "60x3" %>
 				</div>
+				<% if current_user.admin? %>
+					<div class="field">
+						<%= f.label :user %>
+						<%= f.select :user_id, User.order("username ASC").all.map{|u| [u.name, u.id]}, :selected => current_user.id %>
+					</div>
+				<% else %>
+					<%= f.hidden_field :user_id, :value => current_user.id %>
+				<% end %>
 			</td>
 		</tr>
 	</table>
@@ -65,11 +72,13 @@
 		</table>
 	<% else %>
 		<h2>Requested Equipment</h2>
-		<table>
+		<table class="table">
 			<% @loan.returns.each do |r| %>
-				<td><%= r.asset.tag %></td>
+				<tr>
+				<td><%= link_to r.asset.tag, r.asset %></td>
 				<td><%= r.asset.model.name %></td>
-				<td><%= r.asset.model.rtype %></td>
+				<td><%= r.asset.model.rtype.name %></td>
+				</tr>
 			<% end %>
 		</table>
 	<% end %>

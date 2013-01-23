@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803183754) do
+ActiveRecord::Schema.define(:version => 20130123202256) do
 
   create_table "assets", :force => true do |t|
     t.integer  "room_id"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(:version => 20120803183754) do
     t.integer  "building_id"
     t.string   "email"
     t.boolean  "administrator"
+    t.boolean  "support"
   end
 
   create_table "vendors", :force => true do |t|

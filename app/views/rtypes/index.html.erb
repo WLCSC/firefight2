@@ -1,11 +1,10 @@
 <h1>Asset Types</h1>
-<table class="table table-striped">
+<table class="table table-striped datatableable">
   <thead>
     <tr>
 	    <th>Name</th>
-	    <th>Count</th>
+	    <th>Asset Count</th>
       <th>Notes</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -14,15 +13,13 @@
 	      <td><%= link_to rtype.name, rtype %></td>
 	      <td><%= rtype.assets.length %></td>
         <td><%= rtype.notes %></td>
-        <td>
-          <%= link_to "Edit",
-                      edit_rtype_path(rtype), :class => 'btn btn-mini' %>
-        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_rtype_path,
-            :class => 'btn btn-primary' %>
+<% if current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "New Asset Type", new_rtype_path %></li>
+	<% end %>
+<% end %>	
