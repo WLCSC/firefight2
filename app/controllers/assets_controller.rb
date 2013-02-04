@@ -54,14 +54,14 @@ class AssetsController < ApplicationController
 		end
 	end
 
-	# PUT /assets/1
-	# PUT /assets/1.json
+	# put /assets/1
+	# put /assets/1.json
 	def update
 		@asset = Asset.find(params[:id])
 
 		respond_to do |format|
 			if @asset.update_attributes(params[:asset])
-				format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
+				format.html { redirect_to @asset, notice: 'asset was successfully updated.' }
 				format.json { head :no_content }
 			else
 				format.html { render action: "edit" }
@@ -70,8 +70,8 @@ class AssetsController < ApplicationController
 		end
 	end
 
-	# DELETE /assets/1
-	# DELETE /assets/1.json
+	# delete /assets/1
+	# delete /assets/1.json
 	def destroy
 		@asset = Asset.find(params[:id])
 		@asset.destroy
@@ -85,11 +85,11 @@ class AssetsController < ApplicationController
 	def quick
 		@tag = Asset.where(:tag => params[:tag]).first
 		if @tag
-			flash[:notice] = "Found asset."
-			redirect_to @tag, :notice => "Found asset."
+			flash[:notice] = "found asset."
+			redirect_to @tag, :notice => "found asset."
 		else
-			flash[:alert] = "Can't find asset."
-			redirect_to params[:return], :notice => "Can't find asset"
+			flash[:alert] = "can't find asset."
+			redirect_to params[:return], :notice => "can't find asset"
 		end
 	end
 
@@ -107,7 +107,7 @@ class AssetsController < ApplicationController
 			end
 		end
 		if bad.length == 0
-			redirect_to home_tools_path(:t => 'move'), :notice => 'Moved assets.'
+			redirect_to home_tools_path(:t => 'move'), :notice => 'moved assets.'
 		else
 			render home_tools_path, :notice => "#{bad.length} bad tags were submitted."
 		end
@@ -116,6 +116,9 @@ class AssetsController < ApplicationController
 	def mass
 		count = 0
 		final = nil
+		errors = []
+		r = params[:room_name].split(' - ')
+		room = Room.where(:name => r[1]).where(:building_id => Building.where(:name => r[0]).first.id).first
 		params[:pairs].each_line do |line|
 			line.chomp!
 			asset = Asset.create(:super => false, :name => "")
@@ -131,16 +134,18 @@ class AssetsController < ApplicationController
 			asset.serial = x[1]
 			if asset.save
 				count += 1
-				final = asset
 			else
-				raise asset.errors.inspect
+				errors += asset.errors.full_messages.map{|m| "#{asset.tag}: #{m}"}
 			end
 		end
 
-		if count == 0
-			redirect_to home_tools_path, :notice => 'No assets were created.'
-		else
-			redirect_to final.room, :notice => "Created #{count} assets."
-		end
+			n = "Created #{count} assets."
+			if errors.count > 0
+				n << "<br/>"
+				errors.each do |e|
+					n << e << "<br/>"
+				end
+			end
+			redirect_to room, :notice => n.html_safe
 	end
 end

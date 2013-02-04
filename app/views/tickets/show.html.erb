@@ -29,18 +29,42 @@
 				<% end %>
 			</td>
 			<td>
-				<%= @ticket.attachment.exists? ? link_to(image_tag(root_url.gsub(/\/$/, '') + @ticket.attachment.url(:preview)), root_url.gsub(/\/$/, '') + @ticket.attachment.url) : ""  %>
-				<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
-					<%= form_for @ticket, :html => {:multipart => true} do |f| %>
-						<p>Add/Overwrite Screenshot<br />
-						<b><i>.PNG or .JPG files only!</i></b><br/>
-						<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %><br/>
-						<%= f.file_field :attachment, :accept=>"image/gif,image/png,image/jpeg"%><br/>
-						<%= f.submit (@ticket.attachment.exists? ? "Update" : "Add"), :class => 'btn' %>
-						</p>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+						<th>Image</th>
+						<th>Submitted by</th>
+						<th>Submitted at</th>
+					</tr>
+					</thead>
+				<% @ticket.photos.each do |photo| %>
+					<tr>
+						<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
+						<td><%= link_to photo.user.name, photo.user %></td>
+						<td><%= photo.created_at.strftime("%m/%d/%y %I:%M") %>
+						</tr>
 					<% end %>
-				<% end %>
-	</td></tr></table>
+					<tr>
+						<td colspan="3" style="text-align: center;"><b>Add a Screenshot</b></td>
+					</tr>
+					<%= form_for Photo.new, :html => {:multipart => true} do |f| %>
+						<tr>
+							<td colspan=2 style="text-align: center;">
+								<%= f.hidden_field :photographable_type, :value => "Ticket" %>
+								<%= f.hidden_field :photographable_id, :value => @ticket.id %>
+								<%= f.hidden_field :user_id, :value => current_user.id %>
+								<%= f.file_field :image, :accept => "image/gif,image/png,image/jpeg" %><br/>
+								<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %>
+							</td>
+							<td style="text-align: right;">
+								<%= f.submit "Upload", :class => 'btn btn-success' %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</td>
+		</tr>
+	</table>
 	<table class="table table-bordered table-striped">
 		<% @ticket.comments.each do |comment| %>	
 			<tr>
@@ -100,6 +124,7 @@
 				<%= form_for @ticket do |f| %>
 					<li>Move to asset: <%= f.text_field :asset_id, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => @ticket.asset.tag  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-warning' %></li>
 				<% end %>
-				<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", '/tickets/'+(@ticket.id+1).to_s %></li><% end %>
+				<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", ticket_path(@ticket.id+1) %></li><% end %>
 			<% end %>
 		<% end %>
+

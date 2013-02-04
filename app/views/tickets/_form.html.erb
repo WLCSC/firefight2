@@ -26,7 +26,11 @@
 				<p><b><i>Optional</i></b> Screenshot<br />
 				<b><i>.PNG or .JPG files only!</i></b><br/>
 				<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %><br/>
-				<%= f.file_field :attachment, :accept=>"image/gif,image/png,image/jpeg"%>
+				<%= f.fields_for :photo do |ff| %>
+					<%= ff.hidden_field :photographable_type, :value => "Ticket" %>
+					<%= ff.hidden_field :user_id, :value => current_user.id %>
+					<%= ff.file_field :image, :accept => "image/gif,image/png,image/jpeg" %>
+				<% end %>
 				</p>
 
 				<p><b><i>Optional</i></b> Event/Due Date</p>

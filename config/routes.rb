@@ -1,4 +1,5 @@
 Firefight2::Application.routes.draw do
+	resources :photos
 	resources :departments
   resources :shortcuts do
 	collection do

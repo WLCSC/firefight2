@@ -11,6 +11,9 @@ class Ticket < ActiveRecord::Base
 	after_create :set_comment
 	before_save :fix_due
 
+	has_many :photos, :as => :photographable
+	accepts_nested_attributes_for :photos
+
 	has_attached_file :attachment, :styles => {:preview => ["320x240>", :png], :small => ["640x480>", :png]}
 	#validates_attachment_content_type :attachment, :content_type=>['image/jpeg', 'image/png', 'image/gif']	
 	scope :low, where("`tickets`.status = 1")

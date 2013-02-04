@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
 	# GET /tickets
 	# GET /tickets.json
 	def index
-		@tickets = Tickets.readable_by(current_user)
+		@tickets = Ticket.readable_by(current_user)
 		if params[:status] || params[:building_id] || params[:queue_id]
 			if params[:status]
 				case params[:status]
@@ -91,7 +91,10 @@ class TicketsController < ApplicationController
 		@ticket = Ticket.new(params[:ticket])
 		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
 			redirect_to root_path, :notice => "You don't have permission to do that." 
+			return
 		else
+		
+
 		if @ticket.ticketqueue == nil
 			@ticket.ticketqueue = Ticketqueue.first
 		end
@@ -116,6 +119,11 @@ class TicketsController < ApplicationController
 					rescue
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end
+				end
+				if params[:ticket][:photo][:image]
+					@photo = Photo.new(params[:ticket][:photo])
+					@photo.photographable_id = @ticket.id
+					@photo.save
 				end
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 				format.json { render json: @ticket, status: :created, location: @ticket }
