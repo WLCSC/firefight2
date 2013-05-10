@@ -12,7 +12,7 @@
 <% @groups.each do |group| %>
   <tr>
     <td><%= current_user.member_of?(group) ? '<i class="icon-ok"></i>'.html_safe : '<i class="icon-remove"></i>'.html_safe%></td>
-    <td><%= group.name %></td>
+    <td><%= link_to group.name, group %></td>
     <td><%= group.auth_attribute %></td>
     <td><%= group.auth_value %></td>
     <td><%= link_to 'Edit', edit_group_path(group), :class => 'btn btn-mini' %></td>

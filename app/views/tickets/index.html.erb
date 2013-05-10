@@ -1,6 +1,6 @@
 <h1>Tickets</h1>
 <% content_for :filter do %>
-	<%= form_tag '/tickets', :method => :get do %>
+	<%= form_tag tickets_path, :method => :get do %>
 		<table class="table">
 			<tr>
 				<td>Status</td>

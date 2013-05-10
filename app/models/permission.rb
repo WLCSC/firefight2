@@ -19,7 +19,7 @@ class Permission < ActiveRecord::Base
 	end
 
 	def authorizes? user
-		self.principal.authorizes? user
+		self.principal.users.include? user
 	end
 
 	def can right

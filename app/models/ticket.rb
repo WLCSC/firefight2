@@ -7,9 +7,10 @@ class Ticket < ActiveRecord::Base
 	has_many :contexts
 	belongs_to :ticketqueue
 	belongs_to :submitter, :class_name => 'User'
-	attr_accessor :comment, :due_at 
+	attr_accessor :comment, :due_at, :asset_tag 
 	after_create :set_comment
 	before_save :fix_due
+	before_save :find_asset
 
 	has_many :photos, :as => :photographable
 	accepts_nested_attributes_for :photos
@@ -32,7 +33,7 @@ class Ticket < ActiveRecord::Base
 	end
 
 
-	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list
+	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list, :asset_tag
 
 	def statusify
 		return 'Low' if status==1
@@ -87,6 +88,12 @@ class Ticket < ActiveRecord::Base
 			
 		end
 
+	end
+
+	def find_asset
+		if self.asset_tag
+			self.asset = Asset.where(:tag => self.asset_tag).first
+		end
 	end
 
 

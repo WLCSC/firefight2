@@ -4,7 +4,7 @@
 
  <p style="font-size:large">This is an automated response.  Please do not reply back to this e-mail.  All communication regarding this ticket should take place inside Firefight.  Thank you.</p>
 
- <p>Your support ticket, #<%= @ticket.id %>, for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %> has been updated.  <a href="https:/apps.wl.k12.in.us/firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
+ <p>Your support ticket, #<%= @ticket.id %>, for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %> has been updated.  <a href="https://apps.wl.k12.in.us/firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
 
 <% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2]: @ticket.comments.last) %>
 <p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>

@@ -37,26 +37,29 @@
 						<% @loan.returns.each do |r| %>
 							<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><% if @loan.active %><% if r.returned  %><b>Returned</b> <% else %><label>Return <%= check_box_tag 'rx[]', r.id %></label><% end %><% end %></p>
 						<% end %>
-						<% if @loan.active %><%= submit_tag "Submit Returns" %>
+						<% if @loan.active %><%= submit_tag "Submit Returns", :class => 'btn btn-success' %>
 						<% end %><% end %>
 				<% else %>
 					<% @loan.returns.each do |r| %>
 						<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><%= !r.returned ? "Out" : "Returned" %></p>
 					<% end %>
 				<% end %>
-			<% else %>
+			<% elsif @loan.approved == nil %>
 				<% if current_user.admin? %>
 					<%= form_tag approve_loan_path(@loan) do %>
 						<% @loan.rtypes.each do |rtype| %>
-							<p><%= rtype.name %> <%= select :asset,  rtype.name, rtype.assets.map{|a| ["#{a.tag} - #{a.room.building.name} - #{a.room.name}", a.id]} %></p>
+							<p><%= rtype.name %> <%= select :asset,  rtype.name, rtype.assets.order('tag ASC').map{|a| ["#{a.tag} - #{a.room.building.name} - #{a.room.name}", a.id]} %></p>
 						<% end %>
-						<%= submit_tag "Approve" %>
+						<%= submit_tag "Approve", :class => 'btn btn-success' %>
+						<%= submit_tag "Deny", :class => 'btn btn-inverse' %>
 					<% end %>
 				<% else %>
 					<% @loan.rtypes.each do |rtype| %>
 						<p><%= rtype.name %></p>
 					<% end %>
 				<% end %>
+			<% else %>
+				<p>This loan was denied.</p>
 			<% end %>
 		</td>
 	</tr>

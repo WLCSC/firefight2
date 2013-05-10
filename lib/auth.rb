@@ -23,18 +23,30 @@ def ldap_populate user, pass, obj=nil
 		u.username = user
 		u.name = l['givenname'][0].to_s + " " + l['sn'][0].to_s
 		u.administrator = true if(l[:memberof].include? APP_CONFIG[:ldap_domain_administrator_ou])
-		u.email = l['mail'][0].to_s
+		u.email = l['mail'][0]
 
 		Group.all.each do |group|
-			unless group.users.include? u
-				group.users << u if(l[group.auth_attribute.to_sym].include?(group.auth_value) )
+			unless group.auth_attribute == "*"
+				raise group.inspect unless group.auth_attribute
+				if (l[group.auth_attribute.to_sym].include?(group.auth_value))
+					unless group.users.include? u
+						group.users << u 
+					end
+				else
+					if group.users.include? u
+						group.users.delete u
+					end
+				end
 			end
 		end
+
 		u.save
 		u
 	else
 		false
 	end
+
+		
 end
 
 def ldap_search user

@@ -49,12 +49,14 @@
 	<%= render :partial => 'rooms/completetickets' %>
 <% end %>
 
+<% if current_user.ticketqueues.count > 0 || current_user.admin? %>
 <% content_for :new_ticket do %>
 	<% if @asset.super %>
 		<p>This is a super asset, and tickets can't be directly submitted for it.</p>
 	<% else %>
 		<%= render :partial => 'tickets/form' %>
 	<% end %>
+<% end %>
 <% end %>
 
 <% if current_user.admin? %>

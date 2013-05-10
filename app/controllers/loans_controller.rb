@@ -96,19 +96,31 @@ class LoansController < ApplicationController
 
 	def approve
 		@loan = Loan.find(params[:id])
-		@loan.approved = true
-
-		params[:asset].each do |k,v|
-			r = Return.create! :loan_id => @loan.id, :asset_id => v, :returned => false
+		if params[:commit] == "Approve"
+			@loan.approved = true
+	
+			if params[:asset]
+			params[:asset].each do |k,v|
+				r = Return.create! :loan_id => @loan.id, :asset_id => v, :returned => false
+			end
+			end
+			
+			begin
+			MailMan.loan_approved(@loan.user, @loan).deliver
+			rescue => exc
+				ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+			end
+		else
+			@loan.approved = false
+			begin
+			MailMan.loan_denied(@loan.user, @loan).deliver
+			rescue => exc
+				ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+			end
 		end
 
 		@loan.save
-		begin
-		MailMan.loan_approved(@loan.user, @loan).deliver
-		rescue => exc
-			ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
-		end
-		redirect_to @loan, :notice => "Approved loan"
+		redirect_to @loan, :notice => "#{@loan.approved ? "Approved" : "Denied"} loan"
 	end
 
 	def return

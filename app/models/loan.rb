@@ -30,7 +30,11 @@ class Loan < ActiveRecord::Base
 				'<span style="color: #A65400;">Complete</span>'.html_safe
 			end
 		else
+			if self.approved == nil
 			'<span style="color: #FFBA00;">Waiting for approval</span>'.html_safe
+			else
+			'<span style="color: #aa3300;">Denied</span>'.html_safe
+			end
 		end
 	end
 
@@ -46,23 +50,36 @@ class Loan < ActiveRecord::Base
 					'<span class="badge badge-success">' + self.id.to_s + '</span>'
 			end
 		else
+			if self.approved == false
+					'<span class="badge badge-inverse">' + self.id.to_s + '</span>'
+			else
 					'<span class="badge badge-warning">' + self.id.to_s + '</span>'
+			end
 		end
 	end
 
 	def fix_dates
 		if self.start
+			begin
 			self.start.match /(\d+)\/(\d+)\/(\d+)/
 			self.start_date = Date.civil($3.to_i, $1.to_i, $2.to_i)
+			rescue
+				self.errors.add :start_date, "is invalid"
+			end
 		else
 			raise 'no start date'
 		end
 
 		if self.end
+			begin
 			self.end.match /(\d+)\/(\d+)\/(\d+)/
 			self.end_date = Date.civil($3.to_i, $1.to_i, $2.to_i)
+			rescue
+				self.errors.add :end_date, "is invalid"
+			end
 		else
 			raise 'no end date'
 		end
+		true
 	end
 end

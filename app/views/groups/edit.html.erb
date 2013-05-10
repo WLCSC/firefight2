@@ -1,4 +1,10 @@
 <%- model_class = @group.class -%>
-<h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
-                                 :default => "Edit #{model_class.model_name.human}") %></h1>
+<h1>Edit <%= @group.name %></h1>
 <%= render :partial => 'form' %>
+
+<% if @group.auth_attribute != '*' || @group.memberships.count == 0 %>
+<% content_for :sidebar do %>
+	<li><%= link_to "Delete Group", @group, :method => 'delete', :confirm => "Really delete #{@group.name}?" %></li>
+<% end %>
+<% end %>
+

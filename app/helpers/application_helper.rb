@@ -132,4 +132,14 @@ module ApplicationHelper
 		str.match /(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/
 		DateTime.civil($3.to_i, $1.to_i, $2.to_i, $4.to_i, $5.to_i)
 	end
+
+	def pills_for collection, klass = nil
+		buffer = '<ul class="nav nav-pills ' + (klass ? klass : '') + '">' + "\n"
+		collection.each do |item|
+			buffer << '<li>' + link_to(item.display, item) + '</li>' + "\n"
+		end
+		buffer << '</ul>'
+		buffer.html_safe
+	end
+
 end

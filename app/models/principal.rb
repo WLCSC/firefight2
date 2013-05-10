@@ -31,10 +31,14 @@ class Principal < ActiveRecord::Base
 	end
 
 	def users
+		if self.authorizable
 		if self.authorizable_type == "User"
 			[self.authorizable]
 		else
 			self.authorizable.users
+		end
+		else
+			[]
 		end
 	end
 

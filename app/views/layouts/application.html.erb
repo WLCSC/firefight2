@@ -125,7 +125,7 @@
 			<div class="navbar-inner">
 				<div class="container">
 					<div class="container nav-collapse">
-						<ul class="nav">
+						<ul class="nav shortcuts">
 							<li><%= link_to "Manage Shortcuts", shortcuts_path, :class => 'btn btn-mini btn-inverse', :style => 'width: 50px; padding-top: 3px; padding-bottom: 3px; line-height: 12px;' %></li>
 							<% current_user.shortcuts.order(:position).each do |shortcut| %>
 								<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>

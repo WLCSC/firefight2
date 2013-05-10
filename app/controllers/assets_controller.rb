@@ -109,7 +109,7 @@ class AssetsController < ApplicationController
 		if bad.length == 0
 			redirect_to home_tools_path(:t => 'move'), :notice => 'moved assets.'
 		else
-			render home_tools_path, :notice => "#{bad.length} bad tags were submitted."
+			redirect_to home_tools_path(:t => 'move'), :notice => "#{bad.length} bad tags were submitted: #{bad.join}"
 		end
 	end
 

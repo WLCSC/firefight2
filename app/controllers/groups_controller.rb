@@ -81,4 +81,24 @@ class GroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+	def change
+		@group = Group.find(params[:id])
+		@user = User.where(:name => params[:name]).first
+
+		if @user
+			q = ""
+			if @group.users.include? @user
+				@group.users.delete @user
+				q = "Removed "
+			else
+				@group.users << @user
+				q = "Added "
+			end
+			flash[:info] = "Added #{@user.name} to group."
+		else
+			flash[:error] = "Couldn't find user #{params[:name]}."
+		end
+		redirect_to @group
+	end
 end

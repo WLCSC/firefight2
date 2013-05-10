@@ -43,6 +43,12 @@ class MailMan < ActionMailer::Base
     mail(:to => user.email, :subject => "Tech Equipment Loan ##{loan.id}")
   end
 
+	def loan_denied user, loan
+    @user = user
+    @loan = loan
+    mail(:to => user.email, :subject => "Tech Equipment Loan ##{loan.id}")
+  end
+
   def loan_return user, loan
     @user = user
     @loan = loan

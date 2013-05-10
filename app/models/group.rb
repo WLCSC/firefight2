@@ -12,4 +12,8 @@ class Group < ActiveRecord::Base
 		p = self.build_principal
 		p.save
 	end
+
+	def display
+		self.name
+	end
 end

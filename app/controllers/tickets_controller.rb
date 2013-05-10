@@ -81,7 +81,7 @@ class TicketsController < ApplicationController
 	def edit
 		@ticket = Ticket.find(params[:id])
 		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? 
-			redirect_to root_path, :notice => "You don't have permission to read that." 
+			redirect_to root_path, :notice => "You don't have permission to edit that." 
 		end
 	end
 
@@ -154,6 +154,10 @@ class TicketsController < ApplicationController
 					User.where(:administrator => :true).each do |u|
 						MailMan.ticket_updated(@ticket,u)
 					end
+				end
+
+				if params[:commit] == "Move"
+					c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} moved this ticket to Tag##{@ticket.asset.tag}")
 				end
 
 				@ticket.users.each do |u|

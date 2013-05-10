@@ -73,4 +73,7 @@ class User < ActiveRecord::Base
 		self.name
 	end
 
+	def display
+		self.name
+	end
 end
