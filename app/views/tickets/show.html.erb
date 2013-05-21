@@ -128,3 +128,21 @@
 			<% end %>
 		<% end %>
 
+<%# javascript_tag do %>
+<!--			$(document).ready(function() {
+			var values = <%= raw User.all.map{|u| {val: u.username, meta: u.name}}.to_json %>;
+
+				var customItemTemplate = "<div><span />&nbsp;<small /></div>";
+
+				function elementFactory(element, e) {
+					var template = $(customItemTemplate).find('span')
+															.text('@' + e.val).end()
+												   		.find('small')
+															.text("(" + e.meta + ")").end();
+					element.append(template);
+				};
+
+				// here is how we use it
+				$('#comment_content').sew({values: values, elementFactory: elementFactory});
+				}); -->
+<%# end %>

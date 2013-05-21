@@ -18,7 +18,7 @@ class Comment < ActiveRecord::Base
 		end
 
 		if (md = content.match(/#\[(.+)\]/))
-			content.gsub!(/#\[(.+)\]/,'<a href="http://firefight.wlcsc.k12.in.us/tickets/' + md[1] + '"><span class="badge">\\1</span></a>')
+			content.gsub!(/#\[(.+)\]/,'<a href="https://apps.wl.k12.in.us/firefight/tickets/' + md[1] + '"><span class="badge">\\1</span></a>')
 			self.save
 		end
 	end
