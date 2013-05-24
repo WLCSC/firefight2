@@ -31,8 +31,23 @@ class Ticketqueue < ActiveRecord::Base
 	end
 
 	def can? user, right
-		p = self.permissions.where(:user_id => user.id).where(:key => right).order('priority').first
-		p.value == 1
+		return true if user.admin?
+		p = secures(user)
+		r = nil
+		if p
+			case right
+			when :read
+				r=p.read
+			when :write
+				r=p.write
+			when :execute, :admin
+				r=p.execute
+			end
+		else
+			r=false
+		end
+		puts "Chamber##{self.id}: can #{user.name} #{right.to_s}: #{r}"
+		r
 	end
 
 	def permissions

@@ -113,7 +113,13 @@ class TicketsController < ApplicationController
 				rescue => exc
 					ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 				end
-				User.where(:administrator => true).each do |u|
+
+				notifications = []
+				User.where(:administrator => true).each {|u| notifications << u}
+				@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+				notifications.uniq!
+
+				notifications.each do |u|
 					begin
 						MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver unless @ticket.submitter == u
 					rescue

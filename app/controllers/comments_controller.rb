@@ -30,16 +30,15 @@ class CommentsController < ApplicationController
 				unless @comment.ticket.users.include? @comment.user
 					@comment.ticket.users << @comment.user
 				end
-				@comment.ticket.users.each do |u|
+
+				notifications = []
+				@comment.ticket.users.each {|u| notifications << u}
+				@comment.ticket.room.building.techs.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
+				notifications.uniq!
+
+				notifications.each do |u|
 					begin
 					MailMan.ticket_updated(@comment.ticket, u).deliver
-					rescue => exc
-						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
-					end
-				end
-				@comment.ticket.room.building.techs.each do |t|
-					begin
-					MailMan.ticket_updated(@comment.ticket, t).deliver unless @comment.ticket.users.include?(t)
 					rescue => exc
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end

@@ -22,7 +22,9 @@ Firefight2::Application.routes.draw do
 
   resources :permissions
 
-  resources :groups
+  resources :groups do
+		post 'change', :on => :member
+	end
 
   resources :manufacturers do
 	resources :models

@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'ruby-ntlm'
 
 gem 'rails', '3.2.2'
 
