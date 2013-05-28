@@ -44,3 +44,5 @@ gem "net-ldap"
 gem "jquery-rails"
 gem "twitter-bootstrap-rails"
 gem "exception_notification", :require => "exception_notifier"
+gem 'resque'
+gem 'resque_mailer'

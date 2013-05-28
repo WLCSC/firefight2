@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
 
 				notifications.each do |u|
 					begin
-					MailMan.ticket_updated(@comment.ticket, u).deliver
+					MailMan.ticket_updated(@comment.ticket.id, u.id).deliver
 					rescue => exc
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end

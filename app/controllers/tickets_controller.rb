@@ -109,7 +109,7 @@ class TicketsController < ApplicationController
 		respond_to do |format|
 			if @ticket.save
 				begin
-				MailMan.ticket_submitted(current_user, @ticket, @ticket.comments.first).deliver
+				MailMan.ticket_submitted(current_user.id, @ticket.id, @ticket.comments.first.id).deliver
 				rescue => exc
 					ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 				end
@@ -121,7 +121,7 @@ class TicketsController < ApplicationController
 
 				notifications.each do |u|
 					begin
-						MailMan.tech_submitted(u, @ticket, @ticket.comments.first).deliver unless @ticket.submitter == u
+						MailMan.tech_submitted(u.id, @ticket.id, @ticket.comments.first.id).deliver unless @ticket.submitter == u
 					rescue
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end
@@ -158,7 +158,7 @@ class TicketsController < ApplicationController
 
 				if @ticket.status == 100 && !@ticket.assigned?
 					User.where(:administrator => :true).each do |u|
-						MailMan.ticket_updated(@ticket,u)
+						MailMan.ticket_updated(@ticket.id,u.id)
 					end
 				end
 
@@ -167,7 +167,7 @@ class TicketsController < ApplicationController
 				end
 
 				@ticket.users.each do |u|
-					MailMan.ticket_updated(@ticket, u).deliver
+					MailMan.ticket_updated(@ticket.id, u.id).deliver
 				end
 
 				format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }

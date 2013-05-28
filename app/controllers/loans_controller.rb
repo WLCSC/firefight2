@@ -46,13 +46,13 @@ class LoansController < ApplicationController
 		respond_to do |format|
 			if @loan.save
 				begin
-				MailMan.loan_submitted(current_user, @loan).deliver
+				MailMan.loan_submitted(current_user.id, @loan.id).deliver
 				rescue => exc
 					ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 				end
 				User.where(:administrator => true).each do |u|
 					begin
-					MailMan.tech_loan(u, @loan).deliver
+					MailMan.tech_loan(u.id, @loan.id).deliver
 					rescue => exc
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end
@@ -106,14 +106,14 @@ class LoansController < ApplicationController
 			end
 			
 			begin
-			MailMan.loan_approved(@loan.user, @loan).deliver
+			MailMan.loan_approved(@loan.user.id, @loan.id).deliver
 			rescue => exc
 				ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 			end
 		else
 			@loan.approved = false
 			begin
-			MailMan.loan_denied(@loan.user, @loan).deliver
+			MailMan.loan_denied(@loan.user.id, @loan.id).deliver
 			rescue => exc
 				ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 			end
@@ -133,7 +133,7 @@ class LoansController < ApplicationController
 		end
 
 		begin
-		MailMan.loan_return(@loan.user, @loan).deliver
+		MailMan.loan_return(@loan.user.id, @loan.id).deliver
 		rescue => exc
 			ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 		end
