@@ -36,12 +36,12 @@ class Ticketqueue < ActiveRecord::Base
 		r = nil
 		if p
 			case right
-			when :read
-				r=p.read
-			when :write
-				r=p.write
+			when :read, :see
+				r=p.see
+			when :write, :submit
+				r=p.submit
 			when :execute, :admin
-				r=p.execute
+				r=p.admin
 			end
 		else
 			r=false
