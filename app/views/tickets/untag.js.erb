@@ -1,0 +1,2 @@
+$("#tag<%= @user.id %>").remove();
+$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Untagged <%= @user.name %></div>');

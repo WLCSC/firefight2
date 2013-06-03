@@ -1,0 +1,2 @@
+$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Tagged <%= @user.name %></div>');
+$("#taglist").append('<li><%= link_to ("&times " + @user.name).html_safe, untag_ticket_path(@ticket, :user_id => @user.id), :remote => true, :id => ('tag' + @user.id.to_s) %></li>');
