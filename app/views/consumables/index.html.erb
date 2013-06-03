@@ -1,0 +1,27 @@
+<h1>Listing consumables</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Short</th>
+    <th>Cost</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @consumables.each do |consumable| %>
+  <tr>
+    <td><%= consumable.name %></td>
+    <td><%= consumable.short %></td>
+    <td><%= consumable.cost %></td>
+    <td><%= link_to 'Show', consumable %></td>
+    <td><%= link_to 'Edit', edit_consumable_path(consumable) %></td>
+    <td><%= link_to 'Destroy', consumable, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Consumable', new_consumable_path %>

@@ -6,6 +6,8 @@ class Building < ActiveRecord::Base
 	has_one :shortcut, :as => :container
 	has_many :assignments
 	has_many :asignees, :through => :assignments, :source => :user
+	has_many :alerts
+	has_many :inventories, :through => :rooms
 
 	attr_accessible :name, :address, :short
 

@@ -1,0 +1,29 @@
+<%= form_for(@consumable) do |f| %>
+  <% if @consumable.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@consumable.errors.count, "error") %> prohibited this consumable from being saved:</h2>
+
+      <ul>
+      <% @consumable.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :short %><br />
+    <%= f.text_field :short %>
+  </div>
+  <div class="field">
+    <%= f.label :cost %><br />
+    <%= f.text_field :cost %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

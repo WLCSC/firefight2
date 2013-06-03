@@ -1,4 +1,8 @@
 Firefight2::Application.routes.draw do
+  resources :alerts
+
+  resources :consumables
+
 	resources :photos
 	resources :departments
 	resources :shortcuts do

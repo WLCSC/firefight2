@@ -5,6 +5,8 @@ class Room < ActiveRecord::Base
 	has_one :shortcut, :as => :container
 	belongs_to :department
 	belongs_to :default_asset, :class_name => :Asset
+	has_many :inventories
+	has_many :consumables, :through => :inventories
 	before_save :fix_default_tag
 	after_create :add_default_asset
 

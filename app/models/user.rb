@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 	has_many :comments
 	has_many :loans
 	has_many :returns, :through => :loan
+	has_many :alerts
 	after_create :create_principal
 	has_many :shortcuts
 	has_many :assignments, :dependent => :destroy
