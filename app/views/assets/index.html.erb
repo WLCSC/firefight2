@@ -1,4 +1,19 @@
-<h1>All the Assets!</h1>
+<h1>Assets</h1>
+
+<% content_for :filter do %>
+	<%= form_tag assets_path, :method => :get do %>
+		<table class="table">
+			<tr>
+				<td>Serial (substring match): <%= text_field_tag :serial, params[:serial] || '' %> </td>
+				<td>Building: <%= select_tag :building_id, options_for_select([''] + Building.all.map{|q| [q.name, q.id]}), :class => 'input-medium'%></td>
+				<td>Type: <%= select_tag :type_id, options_for_select([''] + Rtype.all.map{|q| [q.name, q.id]}), :class => 'input-medium'%></td>
+			</tr>
+		</table>
+		<%= submit_tag "Go!", :class => 'btn btn-large btn-success' %>
+	<% end %>
+<% end %>
+
+<% content_for :list do %>
 <table class="table table-striped table-condensed">
   <thead>
     <tr>
@@ -26,3 +41,6 @@
     <% end %>
   </tbody>
 </table>
+<% end %>
+
+<%= tabify list: "Tickets", filter: "Filter" %> 

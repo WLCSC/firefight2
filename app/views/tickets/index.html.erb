@@ -57,13 +57,7 @@
 	</table>
 <% end %>
 
-<% if current_user.admin? && params[:commit] == "Go!" %>
-	<% content_for :params do %>
-		<pre><%= params.inspect %></pre>
-<% end %>
-<% end %>
-
-<%= tabify(list: "Tickets", filter: "Filter", params: "Filter Parameters") %>
+<%= tabify(list: "Tickets", filter: "Filter") %>
 
 <%= javascript_tag do %>
 	$(document).ready(function() {

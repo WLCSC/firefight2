@@ -73,4 +73,3 @@ $.extend( $.fn.dataTableExt.oStdClasses, {
     "sSortDesc": "header headerSortUp",
     "sSortable": "header"
 } );
-

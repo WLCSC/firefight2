@@ -23,4 +23,8 @@ class Comment < ActiveRecord::Base
 		end
 	end
 
+	def formatted_display
+		self.content.lines.map{|l| "<p>#{l}</p>"}.join("\n").html_safe
+	end
+
 end

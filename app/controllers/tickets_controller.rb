@@ -4,8 +4,9 @@ class TicketsController < ApplicationController
 	# GET /tickets
 	# GET /tickets.json
 	def index
-		@tickets = Ticket.readable_by(current_user)
+		@tickets = []
 		if params[:status] || params[:building_id] || params[:queue_id]
+			@tickets = Ticket.readable_by(current_user)
 			if params[:status]
 				case params[:status]
 				when 'a'
@@ -93,51 +94,51 @@ class TicketsController < ApplicationController
 			redirect_to root_path, :notice => "You don't have permission to do that." 
 			return
 		else
-		
 
-		if @ticket.ticketqueue == nil
-			@ticket.ticketqueue = Ticketqueue.first
-		end
-		if @ticket.asset == nil 
-			if @ticket.room != nil
-				@ticket.asset = @ticket.room.asset
-			else
-				@ticket.errors << "Something has gone horribly wrong!"
+
+			if @ticket.ticketqueue == nil
+				@ticket.ticketqueue = Ticketqueue.first
 			end
-		end
-
-		respond_to do |format|
-			if @ticket.save
-				begin
-				MailMan.ticket_submitted(current_user.id, @ticket.id, @ticket.comments.first.id).deliver
-				rescue => exc
-					ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+			if @ticket.asset == nil 
+				if @ticket.room != nil
+					@ticket.asset = @ticket.room.asset
+				else
+					@ticket.errors << "Something has gone horribly wrong!"
 				end
+			end
 
-				notifications = []
-				User.where(:administrator => true).each {|u| notifications << u}
-				@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
-				notifications.uniq!
-
-				notifications.each do |u|
+			respond_to do |format|
+				if @ticket.save
 					begin
-						MailMan.tech_submitted(u.id, @ticket.id, @ticket.comments.first.id).deliver unless @ticket.submitter == u
-					rescue
+						MailMan.ticket_submitted(current_user.id, @ticket.id, @ticket.comments.first.id).deliver
+					rescue => exc
 						ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
 					end
+
+					notifications = []
+					User.where(:administrator => true).each {|u| notifications << u}
+					@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					notifications.uniq!
+
+					notifications.each do |u|
+						begin
+							MailMan.tech_submitted(u.id, @ticket.id, @ticket.comments.first.id).deliver unless @ticket.submitter == u
+						rescue
+							ExceptionNotifier::Notifier.exception_notification(request.env, exc, :data => {:message => "failed to deliver mail"}).deliver
+						end
+					end
+					if params[:ticket][:photo][:image]
+						@photo = Photo.new(params[:ticket][:photo])
+						@photo.photographable_id = @ticket.id
+						@photo.save
+					end
+					format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
+					format.json { render json: @ticket, status: :created, location: @ticket }
+				else
+					format.html { render action: "new" }
+					format.json { render json: @ticket.errors, status: :unprocessable_entity }
 				end
-				if params[:ticket][:photo][:image]
-					@photo = Photo.new(params[:ticket][:photo])
-					@photo.photographable_id = @ticket.id
-					@photo.save
-				end
-				format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
-				format.json { render json: @ticket, status: :created, location: @ticket }
-			else
-				format.html { render action: "new" }
-				format.json { render json: @ticket.errors, status: :unprocessable_entity }
 			end
-		end
 		end
 	end
 
@@ -149,102 +150,137 @@ class TicketsController < ApplicationController
 			redirect_to root_path, :notice => "You don't have permission to read that." 
 		else
 
-		respond_to do |format|
-			if @ticket.update_attributes(params[:ticket])
-				@ticket.users << current_user unless @ticket.users.include? current_user
-				if params[:commit] = "OK" && params[:status]
-					c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} changed the status of this ticket to #{string_status(@ticket.status)}")
-				end
-
-				if @ticket.status == 100 && !@ticket.assigned?
-					User.where(:administrator => :true).each do |u|
-						MailMan.ticket_updated(@ticket.id,u.id)
+			respond_to do |format|
+				if @ticket.update_attributes(params[:ticket])
+					@ticket.users << current_user unless @ticket.users.include? current_user
+					if params[:commit] = "OK" && params[:status]
+						c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} changed the status of this ticket to #{string_status(@ticket.status)}")
 					end
-				end
 
-				if params[:commit] == "Move"
-					c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} moved this ticket to Tag##{@ticket.asset.tag}")
-				end
+					if @ticket.status == 100 && !@ticket.assigned?
+						User.where(:administrator => :true).each do |u|
+							MailMan.ticket_updated(@ticket.id,u.id)
+						end
+					end
 
-				@ticket.users.each do |u|
-					MailMan.ticket_updated(@ticket.id, u.id).deliver
-				end
+					if params[:commit] == "Move"
+						c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} moved this ticket to Tag##{@ticket.asset.tag}")
+					end
 
-				format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }
-				format.json { head :no_content }
-			else
-				format.html { render action: "edit" }
-				format.json { render json: @ticket.errors, status: :unprocessable_entity }
+					@ticket.users.each do |u|
+						MailMan.ticket_updated(@ticket.id, u.id).deliver
+					end
+
+					format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }
+					format.json { head :no_content }
+				else
+					format.html { render action: "edit" }
+					format.json { render json: @ticket.errors, status: :unprocessable_entity }
+				end
 			end
-		end
 		end
 	end
 
 	# DELETE /tickets/1
 	# DELETE /tickets/1.json
-#	def destroy
-#		@ticket = Ticket.find(params[:id])
-#		@ticket.destroy
-#
-#		respond_to do |format|
-#			format.html { redirect_to tickets_url }
-#			format.json { head :no_content }
-#		end
-#	end
+	#	def destroy
+	#		@ticket = Ticket.find(params[:id])
+	#		@ticket.destroy
+	#
+	#		respond_to do |format|
+	#			format.html { redirect_to tickets_url }
+	#			format.json { head :no_content }
+	#		end
+	#	end
 
 	def tagchange
 		@ticket = Ticket.find(params[:id])
 		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
-			redirect_to root_path, :notice => "You don't have permission to read that." 
+			redirect_to root_path, :notice => "You don't have permission to do that." 
 		else
-		if params[:user]
-			@user = User.find(params[:user])
-		elsif params[:user_name]
-			@user = User.where(:name => params[:user_name]).first
-		else
-			@user = current_user
-		end
-
-		if @user
-			if @ticket.users.include? @user
-				@ticket.users.delete(@user)
+			if params[:user]
+				@user = User.find(params[:user])
+			elsif params[:user_name]
+				@user = User.where(:name => params[:user_name]).first
 			else
-				@ticket.users << @user
+				@user = current_user
 			end
-			redirect_to ticket_path(@ticket), info: "Tagged user."
-		else
-			redirect_to ticket_path(@ticket), info: "Could not tag #{params[:user_name] || params[:user]}."
-		end
+
+			if @user
+				if @ticket.users.include? @user
+					@ticket.users.delete(@user)
+				else
+					@ticket.users << @user
+				end
+				redirect_to ticket_path(@ticket), info: "Tagged user."
+			else
+				redirect_to ticket_path(@ticket), info: "Could not tag #{params[:user_name] || params[:user]}."
+			end
 		end
 	end
 
+	def untag
+		@ticket = Ticket.find(params[:id])
+		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
+			render :js => '$("#flashbox").append(\'<div class="alert">You can\'t do that.</div>\');'
+		else
+			@user = User.find(params[:user_id])
+			if @user && @ticket.users.include?(@user)
+				@ticket.users.delete(@user)
+			else
+				render :js => '$("#flashbox").append(\'<div class="alert"><button type="button" class="close" data-dismiss="alert">&times</button>That user isn\'t tagged here.</div>\');'
+			end
+		end	
+	end
+
+	def tag
+		@ticket = Ticket.find(params[:id])
+		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
+			render :js => '$("#flashbox").append(\'<div class="alert">You can\'t do that.</div>\');'
+		else
+			if params[:user]
+				@user = User.find(params[:user])
+			elsif params[:user_name]
+				@user = User.where(:name => params[:user_name]).first
+			else
+				@user = current_user
+			end
+			if @user 
+				@ticket.users << @user
+			else
+				render :js => '$("#flashbox").append(\'<div class="alert"><button type="button" class="close" data-dismiss="alert">&times</button>Who is that??</div>\');'
+			end
+		end	
+	end
+
+
 	def mass
 		if current_user.admin?
-		b = (params[:building_id] == '0' ? nil : Building.find(params[:building_id]))
-		d = (params[:department_id] == '0' ? nil : Department.find(params[:department_id]))
-		@rooms = []
-		if b
-			if d
-				@rooms = b.rooms & d.rooms
+			b = (params[:building_id] == '0' ? nil : Building.find(params[:building_id]))
+			d = (params[:department_id] == '0' ? nil : Department.find(params[:department_id]))
+			@rooms = []
+			if b
+				if d
+					@rooms = b.rooms & d.rooms
+				else
+					@rooms = b.rooms
+				end
+
 			else
-				@rooms = b.rooms
+				if d
+					@rooms = d.rooms
+				else
+					@rooms = Room.all
+				end
 			end
 
-		else
-			if d
-				@rooms = d.rooms
-			else
-				@rooms = Room.all
+
+			@rooms.each do |r|
+				t = Ticket.create(:room_id => r.id, :comment => params[:comment], :submitter_id => params[:submitter_id], :ticketqueue_id => params[:ticketqueue_id], :status => params[:status], :due_at => params[:due_at], :asset_id => r.default_asset.id)
+				t.save
 			end
-		end
 
-
-		@rooms.each do |r|
-			t = Ticket.create(:room_id => r.id, :comment => params[:comment], :submitter_id => params[:submitter_id], :ticketqueue_id => params[:ticketqueue_id], :status => params[:status], :due_at => params[:due_at], :asset_id => r.default_asset.id)
-			t.save
-		end
-
-		redirect_to '/home/tools', :info => "Generated #{@rooms.count} tickets"
+			redirect_to '/home/tools', :info => "Generated #{@rooms.count} tickets"
 		end
 	end
 

@@ -3,7 +3,20 @@ class AssetsController < ApplicationController
 	# GET /assets
 	# GET /assets.json
 	def index
-		@assets = Asset.all
+		if params[:serial] || params[:building_id]
+			@assets = Asset.where(true)
+			if params[:serial]
+				@assets = @assets.where("serial LIKE ?", "%#{params[:serial]}%")
+			end
+			if params[:building_id]
+				@assets = @assets.where(:room_id => Building.find(params[:building_id]).room_ids)
+			end
+			if params[:type_id]
+				@assets = @assets.where(:model_id => Rtype.find(params[:type_id]).model_ids)
+			end
+		else
+			@assets = []
+		end
 
 		respond_to do |format|
 			format.html # index.html.erb

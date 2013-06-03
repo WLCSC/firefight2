@@ -53,6 +53,10 @@ module ApplicationHelper
 		end
 	end
 
+	def markdown(text)
+		sanitize(BlueCloth::new(text).to_html)
+	end
+
 	def can(right,queue=nil,user=nil)
 		raise 'outside of queue' if (@ticketqueue == nil && queue == nil)
 		raise 'no user supplied' if (user == nil && current_user == nil)

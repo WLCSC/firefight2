@@ -68,47 +68,49 @@
 			<div class="row-fluid">
 				<% @skip_sidebar ||= false %>
 				<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-<% unless flash[:notice].blank? %>
-  <div class="alert alert-info">
-    <%= content_tag :div, flash[:notice] %>
-  </div>
-<% end %>
+					<div id="flashbox">
+						<% unless flash[:notice].blank? %>
+							<div class="alert alert-info">
+								<%= content_tag :div, flash[:notice] %>
+							</div>
+						<% end %>
+		
+						<% unless flash[:error].blank? %>
+							<div class="alert alert-error">
+								<%= content_tag :div, flash[:error] %>
+							</div>
+						<% end %>
 
-<% unless flash[:error].blank? %>
-  <div class="alert alert-error">
-    <%= content_tag :div, flash[:error] %>
-  </div>
-<% end %>
-
-<% unless flash[:alert].blank? %>
-  <div class="alert alert-warning">
-    <%= content_tag :div, flash[:alert] %>
-  </div>
-<% end %>
+						<% unless flash[:alert].blank? %>
+							<div class="alert alert-warning">
+								<%= content_tag :div, flash[:alert] %>
+							</div>
+						<% end %>
+					</div>
 					<%= yield %>
 				</div>
 				<% unless @skip_sidebar %>
-				<div class="span3" style="margin-left: 90px;">
-					<% if current_user %>
-						<div class="well sidebar-nav">
-							<% if content_for? :sidebar %>
-								<h3>Tools</h3>
-								<ul class="nav nav-list">
-									<%= yield :sidebar %>
-								</ul>
-							<% end %>
-							<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
-							<ul class="nav nav-list">
-								<% Building.all.each do |b| %>
-									<li><%= link_to b.name, b %></li>
+					<div class="span3" style="margin-left: 90px;">
+						<% if current_user %>
+							<div class="well sidebar-nav">
+								<% if content_for? :sidebar %>
+									<h3>Tools</h3>
+									<ul class="nav nav-list">
+										<%= yield :sidebar %>
+									</ul>
 								<% end %>
-							</ul>
-							
+								<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
+								<ul class="nav nav-list">
+									<% Building.all.each do |b| %>
+										<li><%= link_to b.name, b %></li>
+									<% end %>
+								</ul>
 
-						</div><!--/.well -->
-					<% end %>
-				</div><!--/span-->
-			<% end %>
+
+							</div><!--/.well -->
+						<% end %>
+					</div><!--/span-->
+				<% end %>
 			</div><!--/row-->
 		</div><!--/content-->
 

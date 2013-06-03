@@ -7,142 +7,148 @@
 <% @all_assets = Asset.all.map{|a| a.tag} %>
 
 <% if @ticket && @ticket.ticketqueue %>
-	<table class="table" <%= 'style="background-color: #9BF79B;"'.html_safe if @ticket.complete? if @ticket.complete? %>><tr>
-			<td>
-				<p>Asset <%= link_to @ticket.asset.tag, @ticket.asset %>
-				in room <%= link_to @ticket.room.name, @ticket.room %> at
-				<%= link_to @ticket.room.building.name, @ticket.room.building %>.</p>
-				<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
-				<p>Opened on <%= @ticket.created_at.strftime("%m/%d/%y %I:%M") %> </p>
-				<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %></p>
-				<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y %I:%M") %> </p><% end %>
-				<p class="<%= @ticket.statusify.downcase %>">Status: <%= @ticket.statusify %></p>
-				<p>Tagged users: <%= @ticket.users.map{|u| link_to(u.name,u)}.join(', ').html_safe %></p>
-				<% if can(:admin) || current_user.admin? %>
-					<%= form_tag tagchange_ticket_path(@ticket) do %>
-						<p>
-						<%= hidden_field_tag :ticket_id, @ticket.id %>
-						<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
-						<%= submit_tag "OK" %>
-						</p>
-					<% end %>
-				<% end %>
-			</td>
-			<td>
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-						<th>Image</th>
-						<th>Submitted by</th>
-						<th>Submitted at</th>
-					</tr>
-					</thead>
-				<% @ticket.photos.each do |photo| %>
-					<tr>
-						<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
-						<td><%= link_to photo.user.name, photo.user %></td>
-						<td><%= photo.created_at.strftime("%m/%d/%y %I:%M") %>
-						</tr>
-					<% end %>
-					<tr>
-						<td colspan="3" style="text-align: center;"><b>Add a Screenshot</b></td>
-					</tr>
-					<%= form_for Photo.new, :html => {:multipart => true} do |f| %>
-						<tr>
-							<td colspan=2 style="text-align: center;">
-								<%= f.hidden_field :photographable_type, :value => "Ticket" %>
-								<%= f.hidden_field :photographable_id, :value => @ticket.id %>
-								<%= f.hidden_field :user_id, :value => current_user.id %>
-								<%= f.file_field :image, :accept => "image/gif,image/png,image/jpeg" %><br/>
-								<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %>
-							</td>
-							<td style="text-align: right;">
-								<%= f.submit "Upload", :class => 'btn btn-success' %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			</td>
-		</tr>
-	</table>
-	<table class="table table-bordered table-striped">
-		<% @ticket.comments.each do |comment| %>	
-			<tr>
-				<td><%= link_to comment.user.name, comment.user %></td>
-				<td><% if comment.user == current_user || current_user.admin? %><%= link_to "Edit", edit_comment_path(comment) %><% end %></td>
-				<td><%= comment.created_at.strftime("%m/%d/%y %I:%M %p") %></td>
-			</tr>
-			<tr>
-				<td colspan=3><%= comment.content.lines.map{|l| "<p>#{l}</p>"}.join("\n").html_safe%></td>
-			</tr>
+
+<div>
+	<div class="span5">
+		<p>
+			<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> - <%= link_to @ticket.asset.tag, @ticket.asset %>
+		</p>
+		<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
+		<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>
+		<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y at %I:%M") %> - <%= time_delta @ticket.due %> </p><% end %>
+		<p>Status: <span class="label label<%= bootstrap_status @ticket.status %>"><%= @ticket.statusify %></span></p>
+		<p>Tagged users: 
+		<ul class="nav nav-pills" id="taglist">
+			<% @ticket.users.each do |u| %>
+				<li><%= link_to( ("&times " + u.name).html_safe, untag_ticket_path(@ticket, :user_id => u.id), :remote => true, :id => 'tag' + u.id.to_s) %></li>
+			<% end %>
+		</ul>
+		</p>
+		<% if can(:admin) || current_user.admin? %>
+			<%= form_tag tag_ticket_path(@ticket), :method => "get", :remote => true do %>
+				<p>
+				<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
+				<%= submit_tag "OK", :class => 'btn btn-mini btn-primary' %>
+				</p>
+			<% end %>
 		<% end %>
-		<% if can(:submit) || @ticket.users.include?(current_user) || current_user.admin? %>
-			<%= form_for Comment.new do |f| %>
+
+	</div>
+
+	<div class="span6">
+		<table class="table table-bordered">
+			<thead>
 				<tr>
-					<td>Add a comment:</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
+					<th>Image</th>
+					<th>Submitted by</th>
+					<th>Submitted at</th>
 				</tr>
+			</thead>
+			<% @ticket.photos.each do |photo| %>
 				<tr>
-					<td colspan="3">
-						<%= f.text_area :content, :size => '80x4', :style => 'width: auto;', :placeholder => 'Add a comment' %>
-						<%= f.hidden_field :user_id, :value => current_user.id %>
-						<%= f.hidden_field :ticket_id, :value => @ticket.id %>
-						<br/>
-						<%= f.submit :value => 'Add Comment', :class => 'btn btn-primary btn-large' %>
-						<%= f.submit(:value => "Add Comment & Mark As Complete", :class => 'btn btn-success btn-large') %> 
-					<% end %>
+					<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
+					<td><%= link_to photo.user.name, photo.user %></td>
+					<td><%= photo.created_at.strftime("%m/%d/%y %I:%M") %>
+					</tr>
+				<% end %>
+				<%= form_for Photo.new, :html => {:multipart => true} do |f| %>
+					<tr>
+						<td colspan=3 style="text-align: center;">
+							<b>Add a Screenshot</b>
+							<%= f.hidden_field :photographable_type, :value => "Ticket" %>
+							<%= f.hidden_field :photographable_id, :value => @ticket.id %>
+							<%= f.hidden_field :user_id, :value => current_user.id %>
+							<p><%= f.file_field :image, :accept => "image/gif,image/png,image/jpeg" %></p>
+							<p><%= f.submit "Upload", :class => 'btn btn-success' %></p>
+							<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %>
+						</td>
+					</tr>
 				<% end %>
 			</table>
 
-		<% else %>
-			<div class="alert">I have no idea what queue this ticket belongs to, and therefore can't do much of anything with it.</div>
-		<% end %>
+		</div>
+		</div>
 
-		<% content_for :sidebar do %>
-			<% if can(:submit) || current_user.admin? || @ticket.users.include?(current_user) %>
+		<table class="table table-bordered comment-table" <%= @ticket.status == 100 ? 'style="background-color: #dfd;"'.html_safe : "" %>>
+			<% @ticket.comments.each do |comment| %>
+				<tr>
+					<td>
+						<p><%= link_to comment.user.name, comment.user %></p>
+						<p><%= time_delta comment.created_at %></p>
+					</td>
+					<td>
+						<%= comment.formatted_display %>
+					</td>
+				</tr>
+			<% end %>
+
+			<% if current_user.admin? || @ticket.users.include?(current_user) || can?(:submit) %>
+				<tr>
+					<td>
+						<p>Add a comment</p>
+					</td>
+					<td>
+						<%= form_for Comment.new do |f| %>
+							<%= f.text_area :content, :size => '80x4', :style => 'width: auto;', :placeholder => 'Add a comment' %>
+							<%= f.hidden_field :user_id, :value => current_user.id %>
+							<%= f.hidden_field :ticket_id, :value => @ticket.id %>
+							<br/>
+							<%= f.submit :value => 'Add Comment', :class => 'btn btn-primary btn-large' %>
+							<% if @ticket.status != 100 %><%= f.submit(:value => "Add Comment & Mark As Complete", :class => 'btn btn-success btn-large') %><% end %>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+		</table>
+
+	<% else %>
+		<div class="alert">I have no idea what queue this ticket belongs to, and therefore can't do much of anything with it.</div>
+	<% end %>
+
+	<% content_for :sidebar do %>
+		<% if can(:submit) || current_user.admin? || @ticket.users.include?(current_user) %>
+			<li>
+			<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), "/tickets/#{@ticket.id}/tagchange" %>
+			</li>
+		<% end %>
+		<% if current_user.admin? %>
+			<li><%= link_to "Edit Ticket", edit_ticket_path(@ticket) %></li>
+		<% end %>
+		<% if can(:admin) || (can(:submit) && @ticket.users.include?(current_user)) || current_user.admin? %>
+			<%= form_for @ticket, :class => "form-inline" do |f|  %>
 				<li>
-				<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), "/tickets/#{@ticket.id}/tagchange" %>
+				Update Status
+				<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3, 'Deferred' => 99, 'Complete' => 100}), :class => 'input-mini' %>
+				<%= f.submit "OK", :class => 'btn btn-mini btn-primary'%>
 				</li>
 			<% end %>
-			<% if current_user.admin? %>
-				<li><%= link_to "Edit Ticket", edit_ticket_path(@ticket) %></li>
-			<% end %>
-			<% if can(:admin) || (can(:submit) && @ticket.users.include?(current_user)) || current_user.admin? %>
-				<%= form_for @ticket, :class => "form-inline" do |f|  %>
-					<li>
-					Update Status
-					<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3, 'Deferred' => 99, 'Complete' => 100}), :class => 'input-mini' %>
-					<%= f.submit "OK", :class => 'btn btn-mini btn-primary'%>
-					</li>
-				<% end %>
-			<% end %>
-			<% if current_user.admin?  %>
-				<%= form_for @ticket do |f| %>
-					<li>Move to queue: <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]}  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
-				<% end %>
-				<%= form_for @ticket do |f| %>
-					<li>Move to asset: <%= f.text_field :asset_tag, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => @ticket.asset.tag  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-warning' %></li>
-				<% end %>
-				<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", ticket_path(@ticket.id+1) %></li><% end %>
-			<% end %>
 		<% end %>
+		<% if current_user.admin?  %>
+			<%= form_for @ticket do |f| %>
+				<li>Move to queue: <%= f.select :ticketqueue_id, Ticketqueue.all.map{|q| [q.name, q.id]}  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-primary' %></li>
+			<% end %>
+			<%= form_for @ticket do |f| %>
+				<li>Move to asset: <%= f.text_field :asset_tag, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => @ticket.asset.tag  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-warning' %></li>
+			<% end %>
+			<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", ticket_path(@ticket.id+1) %></li><% end %>
+		<% end %>
+	<% end %>
 
-<%# javascript_tag do %>
-<!--			$(document).ready(function() {
-			var values = <%= raw User.all.map{|u| {val: u.username, meta: u.name}}.to_json %>;
+	<%# javascript_tag do %>
+		<!--			$(document).ready(function() {
+		var values = <%= raw User.all.map{|u| {val: u.username, meta: u.name}}.to_json %>;
 
-				var customItemTemplate = "<div><span />&nbsp;<small /></div>";
+		var customItemTemplate = "<div><span />&nbsp;<small /></div>";
 
 				function elementFactory(element, e) {
-					var template = $(customItemTemplate).find('span')
-															.text('@' + e.val).end()
-												   		.find('small')
-															.text("(" + e.meta + ")").end();
-					element.append(template);
+				var template = $(customItemTemplate).find('span')
+				.text('@' + e.val).end()
+				.find('small')
+				.text("(" + e.meta + ")").end();
+				element.append(template);
 				};
 
 				// here is how we use it
 				$('#comment_content').sew({values: values, elementFactory: elementFactory});
 				}); -->
-<%# end %>
+				<%# end %>
