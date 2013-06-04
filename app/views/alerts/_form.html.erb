@@ -13,15 +13,12 @@
 
   <div class="field">
     <%= f.label :consumable_id %><br />
-    <%= f.number_field :consumable_id %>
+		<%= f.select :consumable_id, Consumable.all.map{|c| [c.name, c.id]} %>
   </div>
-  <div class="field">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </div>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
   <div class="field">
     <%= f.label :building_id %><br />
-    <%= f.number_field :building_id %>
+		<%= f.select :building_id, [["All Buildings", nil]] + Building.all.map{|b| [b.name, b.id]} %>
   </div>
   <div class="field">
     <%= f.label :message %><br />
@@ -32,6 +29,6 @@
     <%= f.number_field :count %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+		<%= f.submit :class => 'btn btn-success' %>
   </div>
 <% end %>

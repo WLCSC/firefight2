@@ -1,4 +1,5 @@
 class ConsumablesController < ApplicationController
+	before_filter :check_for_user
   # GET /consumables
   # GET /consumables.json
   def index

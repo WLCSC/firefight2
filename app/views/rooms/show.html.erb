@@ -1,5 +1,68 @@
 <%- model_class = @room.class -%>
 
+<% content_for :consumables do %>
+	<table class="table datatableable">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Short</th>
+				<th>Cost</th>
+				<th>Count</th>
+				<th></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% @room.inventories.each do |i| %>
+				<tr>
+					<td><%= link_to i.consumable.name, i.consumable %></td>
+					<td><%= i.consumable.short %></td>
+					<td><%= i.consumable.cost %></td>
+					<td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
+					<td>
+						<%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
+						<%= link_to "-", adj_inventory_path(i, :commit => "-"), :class => 'btn btn-mini btn-danger', :remote => true %>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+
+	<%= form_tag Inventory.new do |f| %>
+		<%= hidden_field_tag :room_id, @room.id %>
+		Add <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all, :id, :name) %>
+		<%= submit_tag "OK", :class => 'btn btn-success' %>
+	<% end %>
+<% end %>
+
+<% content_for :use do %>
+	<% @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"} %>
+	<%= form_tag use_inventory_path do %>
+		<%= hidden_field_tag :room_id, @room.id %>
+		<p>Use <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all,:id, :name) %> 
+		from <%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %> - <%= submit_tag "Go", :class => "btn btn-mini btn-primary" %></p>
+	<% end %>
+
+	<% if @room.uses.count > 0 && current_user.support %>
+		<table class="table table-striped">
+			<tr>
+				<th>Item</th>
+				<th>Used</th>
+				<th>Time Between Uses</th>
+			</tr>
+			<% last = nil %>
+			<% @room.uses.reverse.each do |use| %>
+				<tr>
+					<td><%= link_to use.consumable.name, use.consumable %> &times; <%= use.count %></td>
+					<td><%= time_delta use.created_at %></td>
+					<td><%= last ? distance_of_time_in_words(last, use.created_at) : "-"%></td>
+				</tr>
+				<% last = use.created_at %>
+			<% end %>
+		</table>
+	<% end %>
+<% end %>
+
 <% content_for :assets do %>
 	<%= render :partial => 'assettable'%>
 <% end %>
@@ -33,14 +96,14 @@
 
 
 <% if current_user.admin? %>
-	<%= tabify(open_tickets: "Open Tickets", assets: "Assets") %>
+	<%= tabify(open_tickets: "Open Tickets", assets: "Assets", consumables: "Consumable Inventory", use: "Use Consumables") %>
 <% else %>
-	<%= tabify(assets: "Assets", open_tickets: "Open Tickets") %>
+	<%= tabify(assets: "Assets", open_tickets: "Open Tickets", use: "Use Consumables") %>
 <% end %>
 
-<% if current_user.admin? %>
 <% content_for :sidebar do %>
+	<% if current_user.admin? %>
 	<li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
 	<li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li><% end %>
-	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %></li>
+<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %></li>
 <% end %>

@@ -1,13 +1,35 @@
 <%- model_class = @building.class -%>
 
-<%= content_for :rooms do %>
+<% content_for :rooms do %>
 	<h3>Click on your room in the list below</h3>
 <%= render :partial => 'roomtable' %>
 <% end %>
 
-<%= content_for :tickets do %>
+<% content_for :tickets do %>
 	<% @room = @building %>
 	<%= render :partial => 'rooms/tickettable' %>
+<% end %>
+
+<% content_for :consumables do %>
+	<table class="table datatableable">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Count</th>
+				<th>In...</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% @building.consumable_counts.each_pair do |c, z| %>
+				<tr>
+					<td><%= c.name %></td>
+					<td><%= z %></td>
+					<td><%= pills_for c.rooms.where(:building_id => @building.id) %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
 <% end %>
 
 <h1><%= @building.name %></h1>
@@ -18,7 +40,7 @@
 
 
 <% if current_user.admin? %>
-	<%= tabify({:tickets => "Open Tickets", :rooms => "Room List"})  %>
+	<%= tabify({:tickets => "Open Tickets", :rooms => "Room List", :consumables => "Consumables"})  %>
 <% else %>
 	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
 <% end %>

@@ -1,83 +1,61 @@
 class InventoriesController < ApplicationController
-  # GET /inventories
-  # GET /inventories.json
-  def index
-    @inventories = Inventory.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @inventories }
-    end
-  end
-
-  # GET /inventories/1
-  # GET /inventories/1.json
-  def show
-    @inventory = Inventory.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @inventory }
-    end
-  end
-
-  # GET /inventories/new
-  # GET /inventories/new.json
-  def new
-    @inventory = Inventory.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @inventory }
-    end
-  end
-
-  # GET /inventories/1/edit
-  def edit
-    @inventory = Inventory.find(params[:id])
-  end
-
+	before_filter :check_for_admin, :except => [:use]
+	before_filter :check_for_user
   # POST /inventories
   # POST /inventories.json
   def create
-    @inventory = Inventory.new(params[:inventory])
+    @inventory = Inventory.where(:room_id => params[:room_id], :consumable_id => params[:consumable_id]).first_or_initialize(:count => 0)
+		@inventory.count += params[:count].to_i
+		if @inventory.save
+			flash[:notice] = "Updated inventory"
+		else
+			flash[:error] = "Invalid inventory operation."
+		end
 
-    respond_to do |format|
-      if @inventory.save
-        format.html { redirect_to @inventory, notice: 'Inventory was successfully created.' }
-        format.json { render json: @inventory, status: :created, location: @inventory }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @inventory.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+		@inventory.consumable.alerts.where(:building_id => @inventory.room.building.id).where("count >= ?", @inventory.room.building.consumable_count(@inventory.consumable)).each do |a|
+			MailMan.consumable_alert(a.id).deliver
+		end
 
-  # PUT /inventories/1
-  # PUT /inventories/1.json
-  def update
-    @inventory = Inventory.find(params[:id])
+		@inventory.consumable.alerts.where(:building_id => nil).where("count >= ?", @inventory.consumable.total_count).each do |a|
+			MailMan.consumable_alert(a.id).deliver
+		end
 
-    respond_to do |format|
-      if @inventory.update_attributes(params[:inventory])
-        format.html { redirect_to @inventory, notice: 'Inventory was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @inventory.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+		redirect_to @inventory.room
+	end
 
-  # DELETE /inventories/1
-  # DELETE /inventories/1.json
-  def destroy
-    @inventory = Inventory.find(params[:id])
-    @inventory.destroy
+	def adj
+		@inventory = Inventory.find(params[:id])
+		if params[:commit] == "+"
+			@inventory.count += 1
+		elsif params[:commit] == "-"
+			@inventory.count -= 1
+		end
 
-    respond_to do |format|
-      format.html { redirect_to inventories_url }
-      format.json { head :no_content }
-    end
-  end
+		@inventory.consumable.alerts.where(:building_id => @inventory.room.building.id).where("count >= ?", @inventory.room.building.consumable_count(@inventory.consumable)).each do |a|
+			MailMan.consumable_alert(a.id).deliver
+		end
+
+		@inventory.consumable.alerts.where(:building_id => nil).where("count >= ?", @inventory.consumable.total_count).each do |a|
+			MailMan.consumable_alert(a.id).deliver
+		end
+
+		@inventory.save
+	end
+
+	def use
+		r = params[:room_name].split(' - ')
+		@use = Use.new(:consumable_id => params[:consumable_id], :count => params[:count], :room_id => params[:room_id])	
+		@from = Room.where(:name => r[1]).where(:building_id => Building.where(:name => r[0]).first.id).first
+		@inventory = @from.inventories.where(:consumable_id => params[:consumable_id]).first
+		if @inventory && @inventory.count > 0 && @use.save
+			@inventory.count -= @use.count
+			if @inventory.save
+				redirect_to @use.room, :notice => "Used #{@use.consumable.name}."
+			else
+				redirect_to @use.room, :notice => "Something wasn't quite right there."
+			end
+		else
+			redirect_to @use.room, :notice => 'Something wasn\'t quite right there.'
+		end
+	end
 end

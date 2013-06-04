@@ -1,27 +1,60 @@
-<h1>Listing consumables</h1>
+<h1>Consumables</h1>
 
-<table>
+<% content_for :index do %>
+<table class="table datatableable">
+	<thead>
   <tr>
     <th>Name</th>
     <th>Short</th>
-    <th>Cost</th>
-    <th></th>
+		<th>Cost</th>
+		<th>Total Count</th>
+	</tr>
+</thead>
+
+<tbody>
+<% @consumables.each do |consumable| %>
+  <tr>
+    <td><%= link_to consumable.name, consumable %></td>
+    <td><%= consumable.short %></td>
+		<td><%= consumable.cost %></td>
+		<td><span id="ctr<%= consumable.id %>"><%= consumable.total_count %></span></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<%= link_to 'Create a New Consumable Item', new_consumable_path, :class => 'btn btn-primary' %>
+
+<% end %>
+
+<% content_for :alerts do %>
+<table class="table">
+  <tr>
+    <th>Consumable</th>
+    <th>Building</th>
+    <th>Message</th>
+    <th>Count</th>
     <th></th>
     <th></th>
   </tr>
 
-<% @consumables.each do |consumable| %>
+<% current_user.alerts.each do |alert| %>
   <tr>
-    <td><%= consumable.name %></td>
-    <td><%= consumable.short %></td>
-    <td><%= consumable.cost %></td>
-    <td><%= link_to 'Show', consumable %></td>
-    <td><%= link_to 'Edit', edit_consumable_path(consumable) %></td>
-    <td><%= link_to 'Destroy', consumable, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to alert.consumable.name, alert.consumable %></td>
+    <td><%= alert.building ? alert.building.name : "All buildings" %></td>
+    <td><%= alert.message %></td>
+    <td><%= alert.count %></td>
+		<td><%= link_to 'Edit', edit_alert_path(alert), :class => 'btn btn-mini btn-warning' %></td>
+		<td><%= link_to 'Destroy', alert, confirm: 'Are you sure?', method: :delete, class: 'btn btn-mini btn-danger' %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Consumable', new_consumable_path %>
+<%= link_to 'New Alert', new_alert_path, :class => 'btn btn-primary' %>
+<% end %>
+
+<%= tabify index: "Consumable List", alerts: "Consumable Alerts" %>

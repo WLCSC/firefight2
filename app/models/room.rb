@@ -7,12 +7,16 @@ class Room < ActiveRecord::Base
 	belongs_to :default_asset, :class_name => :Asset
 	has_many :inventories
 	has_many :consumables, :through => :inventories
+	has_many :uses
 	before_save :fix_default_tag
 	after_create :add_default_asset
 
 	attr_accessible :name, :building_id, :notes, :department_id, :default_asset_id, :default_asset_tag
 	attr_accessor :default_asset_tag
 
+	def display
+		self.name
+	end
 
 	def fix_default_tag
 		if self.default_asset_tag

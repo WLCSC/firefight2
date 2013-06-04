@@ -2,6 +2,12 @@ Firefight2::Application.routes.draw do
   resources :alerts
 
   resources :consumables
+	resources :inventories do
+		member do
+			get 'adj'
+			post 'use'
+		end
+	end
 
 	resources :photos
 	resources :departments

@@ -31,4 +31,24 @@ class Building < ActiveRecord::Base
 	def users
 		self.asignees
 	end
+
+	def consumable_counts 
+		x = {}
+		inventories.each do |i|
+			if x.has_key? i.consumable
+				x[i.consumable] += i.count
+			else
+				x[i.consumable] = i.count
+			end
+		end
+		x
+	end
+
+	def consumable_count c
+		t = 0
+		inventories.where(:consumable_id => c.id).each do |i|
+			t += i.count
+		end
+		t
+	end
 end

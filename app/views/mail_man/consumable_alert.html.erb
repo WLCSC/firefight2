@@ -1,0 +1,10 @@
+<html>
+<body>
+ <p>Hello <%= @user.name %>, </p>
+ 
+ <p>Your consumable alert has been triggered<%= @alert.building ? " for #{@alert.building.name}" : '' %>: there are <%= pluralize (@alert.building ? @alert.building.consumable_count(@alert.consumable) : @alert.consumable.total_count ), @alert.consumable.name %> remaining.</p>
+
+ <p><%= @alert.message %></p>
+
+</body>
+</html>

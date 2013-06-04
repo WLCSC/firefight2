@@ -62,5 +62,12 @@ class MailMan < ActionMailer::Base
 		mail(:to => @user.email, :subject => "Tech Equipment Loan ##{@loan.id}")
 	end
 
+	def consumable_alert alert
+		@alert = Alert.find(alert)
+		@user = @alert.user
+		@building = @alert.building
+		mail(:to => @user.email, :subject => "Consumable Alert #{Time.now.strftime("%I:%M %p %m-%d-%Y")}")
+	end
+
 
 end

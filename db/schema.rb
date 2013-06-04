@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130201162414) do
+ActiveRecord::Schema.define(:version => 20130603185343) do
+
+  create_table "alerts", :force => true do |t|
+    t.integer  "consumable_id"
+    t.integer  "user_id"
+    t.integer  "building_id"
+    t.text     "message"
+    t.integer  "count"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "assets", :force => true do |t|
     t.integer  "room_id"
@@ -55,6 +65,14 @@ ActiveRecord::Schema.define(:version => 20130201162414) do
 
   add_index "comments", ["ticket_id"], :name => "ticket_id"
 
+  create_table "consumables", :force => true do |t|
+    t.string   "name"
+    t.string   "short"
+    t.decimal  "cost",       :precision => 6, :scale => 2
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
+
   create_table "departments", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -67,6 +85,14 @@ ActiveRecord::Schema.define(:version => 20130201162414) do
     t.string   "auth_value"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "inventories", :force => true do |t|
+    t.integer  "consumable_id"
+    t.integer  "room_id"
+    t.integer  "count"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "loans", :force => true do |t|
@@ -228,6 +254,14 @@ ActiveRecord::Schema.define(:version => 20130201162414) do
     t.string   "email"
     t.boolean  "administrator"
     t.boolean  "support"
+  end
+
+  create_table "uses", :force => true do |t|
+    t.integer  "consumable_id"
+    t.integer  "room_id"
+    t.integer  "count"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "vendors", :force => true do |t|

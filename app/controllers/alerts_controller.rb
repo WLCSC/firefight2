@@ -1,13 +1,9 @@
 class AlertsController < ApplicationController
+	before_filter :check_for_user
   # GET /alerts
   # GET /alerts.json
   def index
-    @alerts = Alert.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @alerts }
-    end
+		redirect_to consumables_path
   end
 
   # GET /alerts/1
