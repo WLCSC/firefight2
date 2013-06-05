@@ -11,7 +11,8 @@
 <div>
 	<div class="span5">
 		<p>
-			<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> - <%= link_to @ticket.asset.tag, @ticket.asset %>
+		<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> <br/>
+		Asset #<%= link_to @ticket.asset.tag, @ticket.asset %><%= @ticket.asset.name ? (" [#{@ticket.asset.name}]") : '' %>
 		</p>
 		<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
 		<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>

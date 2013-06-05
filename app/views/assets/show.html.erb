@@ -65,7 +65,7 @@
 	<%= tabify new_ticket: 'New Ticket', info: 'Asset Information', open_tickets: 'Open Tickets', closed_tickets: 'Closed Tickets' %>
 <% end %>
 
-<% if current_user.admin? %>
+<% if current_user.admin? || current_user.support %>
 	<% content_for :sidebar do %>
 		<li><%= link_to "Move Asset", '/home/tools?t=move&tags='+@asset.tag %></li>
 		<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>

@@ -1,5 +1,6 @@
 class AssetsController < ApplicationController
-	before_filter :check_for_admin, :only => ['new', 'edit', 'create', 'update', 'destroy']
+	before_filter :check_for_support, :only => ['new', 'edit', 'create', 'update']
+	before_filter :check_for_admin, :only => ['destroy']
 	# GET /assets
 	# GET /assets.json
 	def index
@@ -74,7 +75,7 @@ class AssetsController < ApplicationController
 
 		respond_to do |format|
 			if @asset.update_attributes(params[:asset])
-				format.html { redirect_to @asset, notice: 'asset was successfully updated.' }
+				format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
 				format.json { head :no_content }
 			else
 				format.html { render action: "edit" }

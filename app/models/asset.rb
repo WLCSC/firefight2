@@ -27,9 +27,11 @@ class Asset < ActiveRecord::Base
 			self.purchase = Date.civil($3.to_i, $1.to_i, $2.to_i)
 		end
 
-		if self.model_name
+		if self.model_name && !self.model_name.empty?
 			r = self.model_name.split(' - ')
 			self.model = Model.where(:name => r[1]).where(:manufacturer_id => Manufacturer.where(:name => r[0]).first.id).first
+		else
+			self.errors.add :model, "doesn't exist."
 		end
 
 

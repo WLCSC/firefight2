@@ -25,6 +25,13 @@ class ApplicationController < ActionController::Base
 	end
 	end
 
+	def check_for_support
+	unless current_user && current_user.support
+		flash[:alert] = "You aren't authorized to do that."
+		redirect_to root_path 	
+	end
+	end
+
 	def grab_url
 		@url = request.original_url
 	end
