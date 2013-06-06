@@ -34,7 +34,7 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td><%= link_to @asset.vendor.name, @asset.vendor %></td>
+			<td><%= @asset.vendor ? link_to(@asset.vendor.name, @asset.vendor) : "UNKNOWN" %></td>
 			<td><%= @asset.purchase %></td>
 			<td>$<%= @asset.cost %></td>
 		</tr>
