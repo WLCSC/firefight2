@@ -21,34 +21,48 @@
 		<link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
 	</head>
 	<body>
-
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+					<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" style="margin-top: 10px;">
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="<%= root_path %>"><%= image_tag 'logo.png'%>Firefight</a>
+					<a class="brand" style="margin-top: 6px" href="<%= root_path %>">
+						<span style="vertical-align: middle">
+							<%= image_tag 'logo.png' %>
+						</span>
+						<span style="vertical-align: bottom">
+							Firefight
+						</span>
+					</a>
 					<div class="container nav-collapse">
-
-						<ul class="nav">
+						<ul class="nav" style="margin-top: 10px;">
 							<% if current_user %>
-								<li><%= link_to "Submit New Ticket", buildings_path  %></li>
-								<li><%= link_to "Request Equipment", new_loan_path  %></li>
-								<% if current_user.support? || current_user.admin? %>
-									<li><%= link_to "All Tickets", tickets_path %></li>
-								<% end %>
-								<% if current_user.admin? %>
-									<li><%= link_to "All Loans", loans_path %></li>
-									<li><%= link_to "Management", home_tools_path %></li>
-								<% end %>
+							<li>
+								<%= link_to "Submit New Ticket", buildings_path %>
+							</li>
+							<li>
+								<%= link_to "Request Equipment", new_loan_path %>
+							</li>
+							<% if current_user.support? || current_user.admin? %>
+							<li>
+								<%= link_to "All Tickets", tickets_path %>
+							</li>
 							<% end %>
-
+							<% if current_user.admin? %>
+							<li>
+								<%= link_to "All Loans", loans_path %>
+							</li>
+							<li>
+								<%= link_to "Management", home_tools_path %>
+							</li>
+							<% end %>
+							<% end %>
 						</ul>
 
-						<ul class="nav pull-right">
+						<ul class="nav pull-right" style="margin-top: 10px;">
 							<% if current_user %>
 							<li>
 								<%= form_tag quick_assets_path, :class => 'form-search' do %>
@@ -64,8 +78,7 @@
 			</div>
 		</div>
 
-
-		<div class="container">
+		<div class="container" style="margin-top: 10px;">
 			<div class="content">
 				<div class="row-fluid">
 					<% @skip_sidebar ||= false %>
