@@ -1,0 +1,9 @@
+<tr>
+	<td>
+		<p><%= link_to comment.user.name, comment.user %></p>
+		<p><%= time_delta comment.created_at %></p>
+	</td>
+	<td>
+		<%= comment.formatted_display %>
+	</td>
+</tr>
