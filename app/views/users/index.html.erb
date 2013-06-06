@@ -16,7 +16,7 @@
 			<tr>
 				<td><%= link_to user.name, user %></td>
 				<td><%= user.building ? link_to(user.building.name, user.building) : "No Building Assigned!" %></td>
-				<td><%= user.administrator %></td>
+				<td><%= user.administrator ? "true" : "false" %></td>
 				<td><%= badge_row user.tickets %></td>
 				<td><%= user.tickets.count %></td>
 				<td><%= badge_row user.submitted_tickets %></td>
