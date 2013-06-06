@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
 				user = ldap_populate(params[:username], params[:password], user)
 				session[:user_id] = user.id
 				n = "Logged in!"
+				v = true
 			else
 				n = "Invalid login."
 			end
@@ -24,11 +25,18 @@ class SessionsController < ApplicationController
 			if user.password_hash == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
 				session[:user_id] = user.id
 				n = "Logged in!"
+				v = true
 			else
 				n = "Invalid local login."
 			end
 		end
-		redirect_to root_path, :notice => n
+		if v
+			if user.buildings.count > 0
+				redirect_to root_path, :notice => n
+			else
+				redirect_to edit_user_path(user), :notice => 'Please indicate which building(s) you belong to & make sure the rest of your information is correct.'
+			end
+		end
 	end
 
 	def destroy
