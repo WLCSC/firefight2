@@ -8,85 +8,78 @@
 
 <% if @ticket && @ticket.ticketqueue %>
 
-<div>
-	<div class="span5">
-		<p>
-		<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> <br/>
-		Asset #<%= link_to @ticket.asset.tag, @ticket.asset %><%= @ticket.asset.name ? (" [#{@ticket.asset.name}]") : '' %>
-		</p>
-		<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
-		<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>
-		<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y at %I:%M") %> - <%= time_delta @ticket.due %> </p><% end %>
-		<p>Status: <span class="label label<%= bootstrap_status @ticket.status %>"><%= @ticket.statusify %></span></p>
-		<p>Tagged users: 
-		<ul class="nav nav-pills" id="taglist">
-			<% @ticket.users.each do |u| %>
-				<li><%= link_to( ("&times " + u.name).html_safe, untag_ticket_path(@ticket, :user_id => u.id), :remote => true, :id => 'tag' + u.id.to_s) %></li>
-			<% end %>
-		</ul>
-		</p>
-		<% if can(:admin) || current_user.admin? %>
-			<%= form_tag tag_ticket_path(@ticket), :method => "get", :remote => true do %>
-				<p>
-				<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
-				<%= submit_tag "OK", :class => 'btn btn-mini btn-primary' %>
-				</p>
-			<% end %>
-		<% end %>
-
-	</div>
-
-	<div class="span6">
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Image</th>
-					<th>Submitted by</th>
-					<th>Submitted at</th>
-				</tr>
-			</thead>
-			<% @ticket.photos.each do |photo| %>
-				<tr>
-					<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
-					<td><%= link_to photo.user.name, photo.user %></td>
-					<td><%= photo.created_at.strftime("%m/%d/%y %I:%M") %>
-					</tr>
+	<div>
+		<div class="span5">
+			<p>
+			<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> <br/>
+			Asset #<%= link_to @ticket.asset.tag, @ticket.asset %><%= @ticket.asset.name ? (" [#{@ticket.asset.name}]") : '' %>
+			</p>
+			<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
+			<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>
+			<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y at %I:%M") %> - <%= time_delta @ticket.due %> </p><% end %>
+			<p>Status: <span class="label label<%= bootstrap_status @ticket.status %>"><%= @ticket.statusify %></span></p>
+			<p>Tagged users: 
+			<ul class="nav nav-pills" id="taglist">
+				<% @ticket.users.each do |u| %>
+					<li><%= link_to( ("&times " + u.name).html_safe, untag_ticket_path(@ticket, :user_id => u.id), :remote => true, :id => 'tag' + u.id.to_s) %></li>
 				<% end %>
-				<%= form_for Photo.new, :html => {:multipart => true} do |f| %>
-					<tr>
-						<td colspan=3 style="text-align: center;">
-							<b>Add a Screenshot</b>
-							<%= f.hidden_field :photographable_type, :value => "Ticket" %>
-							<%= f.hidden_field :photographable_id, :value => @ticket.id %>
-							<%= f.hidden_field :user_id, :value => current_user.id %>
-							<p><%= f.file_field :image, :accept => "image/gif,image/png,image/jpeg" %></p>
-							<p><%= f.submit "Upload", :class => 'btn btn-success' %></p>
-							<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %>
-						</td>
-					</tr>
+			</ul>
+			</p>
+			<% if can(:admin) || current_user.admin? %>
+				<%= form_tag tag_ticket_path(@ticket), :method => "get", :remote => true do %>
+					<p>
+					<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
+					<%= submit_tag "OK", :class => 'btn btn-mini btn-primary' %>
+					</p>
 				<% end %>
-			</table>
+			<% end %>
 
 		</div>
+
+		<div class="span6">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Image</th>
+						<th>Submitted by</th>
+						<th>Submitted at</th>
+					</tr>
+				</thead>
+				<% @ticket.photos.each do |photo| %>
+					<tr>
+						<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
+						<td><%= link_to photo.user.name, photo.user %></td>
+						<td><%= photo.created_at.strftime("%m/%d/%y %I:%M") %>
+						</tr>
+					<% end %>
+					<%= form_for Photo.new, :html => {:multipart => true} do |f| %>
+						<tr>
+							<td colspan=3 style="text-align: center;">
+								<b>Add a Screenshot</b>
+								<%= f.hidden_field :photographable_type, :value => "Ticket" %>
+								<%= f.hidden_field :photographable_id, :value => @ticket.id %>
+								<%= f.hidden_field :user_id, :value => current_user.id %>
+								<p><%= f.file_field :image, :accept => "image/gif,image/png,image/jpeg" %></p>
+								<p><%= f.submit "Upload", :class => 'btn btn-success' %></p>
+								<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+
+			</div>
 		</div>
 
 		<table class="table table-bordered comment-table" <%= @ticket.status == 100 ? 'style="background-color: #dfd;"'.html_safe : "" %>>
 			<% @ticket.comments.each do |comment| %>
-				<tr>
-					<td>
-						<p><%= link_to comment.user.name, comment.user %></p>
-						<p><%= time_delta comment.created_at %></p>
-					</td>
-					<td>
-						<%= comment.formatted_display %>
-					</td>
-				</tr>
+				<%= render :partial => 'comments/comment', :locals => {:comment => comment} %>	
 			<% end %>
 
 			<% if current_user.admin? || @ticket.users.include?(current_user) || can?(:submit) %>
 				<tr>
 					<td>
 						<p>Add a comment</p>
+						<p><a href="#helpModal" role="button" data-toggle="modal" class="btn btn-inverse">?</a></p>
 					</td>
 					<td>
 						<%= form_for Comment.new do |f| %>
@@ -135,21 +128,23 @@
 		<% end %>
 	<% end %>
 
-	<%# javascript_tag do %>
-		<!--			$(document).ready(function() {
-		var values = <%= raw User.all.map{|u| {val: u.username, meta: u.name}}.to_json %>;
 
-		var customItemTemplate = "<div><span />&nbsp;<small /></div>";
+	<div class="modal hide fade" id="helpModal">
+		<div class="modal-header">
+			<h3>Special Syntax</h3>
+		</div>
+		<div class="modal-body">
+			<dl>
+				<dt>#{use:ITEM:COUNT}</dt>
+				<dd>Use consumable ITEM in the room this ticket is associated with from the stock in this room.</dd>
+				<dt>#{asset:ASSET}</dt>
+				<dd>Reference another asset, either by name or by tag number.</dd>
+				<dt>#{ticket:NUMBER}</dt>
+				<dd>Reference another ticket.</dd>
+			</dl>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn" data-dismiss="modal">Close</button>
+		</div>
+	</div>
 
-				function elementFactory(element, e) {
-				var template = $(customItemTemplate).find('span')
-				.text('@' + e.val).end()
-				.find('small')
-				.text("(" + e.meta + ")").end();
-				element.append(template);
-				};
-
-				// here is how we use it
-				$('#comment_content').sew({values: values, elementFactory: elementFactory});
-				}); -->
-				<%# end %>
