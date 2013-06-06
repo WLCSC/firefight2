@@ -21,7 +21,6 @@ class CommentsController < ApplicationController
 				@comment.ticket.save
 			end
 		else
- 		        flash[:error] = "You can't add blank comments."
 			@comment.errors.add :content,  "can't be blank"
 		end
 
@@ -45,9 +44,11 @@ class CommentsController < ApplicationController
 				end
 				format.html { redirect_to @comment.ticket, notice: 'Comment was successfully created.' }
 				format.json { render json: @comment, status: :created, location: @comment }
+				format.js {}
 			else
 				format.html { redirect_to @comment.ticket }
 				format.json { render json: @comment.errors, status: :unprocessable_entity }
+				format.js { render js: '$("#flashbox").append(\'<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times</button>That\'s not going to work.</div>\');'}
 			end
 		end
 		end
