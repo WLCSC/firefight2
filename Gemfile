@@ -46,3 +46,4 @@ gem "twitter-bootstrap-rails"
 gem "exception_notification", :require => "exception_notifier"
 gem 'resque'
 gem 'resque_mailer'
+gem 'bcrypt-ruby'

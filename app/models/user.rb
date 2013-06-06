@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 class User < ActiveRecord::Base
 	has_many :memberships, :dependent => :destroy
 	has_many :groups, :through => :memberships
@@ -11,9 +13,20 @@ class User < ActiveRecord::Base
 	has_many :returns, :through => :loan
 	has_many :alerts
 	after_create :create_principal
+	before_save :encrypt_password
 	has_many :shortcuts
 	has_many :assignments, :dependent => :destroy
 	has_many :buildings, :through => :assignments
+	attr_accessor :password
+	validates :username, :presence => true
+	validates :password, :confirmation => true
+
+	def encrypt_password
+		if password
+			self.password_salt = BCrypt::Engine.generate_salt
+			self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+		end
+	end
 
 	def create_principal
 		self.build_principal.save

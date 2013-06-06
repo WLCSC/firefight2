@@ -7,23 +7,28 @@ class SessionsController < ApplicationController
 	end
 
 	def create
-		lgi = ldap_login(params[:username], params[:password])
-		if lgi && lgi.length > 0
-			user = User.find_by_username(params[:username])
-			user = ldap_populate(params[:username], params[:password], user)
-			session[:user_id] = user.id
-			flash[:notice] = "Logged in!"
-			if user.building
-				redirect_to params[:return] || root_path 
+		params[:username].downcase!
+		user = User.where(:username => params[:username]).first
+		n = nil
+		if APP_CONFIG[:auth_ldap] && user.password_hash == nil
+			lgi = ldap_login(params[:username], params[:password])
+			if lgi && lgi.length > 0
+				user = ldap_populate(params[:username], params[:password], user)
+				session[:user_id] = user.id
+				n = "Logged in!"
 			else
-				flash[:notice] = "Please indicate which building you belong to & make sure your information is correct in the form below."
-				redirect_to edit_user_path(user)
+				n = "Invalid login."
 			end
-			
-		else
-			flash[:alert] = "Invalid login."
-			redirect_to sessions_new_path
 		end
+		if APP_CONFIG[:auth_local] && user && user.password_hash != nil
+			if user.password_hash == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
+				session[:user_id] = user.id
+				n = "Logged in!"
+			else
+				n = "Invalid local login."
+			end
+		end
+		redirect_to root_path, :notice => n
 	end
 
 	def destroy

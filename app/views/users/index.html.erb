@@ -1,27 +1,33 @@
 <h1>Users</h1>
 <table class="table table-striped datatableable">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Primary Building</th>
-      <th>Administrator</th>
-      <th>Tagged Tickets</th>
-      <th><i>T</i></th>
-      <th>Submitted Tickets</th>
-      <th><i>T</i></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= link_to user.name, user %></td>
-	<td><%= user.building ? link_to(user.building.name, user.building) : "No Building Assigned!" %></td>
-	<td><%= user.administrator %></td>
-	<td><%= badge_row user.tickets %></td>
-	<td><%= user.tickets.count %></td>
-	<td><%= badge_row user.submitted_tickets %></td>
-	<td><%= user.submitted_tickets.count %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Primary Building</th>
+			<th>Administrator</th>
+			<th>Tagged Tickets</th>
+			<th><i>T</i></th>
+			<th>Submitted Tickets</th>
+			<th><i>T</i></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @users.each do |user| %>
+			<tr>
+				<td><%= link_to user.name, user %></td>
+				<td><%= user.building ? link_to(user.building.name, user.building) : "No Building Assigned!" %></td>
+				<td><%= user.administrator %></td>
+				<td><%= badge_row user.tickets %></td>
+				<td><%= user.tickets.count %></td>
+				<td><%= badge_row user.submitted_tickets %></td>
+				<td><%= user.submitted_tickets.count %></td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
+
+<% if APP_CONFIG[:auth_local] && current_user.admin? %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Add a User", new_user_path %></li>
+	<% end %>
+<% end %>

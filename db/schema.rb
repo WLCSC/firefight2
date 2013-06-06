@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.string   "email"
     t.boolean  "administrator"
     t.boolean  "support"
+    t.string   "password_hash"
+    t.string   "password_salt"
   end
 
   create_table "uses", :force => true do |t|
