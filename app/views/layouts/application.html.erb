@@ -49,80 +49,78 @@
 						</ul>
 
 						<ul class="nav pull-right">
-							<% if current_user %>
-							<li>
-								<%= form_tag quick_assets_path, :class => 'form-search' do %>
+							<% if current_user %><li><%= form_tag quick_assets_path, :class => 'form-search' do %>
 								<%= hidden_field_tag :return, :nil, :value => @url %>
 								<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Jump to Tag' %>
-								<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
-								<% end %>
-							</li>
+								<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>	
+							<% end %></li>
 							<li><%= link_to "Log Out", sessions_destroy_path %></li><% end %>
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
+					</ul>
+				</div><!--/.nav-collapse -->
 			</div>
 		</div>
+	</div>
 
 
-		<div class="container">
-			<div class="content">
-				<div class="row-fluid">
-					<% @skip_sidebar ||= false %>
-					<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-						<div id="flashbox">
-							<% unless flash[:notice].blank? %>
+
+	<div class="container">
+		<div class="content">
+			<div class="row-fluid">
+				<% @skip_sidebar ||= false %>
+				<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
+					<div id="flashbox">
+						<% unless flash[:notice].blank? %>
 							<div class="alert alert-info">
 								<button type="button" class="close" data-dismiss="alert">&times;</button><%= content_tag :div, flash[:notice] %> 
 							</div>
-							<% end %>
-							
-							<% unless flash[:error].blank? %>
+						<% end %>
+		
+						<% unless flash[:error].blank? %>
 							<div class="alert alert-error">
 								<button type="button" class="close" data-dismiss="alert">&times;</button ><%= content_tag :div, flash[:error] %>
 							</div>
-							<% end %>
-							
-							<% unless flash[:alert].blank? %>
+						<% end %>
+
+						<% unless flash[:alert].blank? %>
 							<div class="alert alert-warning">
-								<button type="button" class="close" data-dismiss="alert">&times;</button ><%= content_tag :div, flash[:alert] %>
+								 <button type="button" class="close" data-dismiss="alert">&times;</button ><%= content_tag :div, flash[:alert] %>
 							</div>
-							<% end %>
-						</div>
-						<%= yield %>
+						<% end %>
+					</div>
+					<%= yield %>
 				</div>
-					<% unless @skip_sidebar %>
+				<% unless @skip_sidebar %>
 					<div class="span3" style="margin-left: 90px;">
 						<% if current_user %>
-						<div class="well sidebar-nav">
-							<% if content_for? :sidebar %>
-							<h3>Tools</h3>
-							<ul class="nav nav-list">
-								<%= yield :sidebar %>
-							</ul>
-							<% end %>
-							<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
-							<ul class="nav nav-list">
-								<% Building.all.each do |b| %>
-								<li><%= link_to b.name, b %></li>
+							<div class="well sidebar-nav">
+								<% if content_for? :sidebar %>
+									<h3>Tools</h3>
+									<ul class="nav nav-list">
+										<%= yield :sidebar %>
+									</ul>
 								<% end %>
-							</ul>
-							
-							
-						</div><!--/.well -->
+								<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
+								<ul class="nav nav-list">
+									<% Building.all.each do |b| %>
+										<li><%= link_to b.name, b %></li>
+									<% end %>
+								</ul>
+
+
+							</div><!--/.well -->
 						<% end %>
 					</div><!--/span-->
-					<% end %>
-				</div><!--/row-->
-			</div><!--/content-->
-			
-			<footer>
-				<p class="pull-right"><a href="https://github.com/WLCSC" class="btn btn-mini" style="margin-top: 10px;margin-right: 5px;">Created by Brad Thompson, West Lafayette Community School Corporation</a></p>
-			</footer>
+				<% end %>
+			</div><!--/row-->
+		</div><!--/content-->
 
-		</div> <!-- /container -->
-		
-		<% if current_user %>
+		<footer>
+		<p class="pull-right"><a href="https://github.com/WLCSC" class="btn btn-mini" style="margin-top: 10px;margin-right: 5px;">Created by Brad Thompson, West Lafayette Community School Corporation</a></p>
+		</footer>
+
+	</div> <!-- /container -->
+
+	<% if current_user %>
 		<div class="navbar navbar-fixed-bottom">
 			<div class="navbar-inner">
 				<div class="container">
@@ -130,18 +128,18 @@
 						<ul class="nav shortcuts">
 							<li><%= link_to "Manage Shortcuts", shortcuts_path, :class => 'btn btn-mini btn-inverse', :style => 'width: 50px; padding-top: 3px; padding-bottom: 3px; line-height: 12px;' %></li>
 							<% current_user.shortcuts.order(:position).each do |shortcut| %>
-							<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
+								<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
 							<% end %>
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>
 			</div>
 		</div>
-		<% end %>
-		
-		<!-- Javascripts
-			 ================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		
-	</body>
+	<% end %>
+
+	<!-- Javascripts
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+</body>
 </html>
