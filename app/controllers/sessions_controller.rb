@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
 	def create
 		params[:username].downcase!
 		user = User.where(:username => params[:username]).first
+		if user
 		n = nil
 		if APP_CONFIG[:auth_ldap] && user.password_hash == nil
 			lgi = ldap_login(params[:username], params[:password])
@@ -27,7 +28,7 @@ class SessionsController < ApplicationController
 				n = "Logged in!"
 				v = true
 			else
-				n = "Invalid local login."
+				n = "Invalid login."
 			end
 		end
 		if v
@@ -36,6 +37,9 @@ class SessionsController < ApplicationController
 			else
 				redirect_to edit_user_path(user), :notice => 'Please indicate which building(s) you belong to & make sure the rest of your information is correct.'
 			end
+		end
+		else
+			redirect_to root_path, :alert => 'Invalid login.'
 		end
 	end
 

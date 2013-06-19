@@ -5,7 +5,7 @@ task :deliver_reminders => :environment do
 
 	User.where(:administrator => true).each do |u|
 		loans.each do |l|
-			MailMan.loan_remind(u,l).deliver
+			MailMan.loan_remind(u.id,l.id).deliver
 		end
 	end
 end
