@@ -34,7 +34,8 @@ body { padding-top: 60px; padding-bottom: 60px;}
 
 body {
 	background-color: #A60400;
-  font-size: 12px; 
+  font-size: 14px;
+	line-height: 15px;
 }
 
 .content {
@@ -467,7 +468,7 @@ input[type="file"] {
 }
 
 tr:hover {
-	background-color: transparent !important;
+	background-color: transparent;
 }
 
 .accordion table {
@@ -479,6 +480,12 @@ tr:hover {
 	text-align: center;
 	color: #b88;
 	text-transform: lowercase;
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+
+h1, h2, h3 {
+	line-height: 28px;
 }
 
 .table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-child(2n+1) th {
@@ -487,4 +494,22 @@ tr:hover {
 
 input, select, textarea {
 	margin-bottom: 0 !important;
+}
+
+.nav-tabs li a {
+	font-size: 12px;
+	line-height: 14px;
+}
+
+.table th, .table td {
+	line-height: 18px;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+	background-color: #ff8888;
+}
+
+.tab-pane {
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
