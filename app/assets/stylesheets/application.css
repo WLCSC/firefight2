@@ -10,8 +10,7 @@
  *
  *= require_self
  *= require jquery.ui.all
- *= require 'bootstrap_and_overrides.css.less'
-  *= require dataTables/jquery.dataTables
+ *= require bootstrap_and_overrides.css.less
+ *= require dataTables/jquery.dataTables
 */
-
 
