@@ -2,7 +2,7 @@ class Room < ActiveRecord::Base
 	has_many :assets
 	has_many :tickets, :through => :assets
 	belongs_to :building
-	has_one :shortcut, :as => :container
+	has_many :shortcuts, :as => :container
 	belongs_to :department
 	belongs_to :default_asset, :class_name => :Asset
 	has_many :inventories

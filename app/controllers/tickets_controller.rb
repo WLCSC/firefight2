@@ -118,6 +118,10 @@ class TicketsController < ApplicationController
 					notifications = []
 					User.where(:administrator => true).each {|u| notifications << u}
 					@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.asset.building.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.asset.room.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.user.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.ticketqueue.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					notifications.uniq!
 
 					notifications.each do |u|

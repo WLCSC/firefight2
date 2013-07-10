@@ -3,7 +3,7 @@ class Building < ActiveRecord::Base
 	has_many :assets, :through => :rooms
 	has_many :tickets, :through => :rooms
 	has_many :ticketqueues, :as => :parent
-	has_one :shortcut, :as => :container
+	has_many :shortcuts, :as => :container
 	has_many :assignments
 	has_many :asignees, :through => :assignments, :source => :user
 	has_many :alerts

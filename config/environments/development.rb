@@ -35,6 +35,6 @@ Firefight2::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-	config.action_controller.asset_host = "http://apps.wl.k12.in.us"
-	config.assets.prefix = '/firefight/assets/'
+#	config.action_controller.asset_host = "http://apps.wl.k12.in.us"
+#	config.assets.prefix = '/firefight/assets/'
 end

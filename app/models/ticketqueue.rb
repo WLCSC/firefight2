@@ -4,7 +4,7 @@ class Ticketqueue < ActiveRecord::Base
 	has_many :principals, :through => :permissions
 	belongs_to :parent, :polymorphic => true
 	has_many :ticketqueues, :as => :parent
-	has_one :shortcut, :as => :container
+	has_many :shortcuts, :as => :container
 
 	before_save :find_parent
 	attr_accessor :parent_name
