@@ -38,7 +38,7 @@ class Comment < ActiveRecord::Base
 
 			q = "[Invalid Operation]"
 			case op
-				when 'use'
+				when /use/i
 					consumable = Consumable.where(:name => args[0]).first
 					consumable = Consumable.where(:short => args[0]).first unless consumable
 					room = self.ticket.room
@@ -49,10 +49,10 @@ class Comment < ActiveRecord::Base
 					q = '<a href="https://apps.wl.k12.in.us/firefight/rooms/' + room.id.to_s + '">' 
 					q += "[Used #{args[1]} #{args[0]}]</a>" 	
 
-				when 'ticket'
+				when /ticket/i
 					q = '<a href="https://apps.wl.k12.in.us/firefight/tickets/' + args[0] + '"><span class="badge">' 
 					q += args[0] + '</span></a>'	
-				when 'asset'
+				when /asset/i
 					a = Asset.where(:tag => args[0]).first
 					a = Asset.where(:name => args[0]).first unless a
 					if a

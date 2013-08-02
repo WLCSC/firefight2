@@ -33,10 +33,10 @@ class CommentsController < ApplicationController
 				notifications = []
 				@comment.ticket.users.each {|u| notifications << u}
 				@comment.ticket.room.building.techs.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
-				@ticket.asset.building.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
-				@ticket.asset.room.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
-				@ticket.user.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
-				@ticket.ticketqueue.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+				@comment.ticket.asset.building.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
+				@comment.ticket.asset.room.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
+				@comment.ticket.submitter.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
+				@comment.ticket.ticketqueue.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
 				notifications.uniq!
 
 				notifications.each do |u|

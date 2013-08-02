@@ -90,6 +90,10 @@ class TicketsController < ApplicationController
 	# POST /tickets.json
 	def create
 		@ticket = Ticket.new(params[:ticket])
+		if params[:ticket][:photo][:image]
+			@photo = Photo.new(@ticket.photo)
+			@ticket.photos << @photo
+		end	
 		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
 			redirect_to root_path, :notice => "You don't have permission to do that." 
 			return
@@ -108,7 +112,7 @@ class TicketsController < ApplicationController
 			end
 
 			respond_to do |format|
-				if @ticket.save
+				if @ticket.save && (!@photo || (@photo && @photo.save))
 					begin
 						MailMan.ticket_submitted(current_user.id, @ticket.id, @ticket.comments.first.id).deliver
 					rescue => exc
@@ -120,7 +124,7 @@ class TicketsController < ApplicationController
 					@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					@ticket.asset.building.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					@ticket.asset.room.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
-					@ticket.user.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.submitter.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					@ticket.ticketqueue.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					notifications.uniq!
 
@@ -139,7 +143,7 @@ class TicketsController < ApplicationController
 					format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
 					format.json { render json: @ticket, status: :created, location: @ticket }
 				else
-					format.html { render action: "new" }
+					format.html { redirect_to @ticket.asset, notice: @ticket.errors.full_messages.join('<br />').html_safe }
 					format.json { render json: @ticket.errors, status: :unprocessable_entity }
 				end
 			end

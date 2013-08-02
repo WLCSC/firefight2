@@ -82,25 +82,7 @@
 				<div class="row-fluid">
 					<% @skip_sidebar ||= false %>
 					<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-						<div id="flashbox">
-							<% unless flash[:notice].blank? %>
-							<div class="alert alert-info">
-								<button type="button" class="close" data-dismiss="alert">&times;</button><%= content_tag :div, flash[:notice] %> 
-							</div>
-							<% end %>
-							
-							<% unless flash[:error].blank? %>
-							<div class="alert alert-error">
-								<button type="button" class="close" data-dismiss="alert">&times;</button ><%= content_tag :div, flash[:error] %>
-							</div>
-							<% end %>
-							
-							<% unless flash[:alert].blank? %>
-							<div class="alert alert-warning">
-								<button type="button" class="close" data-dismiss="alert">&times;</button ><%= content_tag :div, flash[:alert] %>
-							</div>
-							<% end %>
-						</div>
+						<%= bootstrap_flash %>
 						<%= yield %>
 				</div>
 					<% unless @skip_sidebar %>

@@ -7,7 +7,7 @@ class Ticket < ActiveRecord::Base
 	has_many :contexts
 	belongs_to :ticketqueue
 	belongs_to :submitter, :class_name => 'User'
-	attr_accessor :comment, :due_at, :asset_tag 
+	attr_accessor :comment, :due_at, :asset_tag, :photo
 	after_create :set_comment
 	before_save :fix_due
 	before_save :find_asset
@@ -33,7 +33,7 @@ class Ticket < ActiveRecord::Base
 	end
 
 
-	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list, :asset_tag
+	attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list, :asset_tag, :photo
 
 	def statusify
 		return 'Low' if status==1

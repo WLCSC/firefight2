@@ -102,7 +102,7 @@
 	<% content_for :sidebar do %>
 		<% if can(:submit) || current_user.admin? || @ticket.users.include?(current_user) %>
 			<li>
-			<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), "/tickets/#{@ticket.id}/tagchange" %>
+			<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), tagchange_ticket_path(@ticket) %>
 			</li>
 		<% end %>
 		<% if current_user.admin? %>

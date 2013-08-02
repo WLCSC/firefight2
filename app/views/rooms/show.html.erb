@@ -88,11 +88,14 @@
   <strong>Default Asset:</strong><br>
   <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %><br/>
   </p>
-<% else %>
-<%= link_to @room.default_asset do %>
-	<h3><i><b>Click here to submit a ticket if you can't find the appropriate asset below</b></i></h3>
 <% end %>
+<p>
+<%= link_to @room.default_asset, :class => 'btn btn-danger' do %>
+	<i><b>Click here to submit a ticket if you can't find the appropriate asset below</b></i>
 <% end %>
+</p>
+
+<br/>
 
 
 <% if current_user.admin? %>

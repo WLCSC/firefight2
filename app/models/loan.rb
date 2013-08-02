@@ -5,6 +5,7 @@ class Loan < ActiveRecord::Base
 	has_many :rtypes, :through => :requests
 	attr_accessor :start, :end
 	before_create :fix_dates
+	validates :start, :end, :presence => true, :on => :create
 
 	def active
 		ret = false
