@@ -19,6 +19,7 @@ development:
   #are you also using TonerMonkey?
   tonermonkey_integration: false
   tonermonkey_url: http://tonermonkey
+  use_resque: true
   
 test:
   domain: test.host
