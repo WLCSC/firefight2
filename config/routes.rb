@@ -52,6 +52,8 @@ Firefight2::Application.routes.draw do
 			match 'tagchange'
 			get 'untag'
 			get 'tag'
+			get 'assign'
+			get 'unassign'
 		end
 		collection do
 			post 'mass'

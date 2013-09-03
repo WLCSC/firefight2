@@ -36,7 +36,11 @@
 
 <p>
   <span class="address"><%= @building.address %></span>
-  </p>
+</p>
+
+<p>
+  <b>Default Consumable Storeroom:</b> <%= link_to @building.storeroom.name, @building.storeroom %>
+</p>
 
 
 <% if current_user.admin? %>

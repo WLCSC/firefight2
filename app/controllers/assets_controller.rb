@@ -97,13 +97,17 @@ class AssetsController < ApplicationController
 	end
 
 	def quick
-		@tag = Asset.where(:tag => params[:tag]).first
-		if @tag
-			flash[:notice] = "found asset."
-			redirect_to @tag, :notice => "found asset."
+		@collection = []
+		@collection += Asset.where(:tag => params[:tag][0]).all
+		@collection += User.where('name LIKE ?', "%#{params[:tag][0]}%").all
+		@collection += Room.where('name LIKE ?', "%#{params[:tag][0]}%").all
+	
+		if @collection.length == 0
+			redirect_to root_path, :notice => "Couldn't find anything like that."
+		elsif @collection.length == 1
+			redirect_to @collection.first
 		else
-			flash[:alert] = "can't find asset."
-			redirect_to params[:return], :notice => "can't find asset"
+			
 		end
 	end
 

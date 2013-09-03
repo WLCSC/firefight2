@@ -74,6 +74,31 @@
 	<% else %>
 		<% tmap = {:set_building => "Pick your default building"}.merge(bmap).merge( {:your_tickets => "Your Tickets", :loans => "Your Loans"}) %>
 	<% end %>
-	<%= tabify(tmap) %>
+
+<% if current_user.support %>
+	<table class="table table-narrow dashboard" width="80%">
+        <tr>
+            <td class="dashboard" width="50%">
+                <span class="dash-title">You're tagged in</span>
+                <span class="dash-number"><%= current_user.tickets.incomplete.count %></span>
+                <span class="dash-title"><%= current_user.tickets.incomplete.count == 1 ? 'ticket' : 'tickets' %>.</span>
+                <% current_user.tickets.incomplete.each do |ticket| %>
+                    <span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket, :title => "#{ticket.submitter.name} - #{ticket.comments.first.content}" %></span>
+                <% end %>
+            </td>
+
+            <td class="dashboard" width="50%">
+                <span class="dash-title">You're assigned to</span>
+                <span class="dash-number"><%= current_user.mission_tickets.count %></span>
+                <span class="dash-title"><%= current_user.mission_tickets.count == 1 ? 'ticket' : 'tickets' %>.</span>
+                <% current_user.mission_tickets.each do |ticket| %>
+                    <span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket, :title => "#{ticket.submitter.name} - #{ticket.comments.first.content}" %></span>
+                <% end %>
+            </td>
+		</tr>
+	</table>
+<% end %>
+
+<%= tabify(tmap) %>
 
 

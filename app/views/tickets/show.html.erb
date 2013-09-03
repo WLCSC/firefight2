@@ -21,7 +21,11 @@
 			<p>Tagged users: 
 			<ul class="nav nav-pills" id="taglist">
 				<% @ticket.users.each do |u| %>
-					<li><%= link_to( ("&times " + u.name).html_safe, untag_ticket_path(@ticket, :user_id => u.id), :remote => true, :id => 'tag' + u.id.to_s) %></li>
+					<% unless u.mission_tickets.include?(@ticket) %>
+					<li><%= link_to( ("&times " + u.name).html_safe, untag_ticket_path(@ticket, :user_id => u.id), :remote => true, :id => 'tag' + u.id.to_s ) %></li>
+					<% else %>
+					<li><%= link_to( ("&times " + u.name).html_safe, unassign_ticket_path(@ticket, :user_id => u.id), :class => 'mission') %></li>
+					<% end %>
 				<% end %>
 			</ul>
 			</p>
@@ -104,6 +108,13 @@
 			<li>
 			<%= link_to (@ticket.users.include?(current_user) ? "Untag yourself" : "Tag yourself"), tagchange_ticket_path(@ticket) %>
 			</li>
+			<% if current_user.support? %>
+				<% if current_user.mission_tickets.include?(@ticket) %>
+					<li><%= link_to "Unassign Yourself", unassign_ticket_path(@ticket) %></li>
+				<% else %>
+					<li><%= link_to "Assign Yourself", assign_ticket_path(@ticket) %></li>
+				<% end %>
+			<% end %>
 		<% end %>
 		<% if current_user.admin? %>
 			<li><%= link_to "Edit Ticket", edit_ticket_path(@ticket) %></li>
@@ -124,6 +135,9 @@
 			<%= form_for @ticket do |f| %>
 				<li>Move to asset: <%= f.text_field :asset_tag, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => @ticket.asset.tag  %><br/><%= f.submit "Move", :class => 'btn btn-mini btn-warning' %></li>
 			<% end %>
+			<%= form_tag assign_ticket_path(@ticket), :method => 'GET' do %>
+				<li>Assign: <%= select_tag :user_id, options_for_select(User.where(:support => true).reject{|u| u.mission_tickets.include?(@ticket)}.map{|u| [u.name, u.id]}) %><br/><%= submit_tag "Assign", :class => 'btn btn-mini btn-success' %>
+			<% end %>
 			<% unless Ticket.last == @ticket %><li><%= link_to "Next Ticket", ticket_path(@ticket.id+1) %></li><% end %>
 		<% end %>
 	<% end %>
@@ -135,8 +149,10 @@
 		</div>
 		<div class="modal-body">
 			<dl>
+				<dt>#{use:ITEM:COUNT:ROOM}</dt>
+				<dd>Use consumable ITEM in the room this ticket is associated with from the stock in the specified room.</dd>
 				<dt>#{use:ITEM:COUNT}</dt>
-				<dd>Use consumable ITEM in the room this ticket is associated with from the stock in this room.</dd>
+				<dd>Use consumable ITEM in the room this ticket is associated with from the stock in the default storeroom for this building.</dd>
 				<dt>#{asset:ASSET}</dt>
 				<dd>Reference another asset, either by name or by tag number.</dd>
 				<dt>#{ticket:NUMBER}</dt>

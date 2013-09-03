@@ -18,7 +18,20 @@
 	<tbody>
 		<% @uat.each do |ticket| %>
 			<tr>
-				<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
+				<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span>
+<% if current_user.support %>
+                                                <br/>
+                                                <% if current_user.mission_tickets.include? ticket %>
+                                                    <%= link_to "Drop", unassign_ticket_url(ticket), :remote => true, :class => 'btn-mission btn btn-mini btn-success', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                <% else %>
+                                                        <% if ticket.missions.count > 0 %>
+                                                            <%= link_to "Pick Up", assign_ticket_url(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-warning', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                        <% else %>
+                                                            <%= link_to "Pick Up", assign_ticket_url(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-danger', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                        <% end %>
+                                                <% end %>
+                                        <% end %>
+</td>
 				<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
 				<td><%= link_to ticket.room.building.name, ticket.room.building %></td>
 				<td><%= time_delta ticket.created_at %></td>

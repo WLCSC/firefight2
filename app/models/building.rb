@@ -8,6 +8,7 @@ class Building < ActiveRecord::Base
 	has_many :asignees, :through => :assignments, :source => :user
 	has_many :alerts
 	has_many :inventories, :through => :rooms
+    belongs_to :storeroom, :class_name => "Room"
 
 	attr_accessible :name, :address, :short
 

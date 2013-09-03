@@ -39,12 +39,14 @@
 					<div class="container nav-collapse">
 						<ul class="nav" style="margin-top: 10px;">
 							<% if current_user %>
-							<li>
-								<%= link_to "Submit New Ticket", buildings_path %>
-							</li>
-							<li>
-								<%= link_to "Request Equipment", new_loan_path %>
-							</li>
+                                <% unless current_user.support %>
+                                    <li>
+                                        <%= link_to "Submit New Ticket", buildings_path %>
+        							</li>
+		        					<li>
+	    		    					<%= link_to "Request Equipment", new_loan_path %>
+    				    			</li>
+                                <% end %>
 							<% if current_user.support? || current_user.admin? %>
 							<li>
 								<%= link_to "All Tickets", tickets_path %>
@@ -66,7 +68,7 @@
 							<li>
 								<%= form_tag quick_assets_path, :class => 'form-search' do %>
 								<%= hidden_field_tag :return, :nil, :value => @url %>
-								<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Jump to Tag' %>
+								<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Tag/User/Room' %>
 								<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
 								<% end %>
 							</li>
@@ -82,7 +84,7 @@
 				<div class="row-fluid">
 					<% @skip_sidebar ||= false %>
 					<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-						<%= bootstrap_flash %>
+						<div id="flashbox"><%= bootstrap_flash %></div>
 						<%= yield %>
 				</div>
 					<% unless @skip_sidebar %>

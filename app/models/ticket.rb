@@ -7,6 +7,7 @@ class Ticket < ActiveRecord::Base
 	has_many :contexts
 	belongs_to :ticketqueue
 	belongs_to :submitter, :class_name => 'User'
+	has_many :missions
 	attr_accessor :comment, :due_at, :asset_tag, :photo
 	after_create :set_comment
 	before_save :fix_due

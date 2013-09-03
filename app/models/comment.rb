@@ -41,12 +41,16 @@ class Comment < ActiveRecord::Base
 				when /use/i
 					consumable = Consumable.where(:name => args[0]).first
 					consumable = Consumable.where(:short => args[0]).first unless consumable
-					room = self.ticket.room
-					inv = room.inventories.where(:consumable_id => consumable.id).first
+                    if args.length >= 3
+                        room = Room.where("name LIKE ?", "%#{args[2]}%").first
+                    end
+					room = self.ticket.room.building.storeroom unless room
+					inv = room.inventories.where(:consumable_id => consumable.id).first_or_create(:count => 0, :room_id => room.id)
 					inv.count -= args[1].to_i
 					inv.save
+                    use = Use.create(:consumable_id => consumable.id, :count => args[1].to_i, :room => self.ticket.room)
 
-					q = '<a href="https://apps.wl.k12.in.us/firefight/rooms/' + room.id.to_s + '">' 
+					q = '<a href="https://apps.wl.k12.in.us/firefight/rooms/' + self.ticket.room.id.to_s + '">' 
 					q += "[Used #{args[1]} #{args[0]}]</a>" 	
 
 				when /ticket/i

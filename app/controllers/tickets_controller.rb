@@ -171,6 +171,7 @@ class TicketsController < ApplicationController
 						end
 					end
 
+
 					if params[:commit] == "Move"
 						c = Comment.create!(:user_id => current_user.id, :ticket_id => @ticket.id, :content => "#{current_user.name} moved this ticket to Tag##{@ticket.asset.tag}")
 					end
@@ -254,7 +255,11 @@ class TicketsController < ApplicationController
 				@user = current_user
 			end
 			if @user 
-				@ticket.users << @user
+				if @ticket.users.include? @user
+					render :nothing => true
+				else
+					@ticket.users << @user
+				end
 			else
 				render :js => '$("#flashbox").append(\'<div class="alert"><button type="button" class="close" data-dismiss="alert">&times</button>Who is that??</div>\');'
 			end
@@ -295,5 +300,31 @@ class TicketsController < ApplicationController
 	def screenshot
 		@ticket = Ticket.find(params[:id])
 		redirect_to @ticket.attachment.url
+	end
+
+	def assign
+		@ticket = Ticket.find(params[:id])
+		@user = params[:user_id] ? User.find(params[:user_id]) : current_user
+		unless @user.mission_tickets.include?(@ticket)
+			Mission.create(:user => @user, :ticket => @ticket) 
+			@ticket.users << @user unless @ticket.users.include?(@user)
+		end
+		respond_to do |format|
+			format.html {redirect_to @ticket, :notice => "Assigned user to ticket."}
+			format.js {}
+		end
+	end
+
+	def unassign
+		@ticket = Ticket.find(params[:id])
+		@user = params[:user_id] ? User.find(params[:user_id]) : current_user
+		if @user.mission_tickets.include?(@ticket)
+			Mission.where(:user_id => @user.id, :ticket_id => @ticket.id).each {|m| m.delete}
+		end
+		
+		respond_to do |format|
+			format.html {redirect_to @ticket, :notice => "Unassigned user."}
+			format.js {}
+		end
 	end
 end

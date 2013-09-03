@@ -19,6 +19,9 @@ class CommentsController < ApplicationController
 			if params[:commit] == "Add Comment & Mark As Complete"
 				@comment.ticket.status = 100
 				@comment.ticket.save
+                @comment.ticket.missions.all.each do |m|
+                    m.delete
+                end
 			end
 		else
 			@comment.errors.add :content,  "can't be blank"
@@ -38,6 +41,7 @@ class CommentsController < ApplicationController
 				@comment.ticket.submitter.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
 				@comment.ticket.ticketqueue.shortcuts.map{|s| s.user}.each {|u| notifications << u if @comment.ticket.ticketqueue.can?(u, :see)}
 				notifications.uniq!
+
 
 				notifications.each do |u|
 					begin

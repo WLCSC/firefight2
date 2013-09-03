@@ -34,8 +34,12 @@ class SessionsController < ApplicationController
              flash[:alert] = "You are not allowed to log in."
          end
 
-        if ok && user.buildings.count == 0
-		redirect_to edit_user_path(user), :notice => 'Please indicate which building(s) you belong to & make sure the rest of your information is correct.'
+        if ok 
+		if user.buildings.count == 0
+			redirect_to edit_user_path(user), :notice => 'Please indicate which building(s) you belong to & make sure the rest of your information is correct.'
+		else
+			redirect_to params[:return] || root_path
+		end
 	else
 		redirect_to root_path
 	end

@@ -24,7 +24,11 @@ class Asset < ActiveRecord::Base
 
 		if self.purchase_date
 			self.purchase_date.match /(\d+)\/(\d+)\/(\d+)/
+			begin
 			self.purchase = Date.civil($3.to_i, $1.to_i, $2.to_i)
+			rescue
+				self.errors.add(:purchase_date, "is incorrectly formatted.")
+			end
 		end
 
 		if self.model_name && !self.model_name.empty?

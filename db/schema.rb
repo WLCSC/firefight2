@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130603185343) do
+ActiveRecord::Schema.define(:version => 20130903123738) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "consumable_id"
@@ -33,11 +33,14 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.integer  "cost"
     t.integer  "vendor_id"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "super"
     t.string   "name"
   end
+
+  add_index "assets", ["room_id"], :name => "room_id"
+  add_index "assets", ["tag"], :name => "tag", :unique => true
 
   create_table "assignments", :id => false, :force => true do |t|
     t.integer "user_id"
@@ -47,18 +50,21 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
   create_table "buildings", :force => true do |t|
     t.string   "name"
     t.text     "address"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "short"
+    t.integer  "storeroom_id"
   end
 
   create_table "comments", :force => true do |t|
     t.integer  "ticket_id"
     t.integer  "user_id"
     t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  add_index "comments", ["ticket_id"], :name => "ticket_id"
 
   create_table "consumables", :force => true do |t|
     t.string   "name"
@@ -96,21 +102,23 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.text     "use"
     t.boolean  "approved"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  add_index "loans", ["user_id"], :name => "user_id"
 
   create_table "manufacturers", :force => true do |t|
     t.string   "name"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "maps", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "memberships", :force => true do |t|
@@ -120,14 +128,23 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "missions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "ticket_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "models", :force => true do |t|
     t.string   "name"
     t.text     "notes"
     t.integer  "manufacturer_id"
     t.integer  "rtype_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  add_index "models", ["manufacturer_id"], :name => "manufacturer_id"
 
   create_table "permissions", :force => true do |t|
     t.string   "priority"
@@ -169,16 +186,18 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.integer  "loan_id"
     t.integer  "asset_id"
     t.boolean  "returned"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  add_index "returns", ["loan_id"], :name => "loan_id"
 
   create_table "rooms", :force => true do |t|
     t.string   "name"
     t.integer  "building_id"
     t.text     "notes"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "department_id"
     t.integer  "default_asset_id"
   end
@@ -186,8 +205,8 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
   create_table "rtypes", :force => true do |t|
     t.string   "name"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "loanable"
   end
 
@@ -208,8 +227,8 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
   create_table "ticketqueues", :force => true do |t|
     t.string   "name"
     t.text     "notes"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "parent_id"
     t.string   "parent_type"
   end
@@ -218,8 +237,8 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.integer  "asset_id"
     t.integer  "ticketqueue_id"
     t.integer  "status"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -229,11 +248,17 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
     t.integer  "room_id"
   end
 
+  add_index "tickets", ["asset_id"], :name => "asset_id"
+  add_index "tickets", ["room_id"], :name => "room_id"
+  add_index "tickets", ["submitter_id"], :name => "submitter_id"
+  add_index "tickets", ["ticketqueue_id"], :name => "ticketqueue_id"
+
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "name"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "building_id"
     t.string   "email"
     t.boolean  "administrator"
     t.boolean  "support"
@@ -252,8 +277,8 @@ ActiveRecord::Schema.define(:version => 20130603185343) do
   create_table "vendors", :force => true do |t|
     t.string   "name"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

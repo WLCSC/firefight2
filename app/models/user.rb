@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
 	has_many :shortcuts
 	has_many :assignments, :dependent => :destroy
 	has_many :buildings, :through => :assignments
+	has_many :missions
 	attr_accessor :password
 	validates :username, :presence => true
 	validates :password, :confirmation => true
@@ -89,5 +90,9 @@ class User < ActiveRecord::Base
 
 	def display
 		self.name
+	end
+
+	def mission_tickets
+		self.missions.map{|m| m.ticket }
 	end
 end

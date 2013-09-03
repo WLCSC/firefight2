@@ -16,7 +16,7 @@
 				<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
 				<td><%= time_delta ticket.created_at %></td>
 				<td><%= ticket.due ? time_delta(ticket.due) : "-" %></td>
-				<td><%= ticket.comments.first.content %></td>
+				<td><%= ticket.comments.first.content.length > 247 ? ticket.comments.first.content[0..247] + '...' : ticket.comments.first.content  %></td>
 			</tr>
 		<% end %>
 	<% else %>
