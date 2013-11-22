@@ -23,7 +23,11 @@
     <%= f.label :cost %><br />
     <%= f.text_field :cost %>
   </div>
+  <div class="field">
+    <%= f.label :target %><br />
+    <%= f.text_field :target %>
+  </div>
   <div class="actions">
-		<%= f.submit, :class => 'btn btn-primary' %>
+		<%= f.submit :class => 'btn btn-primary' %>
   </div>
 <% end %>

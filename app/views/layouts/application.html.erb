@@ -39,14 +39,14 @@
 					<div class="container nav-collapse">
 						<ul class="nav" style="margin-top: 10px;">
 							<% if current_user %>
-                                <% unless current_user.support %>
+                                <% unless current_user.admin? %>
                                     <li>
                                         <%= link_to "Submit New Ticket", buildings_path %>
         							</li>
-		        					<li>
-	    		    					<%= link_to "Request Equipment", new_loan_path %>
-    				    			</li>
                                 <% end %>
+		        				<li>
+	    		    				<%= link_to "Request Equipment", new_loan_path %>
+    				   			</li>
 							<% if current_user.support? || current_user.admin? %>
 							<li>
 								<%= link_to "All Tickets", tickets_path %>
@@ -55,7 +55,9 @@
 							<% if current_user.admin? %>
 							<li>
 								<%= link_to "All Loans", loans_path %>
-							</li>
+                                </li>
+                            <% end %>
+                            <% if current_user.support || current_user.admin? %>
 							<li>
 								<%= link_to "Management", home_tools_path %>
 							</li>
@@ -84,7 +86,7 @@
 				<div class="row-fluid">
 					<% @skip_sidebar ||= false %>
 					<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
-						<div id="flashbox"><%= bootstrap_flash %></div>
+						<div id="flashbox"><%= my_bootstrap_flash %></div>
 						<%= yield %>
 				</div>
 					<% unless @skip_sidebar %>
@@ -103,7 +105,7 @@
 								<li><%= link_to b.name, b %></li>
 								<% end %>
 							</ul>
-							
+
 							
 						</div><!--/.well -->
 						<% end %>
@@ -111,7 +113,6 @@
 					<% end %>
 				</div><!--/row-->
 			</div><!--/content-->
-			
 			<footer>
 				<p class="pull-right"><a href="https://github.com/WLCSC" class="btn btn-mini" style="margin-top: 10px;margin-right: 5px;">Created by Brad Thompson, West Lafayette Community School Corporation</a></p>
 			</footer>

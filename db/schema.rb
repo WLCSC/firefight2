@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130903123738) do
+ActiveRecord::Schema.define(:version => 20130903134933) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "consumable_id"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20130903123738) do
     t.decimal  "cost",       :precision => 6, :scale => 2
     t.datetime "created_at",                               :null => false
     t.datetime "updated_at",                               :null => false
+    t.integer  "target"
   end
 
   create_table "departments", :force => true do |t|

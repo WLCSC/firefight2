@@ -1,7 +1,18 @@
 Firefight2::Application.routes.draw do
+  get "report" => 'report#index'
+
+  get "report/submissions"
+  get "report/comments"
+  post "report/submissions_graph"
+  get "report/submissions_graph"
+  post "report/comments_graph"
+  get "report/comments_graph"
+
   resources :alerts
 
-  resources :consumables
+  resources :consumables do
+      get 'order', :on => :collection
+  end
 	resources :inventories do
 		member do
 			get 'adj'
@@ -25,8 +36,6 @@ Firefight2::Application.routes.draw do
 	get "home/tools"
 
 	post "sessions/create"
-
-
 
 	post 'tags/destroy'
 
@@ -57,6 +66,7 @@ Firefight2::Application.routes.draw do
 		end
 		collection do
 			post 'mass'
+            post 'csv'
 			get 'screenshot'
 		end
 	end
@@ -82,7 +92,7 @@ Firefight2::Application.routes.draw do
 
 	get "principals/destroy"
 
-	get "sessions/new"
+	get "sessions/new", :as => 'new_session'
 
 	get "sessions/create"
 

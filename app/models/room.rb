@@ -15,7 +15,7 @@ class Room < ActiveRecord::Base
 	attr_accessor :default_asset_tag
 
 	def display
-		self.name
+		"#{self.building.name} - #{self.name}"
 	end
 
 	def fix_default_tag

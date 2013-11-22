@@ -11,14 +11,14 @@
 	<div>
 		<div class="span5">
 			<p>
-			<%= link_to @ticket.room.building.name, @ticket.room.building %> - <%= link_to @ticket.room.name, @ticket.room %> <br/>
+			<%= link_to @ticket.asset.room.building.name, @ticket.asset.room.building %> - <%= link_to @ticket.asset.room.name, @ticket.asset.room %> <br/>
 			Asset #<%= link_to @ticket.asset.tag, @ticket.asset %><%= @ticket.asset.name ? (" [#{@ticket.asset.name}]") : '' %>
 			</p>
 			<p>In the <%= link_to @ticket.ticketqueue.name, @ticket.ticketqueue %> queue.</p>
 			<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>
 			<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y at %I:%M") %> - <%= time_delta @ticket.due %> </p><% end %>
 			<p>Status: <span class="label label<%= bootstrap_status @ticket.status %>"><%= @ticket.statusify %></span></p>
-			<p>Tagged users: 
+            <p>Tagged users:</p> 
 			<ul class="nav nav-pills" id="taglist">
 				<% @ticket.users.each do |u| %>
 					<% unless u.mission_tickets.include?(@ticket) %>
@@ -28,8 +28,7 @@
 					<% end %>
 				<% end %>
 			</ul>
-			</p>
-			<% if can(:admin) || current_user.admin? %>
+			<% if can?(:submit) || current_user.admin? %>
 				<%= form_tag tag_ticket_path(@ticket), :method => "get", :remote => true do %>
 					<p>
 					<%= text_field_tag :user_name, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Tag/untag someone else", :autocomplete => 'off' %>
@@ -38,6 +37,14 @@
 				<% end %>
 			<% end %>
 
+            <% if @ticket.tagged_related_tickets.count > 0 %>
+                <p>Related Tickets</p>
+                <ul class="nav nav-pills">
+                    <% @ticket.tagged_related_tickets.each do |ticket| %>
+                        <li><%= link_to ticket.id, ticket %></li>
+                    <% end %>
+                </ul>
+            <% end %>
 		</div>
 
 		<div class="span6">

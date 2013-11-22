@@ -11,6 +11,12 @@ class ConsumablesController < ApplicationController
     end
   end
 
+  def order
+      buffer = params[:b] ? 0 : params[:b].to_i 
+      @consumables = Consumable.all.delete_if{|c| c.total_count >= (c.target - buffer)}
+      @skip_sidebar = true
+  end
+
   # GET /consumables/1
   # GET /consumables/1.json
   def show

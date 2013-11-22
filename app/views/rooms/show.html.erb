@@ -6,7 +6,6 @@
 			<tr>
 				<th>Name</th>
 				<th>Short</th>
-				<th>Cost</th>
 				<th>Count</th>
 				<th></th>
 			</tr>
@@ -17,7 +16,6 @@
 				<tr>
 					<td><%= link_to i.consumable.name, i.consumable %></td>
 					<td><%= i.consumable.short %></td>
-					<td><%= i.consumable.cost %></td>
 					<td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
 					<td>
 						<%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
@@ -30,7 +28,7 @@
 
 	<%= form_tag Inventory.new do |f| %>
 		<%= hidden_field_tag :room_id, @room.id %>
-		Add <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all, :id, :name) %>
+		Add <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all.sort_by{|x| x.name}, :id, :name) %>
 		<%= submit_tag "OK", :class => 'btn btn-success' %>
 	<% end %>
 <% end %>
@@ -40,7 +38,7 @@
 	<%= form_tag use_inventory_path do %>
 		<%= hidden_field_tag :room_id, @room.id %>
 		<p>Use <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all,:id, :name) %> 
-		from <%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %> - <%= submit_tag "Go", :class => "btn btn-mini btn-primary" %></p>
+        from <%= text_field_tag :room_name, "#{@room.building.name} - #{@room.building.storeroom.name}", :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %> - <%= submit_tag "Go", :class => "btn btn-mini btn-primary" %></p>
 	<% end %>
 
 	<% if @room.uses.count > 0 && current_user.support %>
@@ -106,7 +104,10 @@
 
 <% content_for :sidebar do %>
 	<% if current_user.admin? %>
-	<li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
-	<li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li><% end %>
-<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %></li>
+        <li><%= link_to 'Edit Room', edit_room_path(@room) %></li>
+    <% end %>
+    <% if current_user.support? || current_user.admin? %>
+        <li><%= link_to "Add Asset to Room", new_asset_path(:room_id => @room.id) %></li>
+    <% end %>
+    <li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Room', :container_id => @room.id) %></li>
 <% end %>

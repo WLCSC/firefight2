@@ -11,10 +11,10 @@
 <i><%= @ticketqueue.notes %></i>
 </p>
 
-<% content_for :tickets do %>
-	<% @tickets = Ticket.where(:ticketqueue_id => [@ticketqueue.id] + @ticketqueue.ticketqueues.map{|q| q.id})%>
-	<%= render :partial => 'tickets/tickettable' %>
-<% end %>
+<%# content_for :tickets do %>
+	<%# @tickets = Ticket.where(:ticketqueue_id => [@ticketqueue.id] + @ticketqueue.ticketqueues.map{|q| q.id})%>
+	<%#= render :partial => 'tickets/tickettable' %>
+<%# end %>
 
 <% content_for :open do %>
 	<% @tickets =  Ticket.where(:ticketqueue_id => [@ticketqueue.id] + @ticketqueue.ticketqueues.map{|q| q.id}, :status => [1,2,3,99]) %>

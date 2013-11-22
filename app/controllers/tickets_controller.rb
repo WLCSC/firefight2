@@ -5,7 +5,7 @@ class TicketsController < ApplicationController
 	# GET /tickets.json
 	def index
 		@tickets = []
-		if params[:status] || params[:building_id] || params[:queue_id]
+		if params[:status] || params[:building_id] || params[:queue_id] || params[:rangeEnd] || params[:rangeStart]
 			@tickets = Ticket.readable_by(current_user)
 			if params[:status]
 				case params[:status]
@@ -43,7 +43,7 @@ class TicketsController < ApplicationController
 			end
 			if params[:match] && params[:match] != ''
 				regex = Regexp.new(params[:match], 1)
-				@tickets.keep_if{|t| t.comments.first.content.match(regex)}  
+				@tickets.keep_if{|t| t.comments.keep_if{|c| c.content.match(regex)}.count > 0}  
 			end
 		end
 
@@ -296,6 +296,33 @@ class TicketsController < ApplicationController
 			redirect_to '/home/tools', :info => "Generated #{@rooms.count} tickets"
 		end
 	end
+
+    def csv
+        count = 0
+        final = nil
+        errors = []
+        params[:pairs].each_line do |line|
+            line.chomp!
+            x = line.split(',')
+            asset = Asset.where(:tag => x[0]).first
+            t = Ticket.create(:room_id => room.id, :comment => x[1], :submitter_id => current_user, :ticketqueue_id => params[:ticketqueue_id], :status => params[:status], :due_at => params[:due_at], :asset => asset, :room => asset.room)
+            if t.save
+                count += 1
+            else
+                errors += t.errors.full_messages.map{|m| "#{asset.tag}: #{m}"}
+            end
+        end
+
+        n = "Created #{count} tickets."
+        if errors.count > 0
+            n << "<br/>"
+            errors.each do |e|
+                n << e << "<br/>"
+            end
+        end
+
+        redirect_to root_path, :notice => n.html_safe
+    end
 
 	def screenshot
 		@ticket = Ticket.find(params[:id])

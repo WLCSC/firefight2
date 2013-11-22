@@ -129,11 +129,11 @@ class SimpleLdapAuthenticator
       end
     end
   
-	def search(login)
+	def search(login, by='samaccountname')
 		connection.authenticate("#{APP_CONFIG[:ldap_domain_login]}\\#{APP_CONFIG[:ldap_search_user]}", APP_CONFIG[:ldap_search_password])
 		begin
           if connection.bind
-              connection.search(:base => APP_CONFIG[:ldap_user_search_base], :filter => Net::LDAP::Filter.eq('samaccountname', login))
+              connection.search(:base => APP_CONFIG[:ldap_user_search_base], :filter => Net::LDAP::Filter.eq(by, login))
             else
               logger.info("Error attempting to authenticate #{login.to_s} by #{server}: #{connection.get_operation_result.code} #{connection.get_operation_result.message}") if logger
               switch_server unless connection.get_operation_result.code == 49

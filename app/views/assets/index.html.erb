@@ -10,7 +10,10 @@
 			</tr>
 		</table>
 		<%= submit_tag "Go!", :class => 'btn btn-large btn-success' %>
-	<% end %>
+    <% end %>
+    <% if current_user.id == 1 %>
+        <%= params.inspect %>
+    <% end %>
 <% end %>
 
 <% content_for :list do %>

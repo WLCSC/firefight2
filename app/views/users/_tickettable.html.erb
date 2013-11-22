@@ -16,12 +16,12 @@
 <% if current_user.support %>
                                                 <br/>
                                                 <% if current_user.mission_tickets.include? ticket %>
-                                                    <%= link_to "Drop", unassign_ticket_url(ticket), :remote => true, :class => 'btn-mission btn btn-mini btn-success', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                    <%= link_to "Drop", unassign_ticket_path(ticket), :remote => true, :class => 'btn-mission btn btn-mini btn-success', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
                                                 <% else %>
                                                         <% if ticket.missions.count > 0 %>
-                                                            <%= link_to "Pick Up", assign_ticket_url(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-warning', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                            <%= link_to "Pick Up", assign_ticket_path(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-warning', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
                                                         <% else %>
-                                                            <%= link_to "Pick Up", assign_ticket_url(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-danger', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
+                                                            <%= link_to "Pick Up", assign_ticket_path(ticket), :remote => true, :class => 'btn btn-mission btn-mini btn-danger', :id => "t#{ticket.id}", :title => ticket.missions.map{|m| m.user.name}.join(', ') %>
                                                         <% end %>
                                                 <% end %>
                                         <% end %>

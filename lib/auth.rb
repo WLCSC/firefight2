@@ -49,8 +49,8 @@ def ldap_populate user, pass, obj=nil
 		
 end
 
-def ldap_search user
-	if l = SimpleLdapAuthenticator.search(user)
+def ldap_search user, by='samaccountname'
+	if l = SimpleLdapAuthenticator.search(user, by)
 		l
 	else
 		nil

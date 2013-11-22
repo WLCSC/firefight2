@@ -4,19 +4,18 @@ class AssetsController < ApplicationController
 	# GET /assets
 	# GET /assets.json
 	def index
-		if params[:serial] || params[:building_id]
+        @assets = []
+		if params[:serial] || params[:building_id] || params[:type_id]
 			@assets = Asset.where(true)
-			if params[:serial]
+			if params[:serial] && !params[:serial].empty?
 				@assets = @assets.where("serial LIKE ?", "%#{params[:serial]}%")
 			end
-			if params[:building_id]
+			if params[:building_id] && !params[:building_id].empty?
 				@assets = @assets.where(:room_id => Building.find(params[:building_id]).room_ids)
 			end
-			if params[:type_id]
+			if params[:type_id] && !params[:type_id].empty?
 				@assets = @assets.where(:model_id => Rtype.find(params[:type_id]).model_ids)
 			end
-		else
-			@assets = []
 		end
 
 		respond_to do |format|
@@ -101,6 +100,8 @@ class AssetsController < ApplicationController
 		@collection += Asset.where(:tag => params[:tag][0]).all
 		@collection += User.where('name LIKE ?', "%#{params[:tag][0]}%").all
 		@collection += Room.where('name LIKE ?', "%#{params[:tag][0]}%").all
+		@collection += Asset.where('serial LIKE ?', "%#{params[:tag][0]}%").all
+		@collection += Ticket.where('id LIKE ?', "%#{params[:tag][0]}%").all
 	
 		if @collection.length == 0
 			redirect_to root_path, :notice => "Couldn't find anything like that."
@@ -114,6 +115,7 @@ class AssetsController < ApplicationController
 	def move
 		r = params[:room_name].split(' - ')
 		@room = Room.where(:name => r[1]).where(:building_id => Building.where(:name => r[0]).first.id).first
+        @params = {}
 		bad = []
 		params[:tags].each_line do |t|
 			a = Asset.where(:tag => t.chomp).first
@@ -124,11 +126,16 @@ class AssetsController < ApplicationController
 				bad << t.chomp
 			end
 		end
+        @params[:bad] = bad
 		if bad.length == 0
-			redirect_to home_tools_path(:t => 'move'), :notice => 'moved assets.'
+			flash.now[:notice] = "Moved assets."
+            @tags = ''
 		else
-			redirect_to home_tools_path(:t => 'move'), :notice => "#{bad.length} bad tags were submitted: #{bad.join}"
+            alert = "#{bad.length} bad tags were submitted: #{bad.join}"
+            flash.now[:alert] = alert
+            @tags = params[:tags]
 		end
+		render 'home/tools'
 	end
 
 	def mass
@@ -148,8 +155,9 @@ class AssetsController < ApplicationController
 			asset.vendor_id = params[:vendor_id]
 			asset.notes = params[:notes]
 			x = line.split(',')
-			asset.tag = x[0]
-			asset.serial = x[1]
+			asset.tag = x[0].chomp
+			asset.serial = x[1].chomp
+            asset.name = x[2].chomp if x[2]
 			if asset.save
 				count += 1
 			else

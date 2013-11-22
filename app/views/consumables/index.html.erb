@@ -7,7 +7,8 @@
     <th>Name</th>
     <th>Short</th>
 		<th>Cost</th>
-		<th>Total Count</th>
+        <th>Total Count</th>
+        <th>Target</th>
 	</tr>
 </thead>
 
@@ -17,7 +18,8 @@
     <td><%= link_to consumable.name, consumable %></td>
     <td><%= consumable.short %></td>
 		<td><%= consumable.cost %></td>
-		<td><span id="ctr<%= consumable.id %>"><%= consumable.total_count %></span></td>
+        <td><span id="ctr<%= consumable.id %>"><%= consumable.total_count %></span></td>
+        <td><%= consumable.target || "Null" %></td>
   </tr>
 <% end %>
 </tbody>
@@ -26,6 +28,7 @@
 <br />
 
 <%= link_to 'Create a New Consumable Item', new_consumable_path, :class => 'btn btn-primary' %>
+<%= link_to 'Generate Order List', order_consumables_path, :class => 'btn btn-inverse' %>
 
 <% end %>
 

@@ -1,89 +1,85 @@
 <%
-	@options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
-	@models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
+    @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
+    @models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
 %>
 <%= form_for @asset, :html => { :class => 'form-horizontal' } do |f| %>
-<%
-	if params[:room_id] 
-		@asset.room_id = params[:room_id]
-	end
-%>
-  <div class="control-group">
-    <%= f.label :room_id, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.text_field :room_name, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s, :value => (@asset.room ? "#{@asset.room.building.name} - #{@asset.room.name}" : "" ), :autocomplete => 'off' %>
+    <%
+        if params[:room_id] 
+            @asset.room_id = params[:room_id]
+        end
+    %>
+    <div class="control-group">
+        <%= f.label :tag, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :tag, :class => 'text_field', :autocomplete => 'off' %>
+        </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :tag, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :tag, :class => 'text_field', :autocomplete => 'off' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :os, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :os, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :model_name, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.text_field :model_name, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "", :autocomplete => 'off' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :serial, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :serial, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :purchase, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.text_field :purchase_date, :value => (@asset.purchase ? @asset.purchase.strftime("%m/%d/%Y") : "" ) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :cost, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :cost, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :vendor_id, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.select :vendor_id, Vendor.all.map{|v| [v.name, v.id]} %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :notes, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_area :notes, :class => 'text_area' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :super, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :super, :class => 'check_box' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                assets_path, :class => 'btn' %>
-  </div>
+    <div class="control-group">
+        <%= f.label :name, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :name, :class => 'text_field' %>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <%= f.label :room_id, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :room_name, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s, :value => (@asset.room ? "#{@asset.room.building.name} - #{@asset.room.name}" : "" ), :autocomplete => 'off' %>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <%= f.label :os, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :os, :class => 'text_field' %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :model_name, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :model_name, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s, :value => @asset.model ? "#{@asset.model.manufacturer.name} - #{@asset.model.name}" : "", :autocomplete => 'off' %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :serial, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :serial, :class => 'text_field' %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :purchase, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_field :purchase_date, :value => (@asset.purchase ? @asset.purchase.strftime("%m/%d/%Y") : "" ) %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :cost, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.number_field :cost, :class => 'number_field' %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :vendor_id, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.select :vendor_id, Vendor.order(:name).map{|v| [v.name, v.id]} %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :notes, :class => 'control-label' %>
+        <div class="controls">
+            <%= f.text_area :notes, :class => 'text_area' %>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <%= f.submit nil, :class => 'btn btn-primary' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")), assets_path, :class => 'btn' %>
+    </div>
 <% end %>
 
 <%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#asset_purchase_date').datepicker();
-	});
+    $(document).ready(function() {
+    $('#asset_purchase_date').datepicker();
+    });
 <% end %>

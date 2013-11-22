@@ -1,131 +1,163 @@
 <% content_for :indexes do %>
-	<ul>
-		<li><%= link_to "All Users", users_path %></li>
-		<li><%= link_to "All Security Groups", groups_path %></li>
-		<li><%= link_to "All Queues", ticketqueues_path %></li>
-		<li><%= link_to "All Buildings", buildings_path %></li>
-		<li><%= link_to "All Room Groups", departments_path %></li>
-		<li><%= link_to "All Tickets", tickets_path %></li>
-		<li><%= link_to "All Asset Types", rtypes_path %></li>
-		<li><%= link_to "All Assets", assets_path %></li>
-		<li><%= link_to "All Manufacturers", manufacturers_path %></li>
-		<li><%= link_to "All Models", models_path %></li>
-		<li><%= link_to "All Vendors", vendors_path %></li>
-	</ul>
+    <ul>
+        <li><%= link_to "Reporting", report_path %></li>
+        <li><%= link_to "All Consumables", consumables_path %></li>
+        <li><%= link_to "All Users", users_path %></li>
+        <li><%= link_to "All Security Groups", groups_path %></li>
+        <li><%= link_to "All Queues", ticketqueues_path %></li>
+        <li><%= link_to "All Buildings", buildings_path %></li>
+        <li><%= link_to "All Room Groups", departments_path %></li>
+        <li><%= link_to "All Tickets", tickets_path %></li>
+        <li><%= link_to "All Asset Types", rtypes_path %></li>
+        <li><%= link_to "All Assets", assets_path %></li>
+        <li><%= link_to "All Manufacturers", manufacturers_path %></li>
+        <li><%= link_to "All Models", models_path %></li>
+        <li><%= link_to "All Vendors", vendors_path %></li>
+    </ul>
 <% end %>
 
 <% content_for :move do %>
-	<% @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"} %>
-	<%= form_tag move_assets_path do %>
-		<p>Enter asset tags, 1 per line:</p>
-		<p><%= text_area_tag :tags, params[:tags] %></p>
-		<p>Where are these assets being moved to?</p>
-		<p><%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %></p>
-		<%= submit_tag "Move Assets", :class => 'btn btn-warning btn-large' %>
-	<% end %>
+    <% @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"} %>
+    <%= form_tag move_assets_path do %>
+        <p>Enter asset tags, 1 per line:</p>
+        <p><%= text_area_tag :tags, @tags %></p>
+        <p>Where are these assets being moved to?</p>
+        <p><%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %></p>
+        <%= submit_tag "Move Assets", :class => 'btn btn-warning btn-large' %>
+    <% end %>
 <% end %>
 
 <% content_for :generate do %>
-	<% @buildings = [["All buildings", 0]] + Building.all.map{|b| [b.name, b.id]} %>
-	<% @departments = [["All rooms", 0]] + Department.all.map{|d| [d.name, d.id]} %>
-	<%= form_tag mass_tickets_path do %>
-		<%= hidden_field_tag :submitter_id, current_user.id %>
-		<p>Pick a building: <%= select_tag :building_id,  options_for_select(@buildings) %></p>
-		<p>Pick a room group: <%= select_tag :department_id,  options_for_select(@departments) %></p>
-		<p>
-		<%= label_tag :comment %><br />
-		<%= text_area_tag :comment,'', :size => '40x5' %>
-		</p>
-		<p>
-		<%= label_tag :queue %><br />
-		<%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
-		</p>
-		<p>
-		<%= label_tag :priority %><br />
-		<%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
-		</p>
-		<p><b><i>Optional</i></b> Event/Due Date</p>
-				<%= text_field_tag :due_at, '', :id => 'dueAt' %>
-				</p>
-				<%= submit_tag "Generate Tickets", :class => 'btn btn-large btn-warning' %>
-	<% end %>
+    <% @buildings = [["All buildings", 0]] + Building.all.map{|b| [b.name, b.id]} %>
+    <% @departments = [["All rooms", 0]] + Department.all.map{|d| [d.name, d.id]} %>
+    <%= form_tag mass_tickets_path do %>
+        <%= hidden_field_tag :submitter_id, current_user.id %>
+        <p>Pick a building: <%= select_tag :building_id,  options_for_select(@buildings) %></p>
+        <p>Pick a room group: <%= select_tag :department_id,  options_for_select(@departments) %></p>
+        <p>
+        <%= label_tag :comment %><br />
+        <%= text_area_tag :comment,'', :size => '40x5' %>
+        </p>
+        <p>
+        <%= label_tag :queue %><br />
+        <%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
+        </p>
+        <p>
+        <%= label_tag :priority %><br />
+        <%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
+        </p>
+        <p><b><i>Optional</i></b> Event/Due Date</p>
+        <%= text_field_tag :due_at, '', :id => 'dueAt' %>
+        </p>
+        <%= submit_tag "Generate Tickets", :class => 'btn btn-large btn-warning' %>
+    <% end %>
+<% end %>
+
+<% content_for :csv_tickets do %>
+    <%= form_tag csv_tickets_path do %>
+        <div class="control-group">
+            <%= label_tag :queue %>
+            <div class="controls">
+                <%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :status %>
+            <div class="controls">
+                <%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :due_date %>
+            <div class="controls">
+                <%= text_field_tag :due_at, '', :id => 'dueAt2' %>
+            </div>
+        </div>
+        <div class="control-group">
+            <p>Tag, Comment (1 per line)</p>
+            <div class="controls">
+                <%= text_area_tag :pairs %>
+            </div>
+        </div>
+    <% end %>
 <% end %>
 
 <% content_for :mass_assets do %>
-<%
-	@options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
-	@models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
-%>
-<%= form_tag mass_assets_path, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= label_tag :room_id, nil, :class => 'control-label' %>
-    <div class="controls">
-	    <%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label :os, "OS", :class => 'control-label' %>
-    <div class="controls">
-      <%= text_field_tag :os, nil, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :model_name, nil, :class => 'control-label' %>
-    <div class="controls">
-	    <%= text_field_tag :model_name, nil, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :purchase, nil, :class => 'control-label' %>
-    <div class="controls">
-	    <%= text_field_tag :purchase_date, nil %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :cost, nil, :class => 'control-label' %>
-    <div class="controls">
-      <%= number_field_tag :cost, nil, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :vendor_id, nil, :class => 'control-label' %>
-    <div class="controls">
-	    <%= select_tag :vendor_id, options_for_select(Vendor.all.sort_by{|v| v.name}.map{|v| [v.name, v.id]}) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :notes, nil, :class => 'control-label' %>
-    <div class="controls">
-      <%= text_area_tag :notes, nil, :class => 'text_area' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= label_tag :pairs, "Tag, Serial (1 per line)", :class => 'control-label' %>
-    <div class="controls">
-      <%= text_area_tag :pairs, nil, :class => 'text_area' %>
-    </div>
-  </div>
-  <div class="form-actions">
-    <%= submit_tag nil, :class => 'btn btn-primary' %>
-  </div>
-<% end %>
+    <%
+        @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
+        @models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
+    %>
+    <%= form_tag mass_assets_path, :html => { :class => 'form-horizontal' } do |f| %>
+        <div class="control-group">
+            <%= label_tag :room_id, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= text_field_tag :room_name, nil, :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label :os, "OS", :class => 'control-label' %>
+            <div class="controls">
+                <%= text_field_tag :os, nil, :class => 'text_field' %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :model_name, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= text_field_tag :model_name, nil, :'data-provide' => "typeahead", :"data-items" => @models.count, :"data-source" => @models.to_s %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :purchase, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= text_field_tag :purchase_date, nil %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :cost, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= number_field_tag :cost, nil, :class => 'number_field' %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :vendor_id, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= select_tag :vendor_id, options_for_select(Vendor.all.sort_by{|v| v.name}.map{|v| [v.name, v.id]}) %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :notes, nil, :class => 'control-label' %>
+            <div class="controls">
+                <%= text_area_tag :notes, nil, :class => 'text_area' %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag :pairs, "Tag, Serial [, Name] (1 per line)", :class => 'control-label' %>
+            <div class="controls">
+                <%= text_area_tag :pairs, nil, :class => 'text_area' %>
+            </div>
+        </div>
+        <div class="form-actions">
+            <%= submit_tag nil, :class => 'btn btn-primary' %>
+        </div>
+    <% end %>
 
 
-	
+
 <% end %>
 
 <%= tabify indexes: "Master Lists", move: "Mass Move Assets", generate: "Mass Generate Tickets", mass_assets: "Mass Generate Assets" %>
 
 <%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#dueAt').datetimepicker();
-	});
+    $(document).ready(function() {
+    $('#dueAt').datetimepicker();
+    $('#dueAt2').datetimepicker();
+    });
 <% end %>
 
 <%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#purchase_date').datepicker();
-	});
+    $(document).ready(function() {
+    $('#purchase_date').datepicker();
+    });
 <% end %>
 
 

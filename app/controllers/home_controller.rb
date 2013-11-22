@@ -5,5 +5,6 @@ class HomeController < ApplicationController
   end
 
   def tools
+      @tags = params[:tags]
   end
 end
