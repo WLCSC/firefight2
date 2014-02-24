@@ -27,13 +27,19 @@
 			<td><%= @asset.serial %></td>
 		</tr>
 		<tr style="font-weight: bolder; color: #666; border-top: thin solid #aaa">
-			<td></td>
+            <td>Loaned To</td>
 			<td>Vendor</td>
 			<td>Purchase Date</td>
 			<td>Cost</td>
 		</tr>
 		<tr>
-			<td></td>
+            <td>
+                <% if @asset.loaned? %>
+                    <%= link_to @asset.loaned_to.name, @asset.loaned_to %> 
+                <% else %>
+                    Nobody
+                <% end %>
+            </td>
 			<td><%= @asset.vendor ? link_to(@asset.vendor.name, @asset.vendor) : "UNKNOWN" %></td>
 			<td><%= @asset.purchase %></td>
 			<td>$<%= @asset.cost %></td>
@@ -67,7 +73,7 @@
 
 <% if current_user.admin? || current_user.support %>
 	<% content_for :sidebar do %>
-		<li><%= link_to "Move Asset", '/home/tools?t=move&tags='+@asset.tag %></li>
+		<li><%= link_to "Move Asset", '/firefight/home/tools?t=move&tags='+@asset.tag %></li>
 		<li><%= link_to "Edit Asset", edit_asset_path(@asset) %></li>
 	<% end %>
 <% end %>

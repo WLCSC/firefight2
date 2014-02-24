@@ -106,10 +106,14 @@ class Ticket < ActiveRecord::Base
     def fix_due
         if self.due_at != "" && self.due_at.is_a?(String)
             self.due_at.match /(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/
+                begin
                 self.due = DateTime.civil($3.to_i, $1.to_i, $2.to_i, $4.to_i, $5.to_i)
+                rescue
+                    self.errors.add(:due_at, "is not a valid date.")
+                end
 
         elsif self.due_at != ""
-
+                    self.errors.add(:due_at, "is not a valid date.")
         end
 
     end

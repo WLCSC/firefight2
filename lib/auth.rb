@@ -21,9 +21,11 @@ def ldap_populate user, pass, obj=nil
 	if l = SimpleLdapAuthenticator.valid?(user,pass)[0]
 		u = obj || User.new
 		u.username = user
-		u.name = l['givenname'][0].to_s + " " + l['sn'][0].to_s
+		u.name ||= l['givenname'][0].to_s + " " + l['sn'][0].to_s
 		u.administrator = true if(l[:memberof].include? APP_CONFIG[:ldap_domain_administrator_ou])
-		u.email = l['mail'][0]
+		u.email ||= l['mail'][0]
+		u.first_name ||= l['givenname'][0].to_s
+        u.last_name ||= l['sn'][0].to_s
 
 		Group.all.each do |group|
 			unless group.auth_attribute == "*"
@@ -45,8 +47,21 @@ def ldap_populate user, pass, obj=nil
 	else
 		false
 	end
+end
 
-		
+def ldap_force user
+    if l = ldap_search(user)[0]
+        u = User.new
+		u.username = user
+		u.name ||= l['givenname'][0].to_s + " " + l['sn'][0].to_s
+		u.email ||= l['mail'][0]
+		u.first_name ||= l['givenname'][0].to_s
+        u.last_name ||= l['sn'][0].to_s
+        u.save
+        u
+    else
+        false
+    end
 end
 
 def ldap_search user, by='samaccountname'

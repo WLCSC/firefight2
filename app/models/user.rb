@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 	has_many :tickets, :through => :tags
 	has_many :comments
 	has_many :loans
-	has_many :returns, :through => :loan
+	has_many :returns, :through => :loans
 	has_many :alerts
 	after_create :create_principal
 	before_save :encrypt_password
@@ -95,4 +95,8 @@ class User < ActiveRecord::Base
 	def mission_tickets
 		self.missions.map{|m| m.ticket }
 	end
+
+    def assets
+        returns.where(:returned => false).map{|r| r.asset}
+    end
 end

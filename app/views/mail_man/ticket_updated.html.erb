@@ -9,7 +9,7 @@
 <% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2]: @ticket.comments.last) %>
 <p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>
 
-<pre>
+<pre style="font-size: 14px;">
   Building:	<%= @ticket.room.building.name %>
   Room:		<%= @ticket.room.name %>
   Asset:	<%= @ticket.asset.tag %>
@@ -18,10 +18,11 @@
 <% if @ticket.due %>
   Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
 <% end %> 
+</pre>
  
 <% @ticket.comments.reverse.each do |comment| %>
 <%= comment.user.name %> - <%= comment.created_at %>
-<%= comment.content.html_safe %>
+<p><%= comment.content.html_safe %></p>
 <hr/>
 <%end%>
 

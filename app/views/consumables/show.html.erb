@@ -1,34 +1,35 @@
 <h1><%= @consumable.name %> (<%= @consumable.short %>)</h1>
 
 <div class="accordion" id="accordion2">
-	<% Building.all.each do |building| %>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle btn-danger" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= building.id %>">
-					<%= building.name %> - <%= building.consumable_count @consumable %>
-				</a>
-			</div>
-			<div id="collapse<%= building.id %>" class="accordion-body collapse">
-				<div class="accordion-inner">
-					<table class="table table-striped">
-						<% @consumable.inventories.where(:room_id => building.room_ids).each do |i| %>
-							<tr>
-								<td><%= link_to i.room.name, i.room %> - <%= i.room.notes %></td>
-								<td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
-								<td>
-									<%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
-									<%= link_to "-", adj_inventory_path(i, :commit => "-"), :class => 'btn btn-mini btn-danger', :remote => true %>
-								</td>
-							</tr>
-						<% end %>
-					</table>
-				</div>
-			</div>
-		</div>
-	<% end %>
+    <% Building.all.each do |building| %>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle btn-danger" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= building.id %>">
+                    <%= building.name %> - <%= building.consumable_count @consumable %>
+                </a>
+            </div>
+            <div id="collapse<%= building.id %>" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <table class="table table-striped">
+                        <% invs = @consumable.inventories.where(:room_id => building.room_ids) %>
+                        <% invs.each do |i| %>
+                            <tr>
+                                <td><%= link_to i.room.name, i.room %> - <%= i.room.notes %></td>
+                                <td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
+                                <td>
+                                    <%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
+                                    <%= link_to "-", adj_inventory_path(i, :commit => "-"), :class => 'btn btn-mini btn-danger', :remote => true %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% end %>
 </div>
 
 <% content_for :sidebar do %>
-	<li><%= link_to "Consumable Index", consumables_path %></li>
-	<li><%= link_to "Edit", edit_consumable_path(@consumable) %></li>
+    <li><%= link_to "Consumable Index", consumables_path %></li>
+    <li><%= link_to "Edit", edit_consumable_path(@consumable) %></li>
 <% end %>

@@ -54,6 +54,10 @@ Firefight2::Application.routes.draw do
 			post 'approve'
 			post 'return'
 		end
+        collection do
+            post 'assign'
+            get 'quick'
+        end
 	end
 	resources :maps
 	resources :tickets do

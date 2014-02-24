@@ -1,7 +1,10 @@
 <tr>
 	<td>
 		<p><%= link_to comment.user.name, comment.user %></p>
-		<p><%= time_delta comment.created_at %></p>
+        <p><%= time_delta comment.created_at %></p>
+        <% if current_user.admin? %>
+            <p><%= link_to "Edit", edit_comment_path(comment), :class => 'btn btn-warning btn-mini' %></p>
+        <% end %>
 	</td>
 	<td>
 		<%= comment.formatted_display %>

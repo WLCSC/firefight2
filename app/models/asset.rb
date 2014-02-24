@@ -40,4 +40,12 @@ class Asset < ActiveRecord::Base
 
 
 	end
+
+    def loaned?
+        returns.where(:returned => false).first
+    end
+
+    def loaned_to
+        returns.where(:returned => false).first.loan.user
+    end
 end

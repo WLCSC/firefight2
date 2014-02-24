@@ -1,6 +1,7 @@
 class Loan < ActiveRecord::Base
 	belongs_to :user
 	has_many :returns
+    has_many :assets, :through => :returns
 	has_many :requests
 	has_many :rtypes, :through => :requests
 	attr_accessor :start, :end
@@ -14,6 +15,10 @@ class Loan < ActiveRecord::Base
 		end
 		ret
 	end
+
+    def open
+        approved ? active : false
+    end
 
 	def Loan.open 
 		all.delete_if{|l| l.approved ? !l.active: false}

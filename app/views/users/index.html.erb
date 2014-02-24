@@ -3,7 +3,7 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Primary Building</th>
+			<th>Building(s)</th>
 			<th>Administrator</th>
 			<th>Tagged Tickets</th>
 			<th><i>T</i></th>
@@ -15,7 +15,7 @@
 		<% @users.each do |user| %>
 			<tr>
 				<td><%= link_to user.name, user %></td>
-				<td><%= user.building ? link_to(user.building.name, user.building) : "No Building Assigned!" %></td>
+                <td><%= user.buildings.count > 0 ? user.buildings.map{|b| link_to(b.name, b)}.join(', ').html_safe : "No Buildings Assigned!" %></td>
 				<td><%= user.administrator ? "true" : "false" %></td>
 				<td><%= badge_row user.tickets %></td>
 				<td><%= user.tickets.count %></td>

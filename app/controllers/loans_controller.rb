@@ -139,4 +139,47 @@ class LoansController < ApplicationController
 		end
 		redirect_to @loan, :notice => "Returned equipment"
 	end
+
+    def quick
+
+    end
+
+    def assign
+        user = User.where(:username => params[:username]).first
+        asset = Asset.where(:tag => params[:tag]).first
+
+        if !asset
+            redirect_to quick_loans_path, :notice => 'Invalid asset tag.'
+            return
+        end
+
+        if asset.loaned?
+            redirect_to quick_loans_path, :notice => 'That asset is already loaned out.'
+            return
+        end
+
+        if !user
+            user = ldap_force(params[:username])
+        end
+
+        @loan = Loan.new
+        @loan.user = user
+        @loan.use = "Assigned by Tech"
+        @loan.start = params[:start]
+        @loan.end = params[:end]
+        @loan.approved = true
+
+        if @loan.save
+            r = Return.new
+            r.loan = @loan
+            r.asset = asset
+            r.returned = false
+            r.save
+            redirect_to quick_loans_path, :notice => 'Successfully loaned asset.'
+        else
+            redirect_to quick_loans_path, :notice => 'There was an error saving the loan.'
+            return
+        end
+    end
+
 end

@@ -236,6 +236,7 @@ class TicketsController < ApplicationController
 			@user = User.find(params[:user_id])
 			if @user && @ticket.users.include?(@user)
 				@ticket.users.delete(@user)
+				render :js => '$("#flashbox").append(\'<div class="alert"><button type="button" class="close" data-dismiss="alert">&times</button>Untagged user.</div>\');$("#tag' + @user.id.to_s  + '").remove();'
 			else
 				render :js => '$("#flashbox").append(\'<div class="alert"><button type="button" class="close" data-dismiss="alert">&times</button>That user isn\'t tagged here.</div>\');'
 			end

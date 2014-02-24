@@ -54,7 +54,7 @@
   </tr>
 </thead>
 <tbody>
-<% current_user.loans.each do |loan| %>
+    <% current_user.loans.keep_if{|l| l.open}.each do |loan| %>
   <tr>
     <td><%= link_to loan.badge.html_safe, loan %></td>
     <td><%= loan.start_date %></td>

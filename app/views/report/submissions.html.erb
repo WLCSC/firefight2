@@ -1,0 +1,8 @@
+<%= chart_tag 'submissions_graph', 300, :days => (params[:days] || 14), :user => (params[:user] || 0) %>
+
+<%= form_tag report_submissions_path, :method => :get do %>
+    <p>Days to go back <%= number_field_tag :days, params[:days] || 14 %></p>
+    <p>User <%= select_tag :user,content_tag(:option,'None',:value=>"0")+ options_from_collection_for_select(User.order(:name).all, "id", "name") %></p>
+    <p>Building <%= select_tag :building ,content_tag(:option,'None',:value=>"0")+ options_from_collection_for_select(Building.order(:name).all, "id", "name") %></p>
+    <%= submit_tag "Go", :class => 'btn btn-success' %>
+<% end %>

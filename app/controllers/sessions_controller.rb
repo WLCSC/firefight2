@@ -8,6 +8,10 @@ class SessionsController < ApplicationController
 
 
     def create
+        unless params[:username]
+                redirect_to new_session_path, :alert => 'Invalid username or password.'
+                return
+        end
         params[:username].downcase!
         ok = false
         user = User.where(:username => params[:username]).first

@@ -4,7 +4,7 @@
 
  <p><%= @ticket.submitter.name %> has submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  <%= link_to "Click here", "https://apps.wl.k12.in.us/firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
 
-<pre>
+<pre style="font-size: 14px;">
   Building:	<%= @ticket.room.building.name %>
   Room:		<%= @ticket.room.name %>
   Asset:	<%= @ticket.asset.tag %>
@@ -13,10 +13,11 @@
 <% if @ticket.due %>
   Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
 <% end %> 
- 
+</pre>
+
 <% @ticket.comments.reverse.each do |comment| %>
 <%= comment.user.name %> - <%= comment.created_at %>
-<%= comment.content%>
+<p><%= comment.content%></p>
 <hr/>
 <%end%>
 

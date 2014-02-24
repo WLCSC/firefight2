@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130903134933) do
+ActiveRecord::Schema.define(:version => 20131210131656) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "consumable_id"
@@ -265,6 +265,8 @@ ActiveRecord::Schema.define(:version => 20130903134933) do
     t.boolean  "support"
     t.string   "password_hash"
     t.string   "password_salt"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   create_table "uses", :force => true do |t|

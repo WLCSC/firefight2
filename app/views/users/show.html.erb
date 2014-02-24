@@ -16,6 +16,68 @@
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
+<% content_for :loans do %>
+<table class="table table-striped datatableable">
+	<thead>
+  <tr>
+    <th></th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Use</th>
+    <th>Approved</th>
+    <th>User</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+    <% @user.loans.each do |loan| %>
+  <tr>
+    <td><%= link_to loan.badge.html_safe, loan %></td>
+    <td><%= loan.start_date %></td>
+    <td><%= loan.end_date %></td>
+    <td><%= loan.use %></td>
+    <td><%= loan.approved ? "Yes" : "No" %></td>
+    <td><%= link_to loan.user.name, loan.user %></td>
+    <td><%= loan.statusify %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<% end %>
+
+<% content_for :assets do %>
+<% qs = current_user.submittable_queues.count > 0 %>
+<table class="table table-striped table-bordered datatableable">
+	<thead>
+		<tr>
+			<th>Tag/Name</th>
+			<th></th>
+			<th>Type</th>
+			<th>Serial</th>
+			<th>Manufacturer</th>
+			<th>Model</th>
+			<th>Tickets</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% if @user.assets.count > 0 %>
+			<% @user.assets.each do |asset| %>
+				<tr>
+					<td><%= link_to asset.tag, asset %><%= asset.name ? ("<br/>" + asset.name).html_safe : '' %></td>
+					<td><%= link_to("Submit Ticket", asset, :class => 'btn btn-mini btn-danger') %></td>
+					<td><%= asset.rtype ? link_to(asset.rtype.name, asset.rtype) : "-" %></td>
+					<td><%= asset.serial ? asset.serial : "-" %></td>
+					<td><%= asset.manufacturer ? link_to(asset.manufacturer.name, asset.manufacturer) : '-' %></td>
+					<td><%= asset.manufacturer ? link_to(asset.model.name, asset.model) : '-' %></td>
+					<td><%= link_to badge_row(asset.tickets), asset, :t => 'open_tickets', :class => 'nounderline' %></td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+<% end %>
+
 <% if current_user.admin? %>
 	<% content_for :permissions do %>
 		<ul>
@@ -35,7 +97,7 @@
 	<% end %>
 <%end%>
 
-<%= tabify open: 'Open Tickets', tagged: "Tagged Tickets", submitted: "Submitted Tickets", permissions: "User Permissions", groups: "Memberships" %>
+<%= tabify open: 'Open Tickets', tagged: "Tagged Tickets", submitted: "Submitted Tickets", loans: "Loans", assets: "Loaned Assets", permissions: "User Permissions", groups: "Memberships" %>
 
 <% if current_user.admin? || current_user == @user %>
 	<% content_for :sidebar do %>

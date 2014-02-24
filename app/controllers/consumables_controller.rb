@@ -21,6 +21,11 @@ class ConsumablesController < ApplicationController
   # GET /consumables/1.json
   def show
     @consumable = Consumable.find(params[:id])
+    Building.all.each do |building|
+        if @consumable.inventories.where(:room_id => building.room_ids).count == 0
+            Inventory.create(:consumable_id => @consumable.id, :room_id => building.storeroom.id, :count => 0)
+        end
+    end
 
     respond_to do |format|
       format.html # show.html.erb
