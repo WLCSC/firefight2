@@ -1,4 +1,4 @@
-<h1>Asset <%= @asset.tag =~ "^[\d]+$" ? "#" + @asset.tag : @asset.tag %></h1>
+<h1>Asset <%= @asset.tag =~ /^[\d]+$/ ? "#" + @asset.tag : @asset.tag %></h1>
 
 <% content_for :info do %>
 	<table class="table-condensed" width="100%" >
