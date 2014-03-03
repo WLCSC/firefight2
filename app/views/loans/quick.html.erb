@@ -1,11 +1,15 @@
 <%= form_tag assign_loans_path do %>
     <div class="field">
+        <%= label_tag :use %><br />
+        <%= text_field_tag :use, params[:use] %>
+    </div>
+    <div class="field">
         <%= label_tag :start_date %><br />
-        <%= text_field_tag :start %>
+        <%= text_field_tag :start, params[:start] %>
     </div>
     <div class="field">
         <%= label_tag :end_date %><br />
-        <%= text_field_tag :end %>
+        <%= text_field_tag :end, params[:end] %>
     </div>
     <div class="field">
         <%= label_tag :user %>

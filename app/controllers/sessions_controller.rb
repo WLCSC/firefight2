@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
                 user = ldap_populate(params[:username], params[:password], user)
                 session[:user_id] = user.id
                 #flash[:notice] = "Logged in!"
-                redirect_to (params[:return] ? params[:return] :root_path), :notice => 'Logged in!'
+                redirect_to (params[:return] ? params[:return] : root_path), :notice => 'Logged in!'
                 ok = true
             else
                 redirect_to new_session_path, :alert => 'Invalid username or password.'
@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
             if user.password_hash == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
                 session[:user_id] = user.id
                 #flash[:notice] = "Logged in!"
-                redirect_to (params[:return] ? params[:return] :root_path), :notice => 'Logged in!'
+                redirect_to (params[:return] ? params[:return] : root_path), :notice => 'Logged in!'
             else
                 #flash[:alert] = "Invalid local login."
                 redirect_to new_session_path, :alert => 'Invalid username or password.'

@@ -164,7 +164,7 @@ class LoansController < ApplicationController
 
         @loan = Loan.new
         @loan.user = user
-        @loan.use = "Assigned by Tech"
+        @loan.use = params[:use].empty? ? "Direct Assigned" : "Direct/#{params[:use]}"
         @loan.start = params[:start]
         @loan.end = params[:end]
         @loan.approved = true
@@ -175,9 +175,9 @@ class LoansController < ApplicationController
             r.asset = asset
             r.returned = false
             r.save
-            redirect_to quick_loans_path, :notice => 'Successfully loaned asset.'
+            render :quick, :notice => 'Successfully loaned asset.'
         else
-            redirect_to quick_loans_path, :notice => 'There was an error saving the loan.'
+            render quick, :notice => 'There was an error saving the loan.'
             return
         end
     end
