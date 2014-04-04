@@ -124,5 +124,7 @@ class Ticket < ActiveRecord::Base
         end
     end
 
-
+    def lifetime
+        comments.last.created_at - comments.first.created_at
+    end
 end

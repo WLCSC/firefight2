@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gem 'ruby-ntlm'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.17'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -49,3 +49,4 @@ gem 'resque'
 gem 'resque_mailer'
 gem 'bcrypt-ruby'
 gem 'less-rails'
+gem 'public_activity'

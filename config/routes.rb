@@ -1,4 +1,6 @@
 Firefight2::Application.routes.draw do
+  get "audit/" => "audit#index", :as => 'audit'
+
   get "report" => 'report#index'
 
   get "report/submissions"

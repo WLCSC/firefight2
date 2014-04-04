@@ -1,4 +1,6 @@
 class Ticketqueue < ActiveRecord::Base
+    include PublicActivity::Model
+    tracked owner: Proc.new{ |controller, model| controller.current_user }
 	has_many :tickets
 	has_many :permissions, :as => :securable
 	has_many :principals, :through => :permissions

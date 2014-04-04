@@ -1,4 +1,6 @@
 class Group < ActiveRecord::Base
+    include PublicActivity::Model
+    tracked owner: Proc.new{ |controller, model| controller.current_user }
 	has_many :memberships
 	has_many :users, :through => :memberships
 	has_one :principal, :as => :authorizable
