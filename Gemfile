@@ -39,12 +39,12 @@ gem 'jquery-ui-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem "therubyracer"
-gem "execjs"
-gem "net-ldap"
-gem "jquery-rails"
-gem "twitter-bootstrap-rails"
-gem "exception_notification", :require => "exception_notifier"
+gem 'therubyracer'
+gem 'execjs'
+gem 'net-ldap'
+gem 'jquery-rails'
+gem 'twitter-bootstrap-rails'
+gem 'exception_notification', :require => 'exception_notifier'
 gem 'resque'
 gem 'resque_mailer'
 gem 'bcrypt-ruby'
