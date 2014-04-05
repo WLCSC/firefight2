@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -12,13 +13,15 @@
 		<![endif]-->
 
 		<%= stylesheet_link_tag "application", :media => "all" %>
-		
+
 		<%= javascript_include_tag "application" %>
+
 		<link href="images/favicon.ico" rel="shortcut icon">
 		<link href="images/apple-touch-icon.png" rel="apple-touch-icon">
 		<link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">
 		<link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
 	</head>
+
 	<body>
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
@@ -28,55 +31,58 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
+
 					<a class="brand" style="margin-top: 6px" href="<%= root_path %>">
 						<span style="vertical-align: middle">
 							<%= image_tag 'logo.png' %>
 						</span>
+
 						<span style="vertical-align: bottom">
 							Firefight
 						</span>
 					</a>
+
 					<div class="container nav-collapse">
 						<ul class="nav" style="margin-top: 10px;">
 							<% if current_user %>
-                                <% unless current_user.admin? %>
-                                    <li>
-                                        <%= link_to "Submit New Ticket", buildings_path %>
-        							</li>
-                                <% end %>
-		        				<li>
-	    		    				<%= link_to "Request Equipment", new_loan_path %>
-    				   			</li>
-							<% if current_user.support? || current_user.admin? %>
-							<li>
-								<%= link_to "All Tickets", tickets_path %>
-							</li>
-							<% end %>
-							<% if current_user.admin? %>
-							<li>
-								<%= link_to "All Loans", loans_path %>
-                                </li>
-                            <% end %>
-                            <% if current_user.support || current_user.admin? %>
-							<li>
-								<%= link_to "Management", home_tools_path %>
-							</li>
-							<% end %>
+								<% unless current_user.admin? %>
+									<li>
+										<%= link_to "Submit New Ticket", buildings_path %>
+									</li>
+								<% end %>
+								<li>
+									<%= link_to "Request Equipment", new_loan_path %>
+					   			</li>
+								<% if current_user.support? || current_user.admin? %>
+									<li>
+										<%= link_to "All Tickets", tickets_path %>
+									</li>
+								<% end %>
+								<% if current_user.admin? %>
+									<li>
+										<%= link_to "All Loans", loans_path %>
+									</li>
+								<% end %>
+								<% if current_user.support || current_user.admin? %>
+									<li>
+										<%= link_to "Management", home_tools_path %>
+									</li>
+								<% end %>
 							<% end %>
 						</ul>
 
 						<ul class="nav pull-right" style="margin-top: 10px;">
 							<% if current_user %>
-							<li>
-								<%= form_tag quick_assets_path, :class => 'form-search' do %>
-								<%= hidden_field_tag :return, :nil, :value => @url %>
-								<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Tag/User/Room' %>
-								<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
-								<% end %>
+								<li>
+									<%= form_tag quick_assets_path, :class => 'form-search' do %>
+									<%= hidden_field_tag :return, :nil, :value => @url %>
+									<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Tag/User/Room' %>
+									<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
+							<% end %>
 							</li>
 							<li><%= link_to "Log Out", sessions_destroy_path %></li><% end %>
 						</ul>
-					</div><!--/.nav-collapse -->
+					</div>
 				</div>
 			</div>
 		</div>
@@ -88,57 +94,51 @@
 					<div class="<%= @skip_sidebar ? "span12" : "span8" %>">
 						<div id="flashbox"><%= my_bootstrap_flash %></div>
 						<%= yield %>
-				</div>
+					</div>
 					<% unless @skip_sidebar %>
-					<div class="span3" style="margin-left: 90px;">
-						<% if current_user %>
-						<div class="well sidebar-nav">
-							<% if content_for? :sidebar %>
-							<h3>Tools</h3>
-							<ul class="nav nav-list">
-								<%= yield :sidebar %>
-							</ul>
+						<div class="span3" style="margin-left: 90px;">
+							<% if current_user %>
+								<div class="well sidebar-nav">
+									<% if content_for? :sidebar %>
+										<h3>Tools</h3>
+										<ul class="nav nav-list">
+											<%= yield :sidebar %>
+										</ul>
+									<% end %>
+									<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
+									<ul class="nav nav-list">
+										<% Building.all.each do |b| %>
+											<li><%= link_to b.name, b %></li>
+										<% end %>
+									</ul>
+								</div>
 							<% end %>
-							<h3><%= (current_user.admin? || current_user.support?) ? "Jump to Building" : "Submit Ticket" %></h3>
-							<ul class="nav nav-list">
-								<% Building.all.each do |b| %>
-								<li><%= link_to b.name, b %></li>
-								<% end %>
-							</ul>
-
-							
-						</div><!--/.well -->
-						<% end %>
-					</div><!--/span-->
+						</div>
 					<% end %>
-				</div><!--/row-->
-			</div><!--/content-->
+				</div>
+			</div>
+
 			<footer>
 				<p class="pull-right"><a href="https://github.com/WLCSC" class="btn btn-mini" style="margin-top: 10px;margin-right: 5px;">Created by Brad Thompson, West Lafayette Community School Corporation</a></p>
 			</footer>
 
-		</div> <!-- /container -->
-		
+		</div>
+
 		<% if current_user %>
-		<div class="navbar navbar-fixed-bottom navbar-inverse">
-			<div class="navbar-inner">
-				<div class="container">
-					<div class="container nav-collapse">
-						<ul class="nav shortcuts">
-							<li><%= link_to "Manage Shortcuts", shortcuts_path, :class => 'btn btn-mini btn-inverse', :style => 'width: 50px; padding-top: 3px; padding-bottom: 3px; line-height: 12px;' %></li>
-							<% current_user.shortcuts.order(:position).each do |shortcut| %>
-							<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
-							<% end %>
-						</ul>
-					</div><!--/.nav-collapse -->
+			<div class="navbar navbar-fixed-bottom navbar-inverse">
+				<div class="navbar-inner">
+					<div class="container">
+						<div class="container nav-collapse">
+							<ul class="nav shortcuts">
+								<li><%= link_to "Manage Shortcuts", shortcuts_path, :class => 'btn btn-mini btn-inverse', :style => 'width: 50px; padding-top: 3px; padding-bottom: 3px; line-height: 12px;' %></li>
+								<% current_user.shortcuts.order(:position).each do |shortcut| %>
+									<li style="margin-bottom: 5px; margin-top: -10px;"><%= link_to shortcut.container.nice_name || "Undefined", shortcut.container %><%= badge_row shortcut.container.tickets, true %></li>
+								<% end %>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
 		<% end %>
-		
-		<!-- Javascripts
-			 ================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		
 	</body>
 </html>
