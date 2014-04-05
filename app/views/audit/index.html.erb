@@ -1,0 +1,29 @@
+<table class="table datatableable">
+    <thead>
+        <th>User</th>
+        <th>Time</th>
+        <th>Activity Key</th>
+        <th>Target</th>
+    </thead>
+
+    <tbody>
+        <% @activities.each do |a| %>
+            <tr>
+                <td><%= link_to a.owner.name, a.owner %></td>
+                <td><%= a.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+                <td><%= a.key %></td>
+                <td>
+                    <%= if a.trackable 
+                            begin
+                                link_to(a.trackable.name, a.trackable) 
+                            rescue
+                                link_to(a.trackable.name, a.trackable.ticket)
+                            end
+                        else
+                            "#{a.trackable_type} that doesn't exist."
+                        end %>
+                </td>
+            </tr>
+<% end %>
+</tbody>
+</table>

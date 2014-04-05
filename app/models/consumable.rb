@@ -1,4 +1,6 @@
 class Consumable < ActiveRecord::Base
+    include PublicActivity::Model
+    tracked owner: Proc.new{ |controller, model| controller.current_user }
 	has_many :inventories
 	has_many :rooms, :through => :inventories
 	has_many :alerts
@@ -8,4 +10,8 @@ class Consumable < ActiveRecord::Base
 	def total_count
 		self.inventories.map{|i| i.count}.inject(0,:+)
 	end
+
+    def name
+        short
+    end
 end

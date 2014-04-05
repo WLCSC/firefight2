@@ -1,4 +1,6 @@
 class Room < ActiveRecord::Base
+    include PublicActivity::Model
+    tracked owner: Proc.new{ |controller, model| controller.current_user }
 	has_many :assets
 	has_many :tickets, :through => :assets
 	belongs_to :building

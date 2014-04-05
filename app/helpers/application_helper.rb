@@ -53,6 +53,10 @@ module ApplicationHelper
         end
     end
 
+    def nice_datetime d
+	d.strftime("%I:%M %p %m-%d-%Y")
+  end
+
     def markdown(text)
         sanitize(BlueCloth::new(text).to_html)
     end
