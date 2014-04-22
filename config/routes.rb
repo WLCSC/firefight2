@@ -78,7 +78,11 @@ Firefight2::Application.routes.draw do
 	end
 
 	resources :rooms
-	resources :users
+	resources :users do
+        member do
+            get 'tickets_for'
+        end
+    end
 	resources :rtypes
 	resources :models
 	resources :assets do

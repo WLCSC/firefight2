@@ -17,7 +17,11 @@
                             begin
                                 link_to(a.trackable.name, a.trackable) 
                             rescue
-                                link_to(a.trackable.name, a.trackable.ticket)
+                                if a.trackable.is_a? Mission
+                                    link_to(a.trackable.name, a.trackable.ticket)
+                                else
+                                    link_to a.trackable.name, a.trackable.consumable
+                                end
                             end
                         else
                             "#{a.trackable_type} that doesn't exist."

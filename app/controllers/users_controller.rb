@@ -85,4 +85,18 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def tickets_for
+      @user = User.find(params[:id])
+      if params[:group] && !params[:group].empty?
+          if params[:group] == "open"
+              @tickets = @user.tickets.incomplete
+          elsif params[:group] == "submitted"
+              @tickets = @user.submitted_tickets
+          end
+      else
+          @tickets = @user.tickets
+      end
+      render :partial => 'tickets/tickettable', :layout => false, :locals => {:tickets => @tickets}
+  end
 end

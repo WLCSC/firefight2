@@ -1,19 +1,57 @@
 <h1><%= @user.name %></h1>
 
 <% content_for :open do %>
-	<% @tickets = @user.tickets.incomplete %>
-	<% render :partial => 'tickets/tickettable' %>
+    <div id="openTicketContainer">Loading...</div>
+    <script>
+        $("#openTicketContainer").load("<%= tickets_for_user_path(@user, :group => 'open')  %>", function() {
+            $("#openTicketContainer .datatableable").dataTable({
+		"bPaginate": false,
+	       "bLengthChange": false,
+	       "bFilter": true,
+	       "bSort": true,
+	       "bInfo": false,
+	       "bAutoWidth": false,
+	       "sScrollY": winH - 300,
+	       "bScrollCollapse": true
+	});
+        });
+    </script>
 <% end %>
 
-
 <% content_for :tagged do %>
-	<% @tickets = @user.tickets %>
-	<%= render :partial => 'tickets/tickettable' %>
+    <div id="taggedTicketContainer">Loading...</div>
+    <script>
+        $("#taggedTicketContainer").load("<%= tickets_for_user_path(@user)  %>", function() {
+         $("#taggedTicketContainer .datatableable").dataTable({
+		"bPaginate": false,
+	       "bLengthChange": false,
+	       "bFilter": true,
+	       "bSort": true,
+	       "bInfo": false,
+	       "bAutoWidth": false,
+	       "sScrollY": winH - 300,
+	       "bScrollCollapse": true
+	});
+        });
+    </script>
 <% end %>
 
 <% content_for :submitted do %>
-	<% @tickets = @user.submitted_tickets %>
-	<%= render :partial => 'tickets/tickettable' %>
+    <div id="submittedTicketContainer">Loading...</div>
+    <script>
+        $("#submittedTicketContainer").load("<%= tickets_for_user_path(@user, :group => 'submitted')  %>", function() {
+          $("#submittedTicketContainer .datatableable").dataTable({
+		"bPaginate": false,
+	       "bLengthChange": false,
+	       "bFilter": true,
+	       "bSort": true,
+	       "bInfo": false,
+	       "bAutoWidth": false,
+	       "sScrollY": winH - 300,
+	       "bScrollCollapse": true
+	});
+        });
+    </script>
 <% end %>
 
 <% content_for :loans do %>

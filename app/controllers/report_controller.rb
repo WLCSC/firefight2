@@ -22,7 +22,7 @@ class ReportController < ApplicationController
             else
                 @all = Ticket.where(:submitter_id => params[:user])
             end
-            if params[:building] == '0' || params[:building].empty? || !params[:building]
+            if params[:building] == '0' || (params[:building] && params[:building].empty?) || !params[:building]
                 tickets = @all.where('created_at >= ? AND created_at <= ?', t0, t1).count
                 completed = @all.where(:status => 100).where('updated_at >= ? AND updated_at <= ?', t0, t1).count
             else
