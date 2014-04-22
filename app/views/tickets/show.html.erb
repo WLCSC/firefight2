@@ -18,7 +18,7 @@
 			<p>Submitted by <%= current_user.admin? ? link_to(@ticket.submitter.name, @ticket.submitter) : @ticket.submitter.name %> on <%= @ticket.created_at.strftime("%m/%d/%y at %I:%M") %></p>
 			<% if @ticket.due %> <p>Due on <%= @ticket.due.strftime("%m/%d/%y at %I:%M") %> - <%= time_delta @ticket.due %> </p><% end %>
 			<p>Status: <span class="label label<%= bootstrap_status @ticket.status %>"><%= @ticket.statusify %></span></p>
-            <p>Tagged users:</p> 
+            <p>Tagged users:</p>
 			<ul class="nav nav-pills" id="taglist">
 				<% @ticket.users.each do |u| %>
 					<% unless u.mission_tickets.include?(@ticket) %>
@@ -56,7 +56,7 @@
 						<th>Submitted at</th>
 					</tr>
 				</thead>
-				<% @ticket.photos.each do |photo| %>
+				<% @ticket.photos.uniq.each do |photo| %>
 					<tr>
 						<td><%= link_to(image_tag(root_url.gsub(/\/$/, '') + photo.image.url(:icon)), root_url.gsub(/\/$/, '') + photo.image.url) %></td>
 						<td><%= link_to photo.user.name, photo.user %></td>
@@ -83,7 +83,7 @@
 
 		<table class="table table-bordered comment-table" <%= @ticket.status == 100 ? 'style="background-color: #dfd;"'.html_safe : "" %>>
 			<% @ticket.comments.each do |comment| %>
-				<%= render :partial => 'comments/comment', :locals => {:comment => comment} %>	
+				<%= render :partial => 'comments/comment', :locals => {:comment => comment} %>
 			<% end %>
 
 			<% if current_user.admin? || @ticket.users.include?(current_user) || can?(:submit) %>
@@ -170,4 +170,3 @@
 			<button type="button" class="btn" data-dismiss="modal">Close</button>
 		</div>
 	</div>
-
