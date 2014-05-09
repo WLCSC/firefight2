@@ -5,6 +5,6 @@ class Use < ActiveRecord::Base
 	belongs_to :room
 
     def name
-        "#{room.name} -> #{consumable.short}"
+        "#{room.name} <- #{consumable.short}"
     end
 end

@@ -50,8 +50,4 @@ class Asset < ActiveRecord::Base
     def loaned_to
         returns.where(:returned => false).first.loan.user
     end
-
-    def name
-        tag
-    end
 end

@@ -4,7 +4,7 @@
 		<tr>
 			<th>ID</th>
 			<th>Submitter</th>
-			<th>Submitted</th>
+			<th>Submitted / Updated</th>
 			<th>Due</th>
 			<th>Comment</th>
 		</tr>
@@ -28,7 +28,7 @@
 					<% end %>
 </td>
 				<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
-				<td><%= time_delta ticket.created_at %></td>
+                <td><%= time_delta ticket.created_at %><br/>(<%= time_delta(ticket.updated_at > ticket.comments.last.created_at ? ticket.updated_at : ticket.comments.last.created_at) %>)</td>
 				<td><%= ticket.due ? time_delta(ticket.due) : "-" %></td>
 				<td><%= ticket.comments.first.content.length > 247 ? ticket.comments.first.content[0..247] + '...' : ticket.comments.first.content  %></td>
 			</tr>

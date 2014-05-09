@@ -19,8 +19,10 @@
                             rescue
                                 if a.trackable.is_a? Mission
                                     link_to(a.trackable.name, a.trackable.ticket)
+                                elsif a.trackable.respond_to? :loan
+                                    link_to a.trackable.name, a.trackable.loan
                                 else
-                                    link_to a.trackable.name, a.trackable.consumable
+                                    link_to a.trackable.name, a.trackable.room
                                 end
                             end
                         else

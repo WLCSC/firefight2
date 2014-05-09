@@ -10,8 +10,4 @@ class Consumable < ActiveRecord::Base
 	def total_count
 		self.inventories.map{|i| i.count}.inject(0,:+)
 	end
-
-    def name
-        short
-    end
 end
