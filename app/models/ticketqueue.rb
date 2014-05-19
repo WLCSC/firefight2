@@ -15,7 +15,7 @@ class Ticketqueue < ActiveRecord::Base
 
 	def secures user
 		self.permissions.sort{|a,b| a.priority <=> b.priority}.each do |p|
-			if (p.authorizes? user) && (p.see)
+			if (p.authorizes? user)
 				return p
 			end
 		end
@@ -33,20 +33,20 @@ class Ticketqueue < ActiveRecord::Base
 	end
 
 	def can? user, right
-		return true if user.admin?
 		p = secures(user)
+        puts p.inspect
 		r = nil
 		if p
 			case right
 			when :read, :see
-				r=p.see
+				r=p.see || user.admin?
 			when :write, :submit
-				r=p.submit
+				r=p.submit || user.admin?
 			when :execute, :admin
 				r=p.admin
 			end
 		else
-			r=false
+			r=false || user.admin?
 		end
 		puts "Chamber##{self.id}: can #{user.name} #{right.to_s}: #{r}"
 		r

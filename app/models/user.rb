@@ -80,6 +80,27 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	def readable_queues
+		if self.admin?
+			Ticketqueue.all
+		else
+			q = []
+			Ticketqueue.all.each do |x|
+				q << x if x.secures(self) && x.can?(self, :read) 
+			end
+			q
+		end
+	end
+
+    def administratable_queues
+			q = []
+			Ticketqueue.all.each do |x|
+				q << x if x.secures(self) && x.can?(self, :admin) 
+			end
+			q
+	end
+
+
 	def ticketqueues
 		submittable_queues.to_a
 	end

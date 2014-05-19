@@ -90,24 +90,24 @@ class TicketsController < ApplicationController
 	# POST /tickets.json
 	def create
 		@ticket = Ticket.new(params[:ticket])
-		if params[:ticket][:photo][:image]
-			@photo = Photo.new(@ticket.photo)
-			@ticket.photos << @photo
-		end	
 		unless current_user.ticketqueues.include?(@ticket.ticketqueue) || current_user.admin? || @ticket.users.include?(current_user)
 			redirect_to root_path, :notice => "You don't have permission to do that." 
 			return
 		else
-
+        	if params[:ticket][:photo][:image]
+		    	@photo = Photo.new(@ticket.photo)
+	    		@ticket.photos << @photo
+    		end	
 
 			if @ticket.ticketqueue == nil
 				@ticket.ticketqueue = Ticketqueue.first
 			end
+
 			if @ticket.asset == nil 
 				if @ticket.room != nil
 					@ticket.asset = @ticket.room.asset
 				else
-					@ticket.errors << "Something has gone horribly wrong!"
+					@ticket.errors << "Ticket doesn't have an associated asset!"
 				end
 			end
 
@@ -120,8 +120,7 @@ class TicketsController < ApplicationController
 					end
 
 					notifications = []
-					User.where(:administrator => true).each {|u| notifications << u}
-					@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
+					@ticket.asset.building.techs.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :admin)}
 					@ticket.asset.building.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					@ticket.asset.room.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}
 					@ticket.submitter.shortcuts.map{|s| s.user}.each {|u| notifications << u if @ticket.ticketqueue.can?(u, :see)}

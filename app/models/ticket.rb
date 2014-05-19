@@ -29,7 +29,10 @@ class Ticket < ActiveRecord::Base
         if user.admin?
             self.where(true)
         else
-            self.where(:ticketqueue_id => user.queues.map{|q| q.id})
+            q1 = self.where(:ticketqueue_id => user.readable_queues.map{|q| q.id}).map{|t| t.id}
+            q2 = self.where(:id => user.tickets.map{|t| t.id}).map{|t| t.id}
+            Ticket.where(:id => (q1 + q2))
+            #self.where(:ticketqueue_id => user.readable_queues.map{|q| q.id})#.merge(self.where(:id => (user.tickets.map{|t| t.id} )))
         end
     end
 

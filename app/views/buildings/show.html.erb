@@ -44,7 +44,16 @@
 
 
 <% if current_user.admin? %>
-	<%= tabify({:tickets => "Open Tickets", :rooms => "Room List", :consumables => "Consumables"})  %>
+<% content_for :admin_tickets do %>
+    <%
+        q1 = @room.tickets.incomplete.where(:ticketqueue_id => current_user.administratable_queues.map{|q| q.id}).map{|t| t.id}
+        q2 = @room.tickets.incomplete.where(:id => current_user.tickets.map{|t| t.id}).map{|t| t.id}
+    %>
+    <%= render :partial => 'tickets/tickettable', :locals => {:tickets => Ticket.where(:id => (q1 + q2))} %>
+<% end %>
+
+
+<%= tabify({:admin_tickets => "Open Tickets", :tickets => "All Open Tickets", :rooms => "Room List", :consumables => "Consumables"})  %>
 <% else %>
 	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
 <% end %>

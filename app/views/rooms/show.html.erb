@@ -1,5 +1,6 @@
 <%- model_class = @room.class -%>
 
+<% if current_user.admin? %>
 <% content_for :consumables do %>
 	<table class="table datatableable">
 		<thead>
@@ -32,6 +33,18 @@
 		<%= submit_tag "OK", :class => 'btn btn-success' %>
 	<% end %>
 <% end %>
+
+<% content_for :admin_tickets do %>
+    <%
+        q1 = @room.tickets.incomplete.where(:ticketqueue_id => current_user.administratable_queues.map{|q| q.id}).map{|t| t.id}
+        q2 = @room.tickets.incomplete.where(:id => current_user.tickets.map{|t| t.id}).map{|t| t.id}
+    %>
+    
+    <%= render :partial => 'tickets/tickettable', :locals => { tickets: Ticket.where(:id => (q1 + q2))} %>
+<% end %>
+
+<% end %>
+
 
 <% content_for :use do %>
 	<% @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"} %>
@@ -97,7 +110,7 @@
 
 
 <% if current_user.admin? %>
-	<%= tabify(open_tickets: "Open Tickets", assets: "Assets", consumables: "Consumable Inventory", use: "Use Consumables") %>
+	<%= tabify(admin_tickets: "Open Tickets", open_tickets: "All Open Tickets", assets: "Assets", consumables: "Consumable Inventory", use: "Use Consumables") %>
 <% else %>
 	<%= tabify(assets: "Assets", open_tickets: "Open Tickets", use: "Use Consumables") %>
 <% end %>
