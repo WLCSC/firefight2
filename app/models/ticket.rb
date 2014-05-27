@@ -30,7 +30,7 @@ class Ticket < ActiveRecord::Base
             self.where(true)
         else
             q1 = self.where(:ticketqueue_id => user.readable_queues.map{|q| q.id}).map{|t| t.id}
-            q2 = self.where(:id => user.tickets.map{|t| t.id}).map{|t| t.id}
+            q2 = user.tickets.map{|t| t.id}
             Ticket.where(:id => (q1 + q2))
             #self.where(:ticketqueue_id => user.readable_queues.map{|q| q.id})#.merge(self.where(:id => (user.tickets.map{|t| t.id} )))
         end

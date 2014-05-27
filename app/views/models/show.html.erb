@@ -5,7 +5,7 @@
 	<%= render :partial => 'assets/assettable' %>
 <% end %>	
 <% content_for :tickets do %>
-	<% @tickets = @model.tickets %>
+	<% @tickets = @model.tickets.readable_by(current_user) %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>	
 

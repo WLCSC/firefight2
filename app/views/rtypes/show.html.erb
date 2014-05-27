@@ -9,7 +9,7 @@
 	<%= render :partial => 'assets/assettable' %>
 <% end %>	
 <% content_for :tickets do %>
-	<% @tickets = @rtype.tickets %>
+	<% @tickets = @rtype.tickets.readable_by(current_user) %>
 	<%= render :partial => 'tickets/tickettable' %>
 <% end %>	
 <% content_for :models do %>

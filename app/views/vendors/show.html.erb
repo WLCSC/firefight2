@@ -1,7 +1,7 @@
 <h1><%= @vendor.name %></h1>
 
 <% content_for :tickets do %>
-<% @tickets = @vendor.tickets %>
+<% @tickets = @vendor.tickets.readable_by(current_user) %>
 <%= render :partial => 'tickets/tickettable' %>
 <% end %>
 
