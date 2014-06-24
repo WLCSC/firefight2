@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
                 redirect_to new_session_path, :alert => 'Invalid username or password.'
                 #flash[:alert] = "Invalid login."
             end
-        elsif APP_CONFIG[:auth_local] && user && user.email_address != nil
+        elsif APP_CONFIG[:auth_local] && user && user.email != nil
             if user.password_hash == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
                 session[:user_id] = user.id
                 #flash[:notice] = "Logged in!"
@@ -44,7 +44,7 @@ class SessionsController < ApplicationController
 
 
     def destroy
-        session[:user_id] = nil  
-        redirect_to root_url, :notice => "Logged out!"  
+        session[:user_id] = nil
+        redirect_to root_url, :notice => "Logged out!"
     end
 end
