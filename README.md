@@ -1,3 +1,4 @@
+
 # Firefight
 
 WLCSC's support ticket & inventory management system.
@@ -10,10 +11,11 @@ $ bundle install
 
 # edit/create config/database.yml & config/app_config.yml & config/resque.yml
 # edit/create config/initializers/setup_mail.rb with mail server details.
+# change your security token in config/initializers/secret_token.rb
 
 # Set up the database
-$ rake db:migrate
 # Note that you may need to prefix it with `bundle exec`; this will not cause problems.
+$ rake db:migrate
 
 # Start the server
 $ rails server
