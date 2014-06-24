@@ -8,6 +8,7 @@ How To
 * bundle install
 * edit/create config/database.yml & config/app_config.yml
 * edit config/initializers/setup_mail.rb with your mail server details
+* change your security token in config/initializers/secret_token.rb
 * rake db:setup
 * Start the server, then log in to Firefight with an admin user
 * Create your buildings, rooms, vendors, asset types, manufacturers, models and assets (in that order)
