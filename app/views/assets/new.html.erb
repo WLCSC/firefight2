@@ -1,4 +1,7 @@
-<%- model_class = @asset.class -%>
-<h1><%=t '.title', :default => t('helpers.titles.new', :model => model_class.model_name.human,
-                               :default => "New #{model_class.model_name.human}") %></h1>
+<h1>New Asset</h1>
+<% if @asset.errors.count > 0 %>
+    <% @asset.errors.full_messages.each do |m| %>
+        <div class="alert alert-warning"><%= m %></div>
+    <% end %>
+<% end %>
 <%= render :partial => 'form' %>

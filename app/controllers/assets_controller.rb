@@ -61,7 +61,7 @@ class AssetsController < ApplicationController
 				format.html { redirect_to @asset, notice: 'Asset was successfully created.' }
 				format.json { render json: @asset, status: :created, location: @asset }
 			else
-				format.html { render action: "new" }
+				format.html { render action: "new"; flash[:warning] = @asset.errors.full_messages.join(', ') }
 				format.json { render json: @asset.errors, status: :unprocessable_entity }
 			end
 		end
