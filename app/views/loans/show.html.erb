@@ -26,8 +26,15 @@
 			</p>
 
 			<p>
-			<b>User:</b>
-			<%= link_to @loan.user.name, @loan.user %>
+            <b>User:</b>
+            <% if @loan.user %>
+                <%= link_to @loan.user.name, @loan.user %>
+            <% else %>
+                <%= form_for @loan do |f| %>
+                    <%= f.select :user_id, User.all.map{|u| [u.name, u.id] } %>
+                    <%= f.submit %>
+                <% end %>
+            <% end %>
 			</p>
 			</td><td>
 			<h2>Equipment</h2>

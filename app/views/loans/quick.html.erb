@@ -13,7 +13,7 @@
     </div>
     <div class="field">
         <%= label_tag :user %>
-        <%= text_field_tag :username %>
+					<%= text_field_tag :username, '', :'data-provide' => "typeahead", :"data-items" => @all_users.count, :"data-source" => @all_users.to_s, :size => 10, :placeholder => "Loan asset to:", :autocomplete => 'off' %>
     </div>
     <div class="field">
         <%= label_tag :tag %>

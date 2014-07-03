@@ -1,6 +1,7 @@
 class LoansController < ApplicationController
 	before_filter :check_for_admin, :only => ['edit', 'update', 'destroy']
 	before_filter :check_for_user
+    before_filter :check_for_support, :only => ['edit', 'update', 'quick', 'assign']
 	# GET /loans
 	# GET /loans.json
 	def index
@@ -141,11 +142,12 @@ class LoansController < ApplicationController
 	end
 
     def quick
-
+         @all_users = User.all.map{|u| u.name} 
     end
 
     def assign
-        user = User.where(:username => params[:username]).first
+         @all_users = User.all.map{|u| u.name} 
+        user = User.where(:name => params[:username]).first
         asset = Asset.where(:tag => params[:tag]).first
 
         if !asset
