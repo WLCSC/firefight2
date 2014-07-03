@@ -39,7 +39,7 @@
 </p>
 
 <p>
-	<b>Default Consumable Storeroom:</b> <%= link_to @building.storeroom.name, @building.storeroom %>
+	<b>Default Consumable Storeroom:</b> <% if @building.storeroom %>%><%= link_to @building.storeroom.name, @building.storeroom %><% end %>
 </p>
 
 
