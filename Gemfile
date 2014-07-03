@@ -52,3 +52,5 @@ gem "less-rails"
 gem "public_activity"
 gem "guard"
 gem "guard-rspec"
+
+gem "minitest"
