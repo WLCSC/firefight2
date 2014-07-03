@@ -1,66 +1,66 @@
 <%= form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :username, :class => 'control-label' %>
-    <div class="controls">
-      <%= @user.username ? @user.username : f.text_field(:username, :class => 'text_field') %>
-    </div>
+	<div class="control-group">
+		<%= f.label :username, :class => 'control-label' %>
+		<div class="controls">
+			<%= @user.username ? @user.username : f.text_field(:username, :class => 'text_field') %>
+		</div>
 	</div>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
+	<div class="control-group">
+		<%= f.label :name, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :name, :class => 'text_field' %>
+		</div>
 	</div>
 
 	<div class="control-group">
-    <%= f.label :email, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :email, :class => 'text_field' %>
-    </div>
+		<%= f.label :email, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :email, :class => 'text_field' %>
+		</div>
 	</div>
 
-<% if (@user.id == nil) || (@user.password_hash  && (current_user.admin? || current_user == @user)) %>
-  <div class="control-group">
-    <%= f.label :password, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.password_field :password, :class => 'password_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :password_confirmation, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.password_field :password_confirmation, :class => 'password_field' %>
-    </div>
-  </div>
-<% end %>
+	<% if (@user.id == nil) || (@user.password_hash  && (current_user.admin? || current_user == @user)) %>
+		<div class="control-group">
+			<%= f.label :password, :class => 'control-label' %>
+			<div class="controls">
+				<%= f.password_field :password, :class => 'password_field' %>
+			</div>
+		</div>
+		<div class="control-group">
+			<%= f.label :password_confirmation, :class => 'control-label' %>
+			<div class="controls">
+				<%= f.password_field :password_confirmation, :class => 'password_field' %>
+			</div>
+		</div>
+	<% end %>
 
-  <% if current_user && current_user.admin? %>
-  <div class="control-group">
-    <%= f.label :administrator, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :administrator, :class => 'check_box' %>
-    </div>
-  </div>
+	<% if current_user && current_user.admin? %>
+		<div class="control-group">
+			<%= f.label :administrator, :class => 'control-label' %>
+			<div class="controls">
+				<%= f.check_box :administrator, :class => 'check_box' %>
+			</div>
+		</div>
+		<div class="control-group">
+			<%= f.label :support, :class => 'control-label' %>
+			<div class="controls">
+				<%= f.check_box :support, :class => 'check_box' %>
+			</div>
+		</div>
+	<% end %>
 	<div class="control-group">
-    <%= f.label :support, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :support, :class => 'check_box' %>
-    </div>
-  </div>
-  <% end %>
-  <div class="control-group">
-    <%= f.label :assignments, :class => 'control-label' %>
-    <div class="controls">
-	    <% Building.all.each do |b| %>
+		<%= f.label :assignments, :class => 'control-label' %>
+		<div class="controls">
+			<% Building.all.each do |b| %>
 				<p><%= check_box_tag :building_ids, b.id, @user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%=  b.name %></p>
-	    <% end %>
-    </div>
-  </div> 
-  
+			<% end %>
+		</div>
+	</div> 
+	
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                users_path, :class => 'btn' %>
-  </div>
+	<div class="form-actions">
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+          users_path, :class => 'btn' %>
+	</div>
 <% end %>

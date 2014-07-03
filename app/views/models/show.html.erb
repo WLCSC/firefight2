@@ -10,18 +10,18 @@
 <% end %>	
 
 <p>
-<i><%= @model.notes %></i>
+	<i><%= @model.notes %></i>
 </p>
 <p>
-<%= badge_row @tickets %>
+	<%= badge_row @tickets %>
 </p>
 
 <%= tabify assets: "Assets", tickets: "Open Tickets" %>
 
 <% if current_user.admin? %>
-<% content_for :sidebar do %>
-	<li><%= link_to "Edit Model", edit_model_path(@model) %></li>
-<% end %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Edit Model", edit_model_path(@model) %></li>
+	<% end %>
 <% end %>
 
 

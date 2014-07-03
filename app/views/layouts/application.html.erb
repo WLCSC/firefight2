@@ -77,12 +77,12 @@
 							<% if current_user %>
 								<li>
 									<%= form_tag quick_assets_path, :class => 'form-search' do %>
-									<%= hidden_field_tag :return, :nil, :value => @url %>
-									<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Tag/User/Room' %>
-									<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
-							<% end %>
-							</li>
-							<li><%= link_to "Log Out", sessions_destroy_path %></li><% end %>
+										<%= hidden_field_tag :return, :nil, :value => @url %>
+										<%= text_field :tag, nil, :class => 'input-small', :style => 'height: 12px; line-height: 12px; font-size: 10px; margin-top: 5px; margin-bottom: -15px;', :placeholder => 'Tag/User/Room' %>
+										<%= submit_tag 'Go', :class => 'btn btn-mini btn-success', :style => 'margin-top: 5px; margin-bottom: -15px;' %>
+									<% end %>
+								</li>
+								<li><%= link_to "Log Out", sessions_destroy_path %></li><% end %>
 						</ul>
 					</div>
 				</div>

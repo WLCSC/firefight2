@@ -2,26 +2,26 @@
 <h1><%=t '.title', :default => model_class.model_name.human %></h1>
 
 <p>
-  <strong><%= model_class.human_attribute_name(:user_id) %>:</strong><br>
-  <%= @shortcut.user_id %>
+	<strong><%= model_class.human_attribute_name(:user_id) %>:</strong><br>
+	<%= @shortcut.user_id %>
 </p>
 <p>
-  <strong><%= model_class.human_attribute_name(:container_id) %>:</strong><br>
-  <%= @shortcut.container_id %>
+	<strong><%= model_class.human_attribute_name(:container_id) %>:</strong><br>
+	<%= @shortcut.container_id %>
 </p>
 <p>
-  <strong><%= model_class.human_attribute_name(:container_type) %>:</strong><br>
-  <%= @shortcut.container_type %>
+	<strong><%= model_class.human_attribute_name(:container_type) %>:</strong><br>
+	<%= @shortcut.container_type %>
 </p>
 
 <div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              shortcuts_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_shortcut_path(@shortcut), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              shortcut_path(@shortcut),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+	<%= link_to t('.back', :default => t("helpers.links.back")),
+      shortcuts_path, :class => 'btn'  %>
+	<%= link_to t('.edit', :default => t("helpers.links.edit")),
+      edit_shortcut_path(@shortcut), :class => 'btn' %>
+	<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+      shortcut_path(@shortcut),
+      :method => 'delete',
+      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+        :class => 'btn btn-danger' %>
 </div>

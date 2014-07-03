@@ -36,16 +36,16 @@
         <p>Pick a building: <%= select_tag :building_id,  options_for_select(@buildings) %></p>
         <p>Pick a room group: <%= select_tag :department_id,  options_for_select(@departments) %></p>
         <p>
-        <%= label_tag :comment %><br />
-        <%= text_area_tag :comment,'', :size => '40x5' %>
+			<%= label_tag :comment %><br />
+			<%= text_area_tag :comment,'', :size => '40x5' %>
         </p>
         <p>
-        <%= label_tag :queue %><br />
-        <%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
+			<%= label_tag :queue %><br />
+			<%= select_tag :ticketqueue_id, options_for_select(current_user.queues.map{|q| [q.name, q.id]}) %>
         </p>
         <p>
-        <%= label_tag :priority %><br />
-        <%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
+			<%= label_tag :priority %><br />
+			<%= select_tag :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
         </p>
         <p><b><i>Optional</i></b> Event/Due Date</p>
         <%= text_field_tag :due_at, '', :id => 'dueAt' %>
@@ -85,8 +85,8 @@
 
 <% content_for :mass_assets do %>
     <%
-        @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
-        @models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
+    @options = Room.all.map{|r| "#{r.building.name} - #{r.name}"}
+    @models = Model.all.map{|m| "#{m.manufacturer.name} - #{m.name}"}
     %>
     <%= form_tag mass_assets_path, :html => { :class => 'form-horizontal' } do |f| %>
         <div class="control-group">

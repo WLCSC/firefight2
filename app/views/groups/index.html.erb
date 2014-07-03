@@ -2,27 +2,27 @@
 
 <table class="table table-striped">
 	<tr>
-    <th>You?</th>
-    <th>Name</th>
-    <th>Auth attribute</th>
-    <th>Auth value</th>
-    <th>Actions</th>
-  </tr>
+		<th>You?</th>
+		<th>Name</th>
+		<th>Auth attribute</th>
+		<th>Auth value</th>
+		<th>Actions</th>
+	</tr>
 
-<% @groups.each do |group| %>
-  <tr>
-    <td><%= current_user.member_of?(group) ? '<i class="icon-ok"></i>'.html_safe : '<i class="icon-remove"></i>'.html_safe%></td>
-    <td><%= link_to group.name, group %></td>
-    <td><%= group.auth_attribute %></td>
-    <td><%= group.auth_value %></td>
-    <td><%= link_to 'Edit', edit_group_path(group), :class => 'btn btn-mini' %></td>
-  </tr>
-<% end %>
+	<% @groups.each do |group| %>
+		<tr>
+			<td><%= current_user.member_of?(group) ? '<i class="icon-ok"></i>'.html_safe : '<i class="icon-remove"></i>'.html_safe%></td>
+			<td><%= link_to group.name, group %></td>
+			<td><%= group.auth_attribute %></td>
+			<td><%= group.auth_value %></td>
+			<td><%= link_to 'Edit', edit_group_path(group), :class => 'btn btn-mini' %></td>
+		</tr>
+	<% end %>
 </table>
 
 <br />
 
 <% content_for :sidebar do %>
-<li><%= link_to 'New Group', new_group_path %></li>
+	<li><%= link_to 'New Group', new_group_path %></li>
 <% end %>
 

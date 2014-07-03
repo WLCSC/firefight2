@@ -32,8 +32,8 @@
 <% end %>
 
 <%= javascript_tag do %>
-jQuery(document).ready(function() {
-$('#shortcut_container_name').typeahead({source:queues});
+	jQuery(document).ready(function() {
+	$('#shortcut_container_name').typeahead({source:queues});
 	var t = $('#shortcut_container_type').val();
 	if(t == "Ticketqueue"){
 	$('#shortcut_container_name').typeahead({source:queues});
@@ -47,7 +47,7 @@ $('#shortcut_container_name').typeahead({source:queues});
     });
 
 
-$('#shortcut_container_type').change(function() {
+	$('#shortcut_container_type').change(function() {
 	var t = $('#shortcut_container_type').val();
 	if(t == "Ticketqueue"){
 	$('#shortcut_container_name').data('typeahead').source = queues;
@@ -58,5 +58,5 @@ $('#shortcut_container_type').change(function() {
 	}else if(t == "User"){
 	$('#shortcut_container_name').data('typeahead').source = users;
 	}		
-});
+	});
 <% end %>

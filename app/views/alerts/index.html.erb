@@ -1,29 +1,29 @@
 <h1>Listing alerts</h1>
 
 <table class="table">
-  <tr>
-    <th>Consumable</th>
-    <th>User</th>
-    <th>Building</th>
-    <th>Message</th>
-    <th>Count</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+	<tr>
+		<th>Consumable</th>
+		<th>User</th>
+		<th>Building</th>
+		<th>Message</th>
+		<th>Count</th>
+		<th></th>
+		<th></th>
+		<th></th>
+	</tr>
 
-<% @alerts.each do |alert| %>
-  <tr>
-    <td><%= alert.consumable_id %></td>
-    <td><%= alert.user_id %></td>
-    <td><%= alert.building_id %></td>
-    <td><%= alert.message %></td>
-    <td><%= alert.count %></td>
-    <td><%= link_to 'Show', alert %></td>
-    <td><%= link_to 'Edit', edit_alert_path(alert) %></td>
-    <td><%= link_to 'Destroy', alert, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+	<% @alerts.each do |alert| %>
+		<tr>
+			<td><%= alert.consumable_id %></td>
+			<td><%= alert.user_id %></td>
+			<td><%= alert.building_id %></td>
+			<td><%= alert.message %></td>
+			<td><%= alert.count %></td>
+			<td><%= link_to 'Show', alert %></td>
+			<td><%= link_to 'Edit', edit_alert_path(alert) %></td>
+			<td><%= link_to 'Destroy', alert, confirm: 'Are you sure?', method: :delete %></td>
+		</tr>
+	<% end %>
 </table>
 
 <br />

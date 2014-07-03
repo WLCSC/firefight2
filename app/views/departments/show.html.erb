@@ -20,7 +20,7 @@
 </table>
 
 <% content_for :sidebar do %>
-	      <li><%= link_to t('.edit', :default => t("helpers.links.edit")), edit_department_path(@department) if current_user.admin? %></li>
-	  <li><%= link_to "Delete", department_path(@department), :method => 'delete', :confirm => "Are you sure?" if @department.rooms.count == 0 && current_user.admin? %></li>
-  <% end %>
+	<li><%= link_to t('.edit', :default => t("helpers.links.edit")), edit_department_path(@department) if current_user.admin? %></li>
+	<li><%= link_to "Delete", department_path(@department), :method => 'delete', :confirm => "Are you sure?" if @department.rooms.count == 0 && current_user.admin? %></li>
+<% end %>
 

@@ -1,20 +1,20 @@
 <html>
-<body>
- <p>Hello <%= @user.name %>, </p>
- 
- <p><%= @user == @loan.user ? "Your" : @loan.user.name + "'s" %> tech equipment <%= link_to 'loan request', "https://apps.wl.k12.in.us/firefight/loans/#{@loan.id}" %> needs attention today.</p>
+	<body>
+		<p>Hello <%= @user.name %>, </p>
+		
+		<p><%= @user == @loan.user ? "Your" : @loan.user.name + "'s" %> tech equipment <%= link_to 'loan request', "https://apps.wl.k12.in.us/firefight/loans/#{@loan.id}" %> needs attention today.</p>
 
-<p><b>Use:</b> <%= @loan.use %><p>
+		<p><b>Use:</b> <%= @loan.use %><p>
 
-<p>From <%= @loan.start_date.to_s %> to <%= @loan.end_date.to_s %></p>
+			<p>From <%= @loan.start_date.to_s %> to <%= @loan.end_date.to_s %></p>
 
-<p>Requested equipment:
-<ul>
-<% @loan.returns.each do |r| %>
-	<li><%= r.asset.tag %> - <%= r.asset.rtype.name %> (<%= r.returned ? "Returned" : "Out" %>)</li>
-<% end %>
-</ul></p>
+			<p>Requested equipment:
+				<ul>
+					<% @loan.returns.each do |r| %>
+						<li><%= r.asset.tag %> - <%= r.asset.rtype.name %> (<%= r.returned ? "Returned" : "Out" %>)</li>
+					<% end %>
+				</ul></p>
 
-<p>This loan has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "https://apps.wl.k12.in.us/firefight" %>.</p>
-</body>
+			<p>This loan has been added to your list of tickets accessible from the <%= link_to "Firefight home page", "https://apps.wl.k12.in.us/firefight" %>.</p>
+	</body>
 </html>

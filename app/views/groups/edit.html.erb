@@ -3,8 +3,8 @@
 <%= render :partial => 'form' %>
 
 <% if @group.auth_attribute != '*' || @group.memberships.count == 0 %>
-<% content_for :sidebar do %>
-	<li><%= link_to "Delete Group", @group, :method => 'delete', :confirm => "Really delete #{@group.name}?" %></li>
-<% end %>
+	<% content_for :sidebar do %>
+		<li><%= link_to "Delete Group", @group, :method => 'delete', :confirm => "Really delete #{@group.name}?" %></li>
+	<% end %>
 <% end %>
 

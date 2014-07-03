@@ -1,48 +1,48 @@
 <%- model_class = Photo.new.class -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+	<h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:photographable_type) %></th>
-      <th><%= model_class.human_attribute_name(:photographable_id) %></th>
-      <th><%= model_class.human_attribute_name(:user_id) %></th>
-      <th><%= model_class.human_attribute_name(:image_file_name) %></th>
-      <th><%= model_class.human_attribute_name(:image_content_type) %></th>
-      <th><%= model_class.human_attribute_name(:image_file_size) %></th>
-      <th><%= model_class.human_attribute_name(:image_updated_at) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @photos.each do |photo| %>
-      <tr>
-        <td><%= link_to photo.id, photo_path(photo) %></td>
-        <td><%= photo.photographable_type %></td>
-        <td><%= photo.photographable_id %></td>
-        <td><%= photo.user_id %></td>
-        <td><%= photo.image_file_name %></td>
-        <td><%= photo.image_content_type %></td>
-        <td><%= photo.image_file_size %></td>
-        <td><%= photo.image_updated_at %></td>
-        <td><%=l photo.created_at %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+	<thead>
+		<tr>
+			<th><%= model_class.human_attribute_name(:id) %></th>
+			<th><%= model_class.human_attribute_name(:photographable_type) %></th>
+			<th><%= model_class.human_attribute_name(:photographable_id) %></th>
+			<th><%= model_class.human_attribute_name(:user_id) %></th>
+			<th><%= model_class.human_attribute_name(:image_file_name) %></th>
+			<th><%= model_class.human_attribute_name(:image_content_type) %></th>
+			<th><%= model_class.human_attribute_name(:image_file_size) %></th>
+			<th><%= model_class.human_attribute_name(:image_updated_at) %></th>
+			<th><%= model_class.human_attribute_name(:created_at) %></th>
+			<th><%=t '.actions', :default => t("helpers.actions") %></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @photos.each do |photo| %>
+			<tr>
+				<td><%= link_to photo.id, photo_path(photo) %></td>
+				<td><%= photo.photographable_type %></td>
+				<td><%= photo.photographable_id %></td>
+				<td><%= photo.user_id %></td>
+				<td><%= photo.image_file_name %></td>
+				<td><%= photo.image_content_type %></td>
+				<td><%= photo.image_file_size %></td>
+				<td><%= photo.image_updated_at %></td>
+				<td><%=l photo.created_at %></td>
+				<td>
+					<%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_photo_path(photo), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+					<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       photo_path(photo),
                       :method => :delete,
                       :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
+						:class => 'btn btn-mini btn-danger' %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_photo_path,
-            :class => 'btn btn-primary' %>
+  new_photo_path,
+  :class => 'btn btn-primary' %>

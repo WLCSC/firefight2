@@ -3,40 +3,40 @@
 		<td>
 			<h2>Loan Information</h2>
 			<p>
-			<b>Start date:</b>
-			<%= @loan.start_date %>
+				<b>Start date:</b>
+				<%= @loan.start_date %>
 			</p>
 
 			<p>
-			<b>End date:</b>
-			<%= @loan.end_date %>
+				<b>End date:</b>
+				<%= @loan.end_date %>
 			</p>
 
 			<p><b>Status:</b><%= @loan.statusify %>
 			</p>
 
 			<p>
-			<b>Use:</b>
-			<%= @loan.use %>
+				<b>Use:</b>
+				<%= @loan.use %>
 			</p>
 
 			<p>
-			<b>Approved:</b>
-			<%= @loan.approved ? "Yes" : "No" %>
+				<b>Approved:</b>
+				<%= @loan.approved ? "Yes" : "No" %>
 			</p>
 
 			<p>
-            <b>User:</b>
-            <% if @loan.user %>
-                <%= link_to @loan.user.name, @loan.user %>
-            <% else %>
-                <%= form_for @loan do |f| %>
-                    <%= f.select :user_id, User.all.map{|u| [u.name, u.id] } %>
-                    <%= f.submit %>
-                <% end %>
-            <% end %>
+				<b>User:</b>
+				<% if @loan.user %>
+					<%= link_to @loan.user.name, @loan.user %>
+				<% else %>
+					<%= form_for @loan do |f| %>
+						<%= f.select :user_id, User.all.map{|u| [u.name, u.id] } %>
+						<%= f.submit %>
+					<% end %>
+				<% end %>
 			</p>
-			</td><td>
+		</td><td>
 			<h2>Equipment</h2>
 			<% if @loan.approved  %>
 				<% if current_user.admin? %>
@@ -47,9 +47,9 @@
 						<% if @loan.active %><%= submit_tag "Submit Returns", :class => 'btn btn-success' %>
 						<% end %><% end %>
 				<% else %>
-					<% @loan.returns.each do |r| %>
-						<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><%= !r.returned ? "Out" : "Returned" %></p>
-					<% end %>
+						<% @loan.returns.each do |r| %>
+							<p>Asset #<%= link_to r.asset.tag, r.asset %> - <%= r.asset.rtype.name %><br/><%= !r.returned ? "Out" : "Returned" %></p>
+						<% end %>
 				<% end %>
 			<% elsif @loan.approved == nil %>
 				<% if current_user.admin? %>

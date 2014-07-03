@@ -1,6 +1,6 @@
 <% if params[:commit] == "+" %>
-	$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Added a <%= @inventory.consumable.name %></div>');
+$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Added a <%= @inventory.consumable.name %></div>');
 <% elsif params[:commit] == '-' %>
-	$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Removed a <%= @inventory.consumable.name %></div>');
+$("#flashbox").append('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times</button>Removed a <%= @inventory.consumable.name %></div>');
 <% end %>
 $("#ctr<%= @inventory.id %>").html("<%= @inventory.count %>");

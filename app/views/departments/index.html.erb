@@ -1,19 +1,19 @@
 <h1>Room Departments</h1>
 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th># of Rooms</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @departments.each do |department| %>
-      <tr>
-        <td><%= link_to department.name, department %></td>
-        <td><%= department.rooms.count %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th># of Rooms</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @departments.each do |department| %>
+			<tr>
+				<td><%= link_to department.name, department %></td>
+				<td><%= department.rooms.count %></td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
 
 <% content_for :sidebar do %>

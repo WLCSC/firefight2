@@ -1,19 +1,19 @@
 <html>
-<body>
- <p>Hello <%= @user.name %>, </p>
- 
+	<body>
+		<p>Hello <%= @user.name %>, </p>
+		
 
-<p>Equipment that you borrowed has been marked as returned.</p>
+		<p>Equipment that you borrowed has been marked as returned.</p>
 
-<p>Requested equipment:
-<ul>
-<% @loan.returns.each do |r| %>
-<li><%= r.asset.tag %> - <%= r.asset.rtype.name %> - <%= r.returned ? "Returned" : "Out" %></li>
-<% end %>
-</ul></p>
+		<p>Requested equipment:
+			<ul>
+				<% @loan.returns.each do |r| %>
+					<li><%= r.asset.tag %> - <%= r.asset.rtype.name %> - <%= r.returned ? "Returned" : "Out" %></li>
+				<% end %>
+			</ul></p>
 
-<% if @loan.active && @loan.end_date < (Date.today+1.day) %>
-<p>Please return all equipment to the IT department as soon as possible.</p>
-<% end %>
-</body>
+		<% if @loan.active && @loan.end_date < (Date.today+1.day) %>
+			<p>Please return all equipment to the IT department as soon as possible.</p>
+		<% end %>
+	</body>
 </html>

@@ -28,32 +28,32 @@
 <%= content_for :list do %>
 	<% if @tickets.length > 0 %><div style="width: 100%; text-align: center;">Found <%= @tickets.length %> tickets.</div><% end %>
 	<table class="table table-striped datatableable" width="100%">
-	<thead>
-	<tr>
-	<th>ID</th>
-	<th>Room</th>
-	<th>Building</th>
-	<th>Queue</th>
-	<th>Submitter</th>
-	<th>Due</th>
-	<th>Created</th>
-	<th>Comment</th>
-	</tr>
-	</thead>
-	<tbody>
-	<% @tickets.each do |ticket| %>
-		<tr>
-		<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
-		<td><%= link_to ticket.room.name, ticket.room %></td>
-		<td><%= link_to ticket.room.building.name, ticket.room.building %></td>
-		<td><%= link_to ticket.ticketqueue.name, ticket.ticketqueue %></td>
-		<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
-		<td><%= ticket.due ? ticket.due : "-" %></td>
-		<td><%= ticket.created_at %></td>
-		<td><%= ticket.comments.first ? ticket.comments.first.content : "NO COMMENT"  %></td>
-		</tr>
-	<% end %>
-	</tbody>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Room</th>
+				<th>Building</th>
+				<th>Queue</th>
+				<th>Submitter</th>
+				<th>Due</th>
+				<th>Created</th>
+				<th>Comment</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @tickets.each do |ticket| %>
+				<tr>
+					<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
+					<td><%= link_to ticket.room.name, ticket.room %></td>
+					<td><%= link_to ticket.room.building.name, ticket.room.building %></td>
+					<td><%= link_to ticket.ticketqueue.name, ticket.ticketqueue %></td>
+					<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
+					<td><%= ticket.due ? ticket.due : "-" %></td>
+					<td><%= ticket.created_at %></td>
+					<td><%= ticket.comments.first ? ticket.comments.first.content : "NO COMMENT"  %></td>
+				</tr>
+			<% end %>
+		</tbody>
 	</table>
 <% end %>
 

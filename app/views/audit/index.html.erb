@@ -14,22 +14,22 @@
                 <td><%= a.key %></td>
                 <td>
                     <%= if a.trackable 
-                            begin
-                                link_to(a.trackable.name, a.trackable) 
-                            rescue
-                                if a.trackable.is_a? Mission
-                                    link_to(a.trackable.name, a.trackable.ticket)
-                                elsif a.trackable.respond_to? :loan
-                                    link_to a.trackable.name, a.trackable.loan
-                                else
-                                    link_to a.trackable.name, a.trackable.room
-                                end
-                            end
-                        else
-                            "#{a.trackable_type} that doesn't exist."
-                        end %>
+                      begin
+                      link_to(a.trackable.name, a.trackable) 
+                      rescue
+                      if a.trackable.is_a? Mission
+                        link_to(a.trackable.name, a.trackable.ticket)
+                      elsif a.trackable.respond_to? :loan
+                        link_to a.trackable.name, a.trackable.loan
+                      else
+                        link_to a.trackable.name, a.trackable.room
+                      end
+                    end
+                  else
+                    "#{a.trackable_type} that doesn't exist."
+                  end %>
                 </td>
             </tr>
-<% end %>
-</tbody>
+					<% end %>
+	</tbody>
 </table>

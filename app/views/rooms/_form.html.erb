@@ -1,44 +1,44 @@
 <%= form_for @room, :html => { :class => 'form-horizontal' } do |f| %>
 	<% @room.building_id = params[:building_id] if params[:building_id] %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :building, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.select :building_id, Building.all.map{|b| [b.name, b.id]} %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :notes, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_area :notes, :class => 'text_area' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :department, :class => 'control-label' %>
-    <div class="controls">
-	    <%= f.select :department_id, Department.all.map{|d| [d.name, d.id]} %>
-    </div>
-  </div>
+	<div class="control-group">
+		<%= f.label :name, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :name, :class => 'text_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :building, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.select :building_id, Building.all.map{|b| [b.name, b.id]} %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :notes, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_area :notes, :class => 'text_area' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :department, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.select :department_id, Department.all.map{|d| [d.name, d.id]} %>
+		</div>
+	</div>
 
-  <% if @room.assets.length > 0 %>
-	  <% @all_assets = Asset.all.map{|a| a.tag} %>
-  <div class="control-group">
-	  <%= f.label :default_asset, :class => 'control-label' %>
-    <div class="controls">
-	   <%= f.text_field :default_asset_tag, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => (@room.default_asset ? @room.default_asset.tag : nil)  %> 
-    </div>
-  </div>
-  <% end %>
+	<% if @room.assets.length > 0 %>
+		<% @all_assets = Asset.all.map{|a| a.tag} %>
+		<div class="control-group">
+			<%= f.label :default_asset, :class => 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :default_asset_tag, :'data-provide' => "typeahead", :"data-items" => @all_assets.count, :"data-source" => @all_assets.to_s, :size => 5, :placeholder => "Tag", :autocomplete => 'off', :value => (@room.default_asset ? @room.default_asset.tag : nil)  %> 
+			</div>
+		</div>
+	<% end %>
 
-  
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                rooms_path, :class => 'btn' %>
-  </div>
+	
+	<div class="form-actions">
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+          rooms_path, :class => 'btn' %>
+	</div>
 <% end %>

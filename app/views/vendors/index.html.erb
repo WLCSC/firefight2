@@ -1,23 +1,23 @@
 <h1>Vendors</h1>
 <table class="table table-striped datatableable">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Notes</th>
-      <th>Assets</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @vendors.each do |vendor| %>
-      <tr>
-        <td><%= link_to vendor.name, vendor %></td>
-        <td><%= vendor.notes %></td>
-        <td><%= vendor.assets.count %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Notes</th>
+			<th>Assets</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @vendors.each do |vendor| %>
+			<tr>
+				<td><%= link_to vendor.name, vendor %></td>
+				<td><%= vendor.notes %></td>
+				<td><%= vendor.assets.count %></td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_vendor_path,
-            :class => 'btn btn-primary' %>
+  new_vendor_path,
+  :class => 'btn btn-primary' %>

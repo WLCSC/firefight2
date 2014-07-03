@@ -1,30 +1,30 @@
 <html>
-<body>
- <p>Hello <%= @user.name %>, </p>
+	<body>
+		<p>Hello <%= @user.name %>, </p>
 
- <p style="font-size:large">This is an automated response.  Please do not reply back to this e-mail.  All communication regarding this ticket should take place inside Firefight.  Thank you.</p>
+		<p style="font-size:large">This is an automated response.  Please do not reply back to this e-mail.  All communication regarding this ticket should take place inside Firefight.  Thank you.</p>
 
- <p>Your support ticket, #<%= @ticket.id %>, for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %> has been updated.  <a href="https://apps.wl.k12.in.us/firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
+		<p>Your support ticket, #<%= @ticket.id %>, for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %> has been updated.  <a href="https://apps.wl.k12.in.us/firefight/tickets/<%= @ticket.id %>">Please click here to respond to ticket #<%= @ticket.id %>.</a></p>
 
-<% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2]: @ticket.comments.last) %>
-<p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>
+		<% c = (@ticket.comments.last.content.match(/ has changed this ticket to /) ? @ticket.comments[-2]: @ticket.comments.last) %>
+		<p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>
 
-<pre style="font-size: 14px;">
-  Building:	<%= @ticket.room.building.name %>
-  Room:		<%= @ticket.room.name %>
-  Asset:	<%= @ticket.asset.tag %>
-  Submitted By:	<%= @ticket.submitter.name %>
-  Status: 	<%= @ticket.statusify %>
-<% if @ticket.due %>
-  Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
-<% end %> 
-</pre>
- 
-<% @ticket.comments.reverse.each do |comment| %>
-<%= comment.user.name %> - <%= comment.created_at %>
-<p><%= comment.content.html_safe %></p>
-<hr/>
-<%end%>
+		<pre style="font-size: 14px;">
+			Building:	<%= @ticket.room.building.name %>
+			Room:		<%= @ticket.room.name %>
+			Asset:	<%= @ticket.asset.tag %>
+			Submitted By:	<%= @ticket.submitter.name %>
+			Status: 	<%= @ticket.statusify %>
+			<% if @ticket.due %>
+				Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
+			<% end %> 
+		</pre>
+		
+		<% @ticket.comments.reverse.each do |comment| %>
+			<%= comment.user.name %> - <%= comment.created_at %>
+			<p><%= comment.content.html_safe %></p>
+			<hr/>
+		<%end%>
 
-</body>
+	</body>
 </html>

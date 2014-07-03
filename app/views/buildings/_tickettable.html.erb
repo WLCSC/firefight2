@@ -10,17 +10,17 @@
 	</thead>
 	<tbody>
 		<% if @tickets.incomplete.count > 0 %>
-		<% @tickets.incomplete.each do |ticket| %>
-			<tr>
-				<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
-				<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
-                <td><%= time_delta ticket.created_at %><br/>(<%= time_delta( ticket.updated_at > ticket.comments.last.created_at ? ticket.updated_at : ticket.comments.last.created_at) %>)</td>
-				<td><%= ticket.due ? time_delta(ticket.due) : "-" %></td>
-				<td><%= ticket.comments.first.content.length > 247 ? ticket.comments.first.content[0..247] + '...' : ticket.comments.first.content  %></td>
-			</tr>
+			<% @tickets.incomplete.each do |ticket| %>
+				<tr>
+					<td><span class="badge badge<%= bootstrap_status ticket.status %>"><%= link_to ticket.id.to_s.rjust(5,'0'), ticket %></span></td>
+					<td><%= link_to ticket.submitter.name, ticket.submitter %></td>
+					<td><%= time_delta ticket.created_at %><br/>(<%= time_delta( ticket.updated_at > ticket.comments.last.created_at ? ticket.updated_at : ticket.comments.last.created_at) %>)</td>
+					<td><%= ticket.due ? time_delta(ticket.due) : "-" %></td>
+					<td><%= ticket.comments.first.content.length > 247 ? ticket.comments.first.content[0..247] + '...' : ticket.comments.first.content  %></td>
+				</tr>
+			<% end %>
+		<% else %>
+			<tr><td colspan="5">No Open Tickets Found</td></tr>
 		<% end %>
-	<% else %>
-		<tr><td colspan="5">No Open Tickets Found</td></tr>
-	<% end %>
 	</tbody>
 </table>

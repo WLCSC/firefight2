@@ -1,21 +1,21 @@
 <h1>Asset Types</h1>
 <table class="table table-striped datatableable">
-  <thead>
-    <tr>
-	    <th>Name</th>
-	    <th>Asset Count</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @rtypes.each do |rtype| %>
-      <tr>
-	      <td><%= link_to rtype.name, rtype %></td>
-	      <td><%= rtype.assets.length %></td>
-        <td><%= rtype.notes %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Asset Count</th>
+			<th>Notes</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @rtypes.each do |rtype| %>
+			<tr>
+				<td><%= link_to rtype.name, rtype %></td>
+				<td><%= rtype.assets.length %></td>
+				<td><%= rtype.notes %></td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
 
 <% if current_user.admin? %>

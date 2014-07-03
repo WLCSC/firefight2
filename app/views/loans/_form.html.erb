@@ -60,14 +60,14 @@
 			<% Rtype.where(:loanable => true).all.sort{|a,b| a.name <=> b.name}.each do |rtype| %>
 				<% if i == 0 %>
 					<tr>
-					<% end %>
-					<td style="width: 25%" ><%= check_box_tag "loan[rtype_ids][]", rtype.id, @loan.rtypes.include?(rtype) %>
-						<%= f.label rtype.name %></td>
-					<% if i == 5 %>
+				<% end %>
+				<td style="width: 25%" ><%= check_box_tag "loan[rtype_ids][]", rtype.id, @loan.rtypes.include?(rtype) %>
+					<%= f.label rtype.name %></td>
+				<% if i == 5 %>
 					</tr>
 				<% end %>
 				<% i += 1 unless i == 5
-				i = 0 if i == 5 %>
+				  i = 0 if i == 5 %>
 			<% end %>
 		</table>
 	<% else %>
@@ -75,21 +75,21 @@
 		<table class="table">
 			<% @loan.returns.each do |r| %>
 				<tr>
-				<td><%= link_to r.asset.tag, r.asset %></td>
-				<td><%= r.asset.model.name %></td>
-				<td><%= r.asset.model.rtype.name %></td>
+					<td><%= link_to r.asset.tag, r.asset %></td>
+					<td><%= r.asset.model.name %></td>
+					<td><%= r.asset.model.rtype.name %></td>
 				</tr>
 			<% end %>
 		</table>
 	<% end %>
-</td></tr></table>
-<div class="actions" style="margin: auto; text-align:center; width: 70px;">
-	<%= f.submit "Submit", :class => "btn btn-primary btn-large" %>
-</div>
-<% end %>
-<%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#loan_start').datepicker();
-	$('#loan_end').datepicker();
-	});
-<% end %>
+			</td></tr></table>
+	<div class="actions" style="margin: auto; text-align:center; width: 70px;">
+		<%= f.submit "Submit", :class => "btn btn-primary btn-large" %>
+	</div>
+					<% end %>
+					<%= javascript_tag do %>
+						$(document).ready(function() {
+						$('#loan_start').datepicker();
+						$('#loan_end').datepicker();
+						});
+					<% end %>

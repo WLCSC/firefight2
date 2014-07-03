@@ -1,5 +1,5 @@
 <%
-	parents = (Building.all + Ticketqueue.all - @ticketqueue.ticketqueues).map{|x| x.name}
+parents = (Building.all + Ticketqueue.all - @ticketqueue.ticketqueues).map{|x| x.name}
 %>
 
 <h1><%= @ticketqueue.name %></h1>
@@ -8,12 +8,12 @@
 	<p>Belongs to <%= link_to @ticketqueue.parent.name, @ticketqueue.parent %></p>
 <% end %>
 <p>
-<i><%= @ticketqueue.notes %></i>
+	<i><%= @ticketqueue.notes %></i>
 </p>
 
 <%# content_for :tickets do %>
-	<%# @tickets = Ticket.where(:ticketqueue_id => [@ticketqueue.id] + @ticketqueue.ticketqueues.map{|q| q.id})%>
-	<%#= render :partial => 'tickets/tickettable' %>
+<%# @tickets = Ticket.where(:ticketqueue_id => [@ticketqueue.id] + @ticketqueue.ticketqueues.map{|q| q.id})%>
+<%#= render :partial => 'tickets/tickettable' %>
 <%# end %>
 
 <% content_for :open do %>
@@ -66,10 +66,10 @@
 <%= tabify open: 'Open Tickets', tickets: 'All Tickets', permissions: 'Queue Permissions', children: "Subqueues & Superqueues" %>
 
 <% content_for :sidebar do %>
-<% if current_user.admin? %>
-	
+	<% if current_user.admin? %>
+		
 		<li><%= link_to "Edit Queue", edit_ticketqueue_path(@ticketqueue) %></li><% end %>
 
-	<% if can(:read) %><li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %></li><% end %>
-	
+		<% if can(:read) %><li><%= link_to "Add to Shortcut", quick_shortcuts_path(:container_type => 'Ticketqueue', :container_id => @ticketqueue.id) %></li><% end %>
+		
 <% end %>

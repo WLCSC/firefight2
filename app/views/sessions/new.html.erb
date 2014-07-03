@@ -1,16 +1,16 @@
-    <h1>Log in</h1>  
-      
-    <%= form_tag sessions_create_path do %>  
-	    <p> 
+<h1>Log in</h1>  
+
+<%= form_tag sessions_create_path do %>  
+	<p> 
 	    <%= hidden_field_tag :return, params[:return] %> 
         <%= label_tag :username %><br />  
         <%= text_field_tag :username, params[:username] %>  
-      </p>  
-      <p>  
+    </p>  
+    <p>  
         <%= label_tag :password %><br />  
         <%= password_field_tag :password %>  
-      </p>  
-      <p class="button"><%= submit_tag "Log In", :class => 'btn btn-primary btn-large' %></p>  
-    <% end %>  
-	
-	
+    </p>  
+    <p class="button"><%= submit_tag "Log In", :class => 'btn btn-primary btn-large' %></p>  
+<% end %>  
+
+

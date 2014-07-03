@@ -23,20 +23,20 @@
 <%= link_to t('.new', :default => t("helpers.links.new")),new_shortcut_path,:class => 'btn btn-primary' %>
 
 <%= javascript_tag do %>
-$().ready(function() {
-      $('#shortcuts').tableDnD({
-        onDrop: function(table, row) {
-          $.ajax({
-             type: "POST",
-             url: "<%= url_for(:action => 'sort') %>",
-             processData: false,
-             data: $.tableDnD.serialize() + '&authenticity_token=' + encodeURIComponent('<%= form_authenticity_token if protect_against_forgery? %>'),
-             success: function(msg) {
-               alert("Sorted shortcuts!");
-             }
-           });
-        }
-      })
+	$().ready(function() {
+    $('#shortcuts').tableDnD({
+    onDrop: function(table, row) {
+    $.ajax({
+    type: "POST",
+    url: "<%= url_for(:action => 'sort') %>",
+    processData: false,
+    data: $.tableDnD.serialize() + '&authenticity_token=' + encodeURIComponent('<%= form_authenticity_token if protect_against_forgery? %>'),
+    success: function(msg) {
+    alert("Sorted shortcuts!");
+    }
+    });
+    }
+    })
     })
 
-<% end %>
+	<% end %>

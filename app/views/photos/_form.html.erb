@@ -1,50 +1,50 @@
 <%= form_for @photo, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :photographable_type, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :photographable_type, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :photographable_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :photographable_id, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :user_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :user_id, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :image_file_name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :image_file_name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :image_content_type, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :image_content_type, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :image_file_size, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :image_file_size, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :image_updated_at, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.datetime_select :image_updated_at, :class => 'datetime_select' %>
-    </div>
-  </div>
+	<div class="control-group">
+		<%= f.label :photographable_type, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :photographable_type, :class => 'text_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :photographable_id, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.number_field :photographable_id, :class => 'number_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :user_id, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.number_field :user_id, :class => 'number_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :image_file_name, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :image_file_name, :class => 'text_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :image_content_type, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.text_field :image_content_type, :class => 'text_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :image_file_size, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.number_field :image_file_size, :class => 'number_field' %>
+		</div>
+	</div>
+	<div class="control-group">
+		<%= f.label :image_updated_at, :class => 'control-label' %>
+		<div class="controls">
+			<%= f.datetime_select :image_updated_at, :class => 'datetime_select' %>
+		</div>
+	</div>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                photos_path, :class => 'btn' %>
-  </div>
+	<div class="form-actions">
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+          photos_path, :class => 'btn' %>
+	</div>
 <% end %>

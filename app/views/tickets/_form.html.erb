@@ -1,63 +1,63 @@
 <%
-	if @ticket && @ticket.asset
-		@asset = @ticket.asset
-	end
+if @ticket && @ticket.asset
+  @asset = @ticket.asset
+end
 %>
-<%= form_for (@ticket || Ticket.new), :html => {:multipart => true} do |f| %>
-	<%= f.hidden_field :submitter_id, :value => current_user.id %>
+	<%= form_for (@ticket || Ticket.new), :html => {:multipart => true} do |f| %>
+		<%= f.hidden_field :submitter_id, :value => current_user.id %>
 
-	<table>
-		<tr>
-			<td>
-				<% if @asset %>
-					<%= f.hidden_field :room_id, :value => @asset.room.id  %>
-					<%= f.hidden_field :asset_id, :value => @asset.id %>
-				<% else %>
-					<%= f.label :asset_tag%><br/><%= f.text_field :asset_id %></p>
-				<% end %>
-				<p>
-				<%= f.label :queue %>
-				<%= f.collection_select :ticketqueue_id, current_user.submittable_queues, :id, :name %>
-				</p>
-				<p>
-				<%= f.label :priority %>
-				<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
-				</p>
-				<p><b><i>Optional</i></b> Screenshot<br />
-				<b><i>.PNG or .JPG files only!</i></b><br/>
-				<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %><br/>
-				<%= f.fields_for :photo do |ff| %>
-					<%= ff.hidden_field :photographable_type, :value => "Ticket" %>
-					<%= ff.hidden_field :user_id, :value => current_user.id %>
-					<%= ff.file_field :image, :accept => "image/gif,image/png,image/jpeg" %>
-				<% end %>
-				</p>
+		<table>
+			<tr>
+				<td>
+					<% if @asset %>
+						<%= f.hidden_field :room_id, :value => @asset.room.id  %>
+						<%= f.hidden_field :asset_id, :value => @asset.id %>
+					<% else %>
+						<%= f.label :asset_tag%><br/><%= f.text_field :asset_id %></p>
+					<% end %>
+					<p>
+						<%= f.label :queue %>
+						<%= f.collection_select :ticketqueue_id, current_user.submittable_queues, :id, :name %>
+					</p>
+					<p>
+						<%= f.label :priority %>
+						<%= f.select :status, options_for_select({'Low' => 1, 'Routine' => 2, "Urgent" => 3}, 2) %>
+					</p>
+					<p><b><i>Optional</i></b> Screenshot<br />
+						<b><i>.PNG or .JPG files only!</i></b><br/>
+						<%= link_to "Need to know how to make a screenshot?", 'http://reddev/Intranet/documents/media/videos/screenshot/' %><br/>
+						<%= f.fields_for :photo do |ff| %>
+							<%= ff.hidden_field :photographable_type, :value => "Ticket" %>
+							<%= ff.hidden_field :user_id, :value => current_user.id %>
+							<%= ff.file_field :image, :accept => "image/gif,image/png,image/jpeg" %>
+						<% end %>
+					</p>
 
-				<p><b><i>Optional</i></b> Event/Due Date</p>
-				<%= f.text_field :due_at, :id => 'dueAt' %>
-				</p>
-				<p>
-				<%= f.submit "Submit Ticket", :class => 'btn btn-large btn-inverse' %>
-				</p>
-			</td>
-			<td>
-				<p style="margin-left: 20px;">
-				<% if @ticket==nil || @ticket.comments.empty? %>
-					<%= f.label :comment, 'What can we do for you?' %>
-					<%= f.text_area :comment, :size => "60x10" %>
-				<% else %>
-					<%= @ticket.comments.first.content %>
-				<% end %>
-				</p>
-			</td>
+					<p><b><i>Optional</i></b> Event/Due Date</p>
+					<%= f.text_field :due_at, :id => 'dueAt' %>
+						</p>
+						<p>
+							<%= f.submit "Submit Ticket", :class => 'btn btn-large btn-inverse' %>
+						</p>
+				</td>
+				<td>
+					<p style="margin-left: 20px;">
+						<% if @ticket==nil || @ticket.comments.empty? %>
+							<%= f.label :comment, 'What can we do for you?' %>
+								<%= f.text_area :comment, :size => "60x10" %>
+							<% else %>
+								<%= @ticket.comments.first.content %>
+							<% end %>
+					</p>
+				</td>
 
-	</tr></table>
-<% end %>
+			</tr></table>
+						<% end %>
 
-<%= javascript_tag do %>
-	$(document).ready(function() {
-	$('#dueAt').datetimepicker();
-	});
-<% end %>
+						<%= javascript_tag do %>
+							$(document).ready(function() {
+							$('#dueAt').datetimepicker();
+							});
+						<% end %>
 
 

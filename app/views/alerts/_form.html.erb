@@ -1,34 +1,34 @@
 <%= form_for(@alert) do |f| %>
-  <% if @alert.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@alert.errors.count, "error") %> prohibited this alert from being saved:</h2>
+	<% if @alert.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@alert.errors.count, "error") %> prohibited this alert from being saved:</h2>
 
-      <ul>
-      <% @alert.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+			<ul>
+				<% @alert.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
 
-  <div class="field">
-    <%= f.label :consumable_id %><br />
+	<div class="field">
+		<%= f.label :consumable_id %><br />
 		<%= f.select :consumable_id, Consumable.all.map{|c| [c.name, c.id]} %>
-  </div>
+	</div>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
-  <div class="field">
-    <%= f.label :building_id %><br />
+	<div class="field">
+		<%= f.label :building_id %><br />
 		<%= f.select :building_id, [["All Buildings", nil]] + Building.all.map{|b| [b.name, b.id]} %>
-  </div>
-  <div class="field">
-    <%= f.label :message %><br />
-    <%= f.text_area :message %>
-  </div>
-  <div class="field">
-    <%= f.label :count %><br />
-    <%= f.number_field :count %>
-  </div>
-  <div class="actions">
+	</div>
+	<div class="field">
+		<%= f.label :message %><br />
+		<%= f.text_area :message %>
+	</div>
+	<div class="field">
+		<%= f.label :count %><br />
+		<%= f.number_field :count %>
+	</div>
+	<div class="actions">
 		<%= f.submit :class => 'btn btn-success' %>
-  </div>
+	</div>
 <% end %>

@@ -1,26 +1,26 @@
 <html>
-<body>
- <p>Hello <%= @user.name %>, </p>
+	<body>
+		<p>Hello <%= @user.name %>, </p>
 
- <p><%= @ticket.submitter.name %> has submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  <%= link_to "Click here", "https://apps.wl.k12.in.us/firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
+		<p><%= @ticket.submitter.name %> has submitted a support ticket for <%= @ticket.room.building.name %>, room <%= @ticket.room.name %>, asset <%= @ticket.asset.tag %>.  <%= link_to "Click here", "https://apps.wl.k12.in.us/firefight/tickets/"+@ticket.id.to_s %> to go straight to the ticket page.</p>
 
-<pre style="font-size: 14px;">
-  Building:	<%= @ticket.room.building.name %>
-  Room:		<%= @ticket.room.name %>
-  Asset:	<%= @ticket.asset.tag %>
-  Submitted By:	<%= @ticket.submitter.name %>
-  Status: 	<%= @ticket.statusify %>
-<% if @ticket.due %>
-  Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
-<% end %> 
-</pre>
+		<pre style="font-size: 14px;">
+			Building:	<%= @ticket.room.building.name %>
+			Room:		<%= @ticket.room.name %>
+			Asset:	<%= @ticket.asset.tag %>
+			Submitted By:	<%= @ticket.submitter.name %>
+			Status: 	<%= @ticket.statusify %>
+			<% if @ticket.due %>
+				Due: <%= @ticket.due.strftime("%m/%d/%y %I:%M") %>
+			<% end %> 
+		</pre>
 
-<% @ticket.comments.reverse.each do |comment| %>
-<%= comment.user.name %> - <%= comment.created_at %>
-<p><%= comment.content%></p>
-<hr/>
-<%end%>
+		<% @ticket.comments.reverse.each do |comment| %>
+			<%= comment.user.name %> - <%= comment.created_at %>
+			<p><%= comment.content%></p>
+			<hr/>
+		<%end%>
 
-</body>
+	</body>
 </html>
 

@@ -1,47 +1,47 @@
 <%- model_class = @room.class -%>
 
 <% if current_user.admin? %>
-<% content_for :consumables do %>
-	<table class="table datatableable">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Short</th>
-				<th>Count</th>
-				<th></th>
-			</tr>
-		</thead>
-
-		<tbody>
-			<% @room.inventories.each do |i| %>
+	<% content_for :consumables do %>
+		<table class="table datatableable">
+			<thead>
 				<tr>
-					<td><%= link_to i.consumable.name, i.consumable %></td>
-					<td><%= i.consumable.short %></td>
-					<td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
-					<td>
-						<%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
-						<%= link_to "-", adj_inventory_path(i, :commit => "-"), :class => 'btn btn-mini btn-danger', :remote => true %>
-					</td>
+					<th>Name</th>
+					<th>Short</th>
+					<th>Count</th>
+					<th></th>
 				</tr>
-			<% end %>
-		</tbody>
-	</table>
+			</thead>
 
-	<%= form_tag Inventory.new do |f| %>
-		<%= hidden_field_tag :room_id, @room.id %>
-		Add <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all.sort_by{|x| x.name}, :id, :name) %>
-		<%= submit_tag "OK", :class => 'btn btn-success' %>
+			<tbody>
+				<% @room.inventories.each do |i| %>
+					<tr>
+						<td><%= link_to i.consumable.name, i.consumable %></td>
+						<td><%= i.consumable.short %></td>
+						<td><span id="ctr<%= i.id %>"><%= i.count %></span></td>
+						<td>
+							<%= link_to "+", adj_inventory_path(i, :commit => "+"), :class => 'btn btn-mini btn-success', :remote => true %>
+							<%= link_to "-", adj_inventory_path(i, :commit => "-"), :class => 'btn btn-mini btn-danger', :remote => true %>
+						</td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+		<%= form_tag Inventory.new do |f| %>
+			<%= hidden_field_tag :room_id, @room.id %>
+			Add <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all.sort_by{|x| x.name}, :id, :name) %>
+			<%= submit_tag "OK", :class => 'btn btn-success' %>
+		<% end %>
 	<% end %>
-<% end %>
 
-<% content_for :admin_tickets do %>
-    <%
+	<% content_for :admin_tickets do %>
+		<%
         q1 = @room.tickets.incomplete.where(:ticketqueue_id => current_user.administratable_queues.map{|q| q.id}).map{|t| t.id}
         q2 = @room.tickets.incomplete.where(:id => current_user.tickets.map{|t| t.id}).map{|t| t.id}
-    %>
-    
-    <%= render :partial => 'tickets/tickettable', :locals => { tickets: Ticket.where(:id => (q1 + q2))} %>
-<% end %>
+		%>
+		
+		<%= render :partial => 'tickets/tickettable', :locals => { tickets: Ticket.where(:id => (q1 + q2))} %>
+	<% end %>
 
 <% end %>
 
@@ -51,7 +51,7 @@
 	<%= form_tag use_inventory_path do %>
 		<%= hidden_field_tag :room_id, @room.id %>
 		<p>Use <%= number_field_tag :count, 1, :class => 'input-mini' %> <%= select_tag :consumable_id, options_from_collection_for_select(Consumable.all,:id, :name) %> 
-        from <%= text_field_tag :room_name, "#{@room.building.name} - #{@room.building.storeroom.name}", :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %> - <%= submit_tag "Go", :class => "btn btn-mini btn-primary" %></p>
+			from <%= text_field_tag :room_name, "#{@room.building.name} - #{@room.building.storeroom.name}", :'data-provide' => "typeahead", :"data-items" => @options.count, :"data-source" => @options.to_s %> - <%= submit_tag "Go", :class => "btn btn-mini btn-primary" %></p>
 	<% end %>
 
 	<% if @room.uses.count > 0 && current_user.support %>
@@ -84,26 +84,26 @@
 
 <h1><%= @room.building.name %> - <%= @room.name %></h1>
 <p>
-<i><%= @room.notes || "" %></i>
+	<i><%= @room.notes || "" %></i>
 </p>
 <% if current_user.admin? %>
-<p>
-  <strong>Department:</strong><br>
-  <%= @room.department ? link_to(@room.department.name, @room.department) : "Undefined" %>
-</p>
+	<p>
+		<strong>Department:</strong><br>
+		<%= @room.department ? link_to(@room.department.name, @room.department) : "Undefined" %>
+	</p>
 
 <% end %>
 
 <% if current_user.admin? %>
-<p>
-  <strong>Default Asset:</strong><br>
-  <%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %><br/>
-  </p>
+	<p>
+		<strong>Default Asset:</strong><br>
+		<%= @room.default_asset ? link_to(@room.default_asset.tag, @room.default_asset) : "Undefined" %><br/>
+	</p>
 <% end %>
 <p>
-<%= link_to @room.default_asset, :class => 'btn btn-danger' do %>
-	<i><b>Click here to submit a ticket if you can't find the appropriate asset below</b></i>
-<% end %>
+	<%= link_to @room.default_asset, :class => 'btn btn-danger' do %>
+		<i><b>Click here to submit a ticket if you can't find the appropriate asset below</b></i>
+	<% end %>
 </p>
 
 <br/>
