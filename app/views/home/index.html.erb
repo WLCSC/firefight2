@@ -9,17 +9,21 @@
 	<% end %>
 <% else %>
 	<% content_for :set_building do %>
-		<%= form_for current_user do |f| %>
+		<%= form_for current_user, class: "form-horizontal" do |f| %>
 			<p>You do not currently have your building assignments set.  Please choose those now.</p>
 			<div class="control-group">
 				<%= f.label :assignments, :class => 'control-label' %>
 				<div class="controls">
 					<% Building.all.each do |b| %>
-						<%= check_box_tag :building_ids, b.id, current_user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%= label_tag b.id, b.name %>
+						<label class="checkbox">
+							<%= check_box_tag :building_ids, b.id, current_user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'checkbox' %>
+							<%= b.name %>
+						</label>
 					<% end %>
+					
+					<%= f.submit "OK", :class => 'btn btn-primary' %>
 				</div>
 			</div>
-			<%= f.submit "OK", :class => 'btn btn-primary' %>
 		<% end %>
 	<% end %>
 <% end %>
