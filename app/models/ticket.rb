@@ -63,12 +63,20 @@ class Ticket < ActiveRecord::Base
     attr_accessible :room_id, :asset_id, :ticketqueue_id, :status, :attachment, :submitter_id, :due, :comment, :due_at, :context_list, :asset_tag, :photo
 
     def statusify
-        return 'Low' if status==1
-        return 'Routine' if status==2
-        return 'Urgent' if status==3
-        return 'Deferred' if status==99
-        return 'Completed' if status==100
-        return 'Undefined'
+	    case status
+	    when 1
+		    "Low"
+	    when 2
+		    "Routine"
+	    when 3
+		    "Urgent"
+	    when 99
+		    "Deferred"
+	    when 100
+		    "Completed"
+	    else
+		    "Undefined"
+	    end
     end
 
     def context_list
