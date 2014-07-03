@@ -17,7 +17,7 @@ class Ticket < ActiveRecord::Base
     accepts_nested_attributes_for :photos
 
     has_attached_file :attachment, :styles => {:preview => ["320x240>", :png], :small => ["640x480>", :png]}
-    #validates_attachment_content_type :attachment, :content_type=>['image/jpeg', 'image/png', 'image/gif']	
+    #validates_attachment_content_type :attachment, :content_type=>['image/jpeg', 'image/png', 'image/gif']
     scope :low, where("`tickets`.status = 1")
     scope :routine, where("status = 2")
     scope :urgent, where("status = 3")
@@ -76,7 +76,7 @@ class Ticket < ActiveRecord::Base
     end
 
     def assigned?
-        return submitter if submitter.admin? 
+        return submitter if submitter.admin?
         users.each do |user|
             if(user.admin?) then return user end
         end
