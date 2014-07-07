@@ -1,59 +1,59 @@
-source 'https://rubygems.org'
-gem 'ruby-ntlm'
+source "https://rubygems.org"
+gem "ruby-ntlm"
 
-gem 'rails', '3.2.17'
+gem "rails", "3.2.17"
 
 # Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# gem "rails", :git => "git://github.com/rails/rails.git"
 
-gem 'sqlite3'
-gem 'mysql2'
-gem 'paperclip'
-gem 'bluecloth'
+gem "sqlite3"
+gem "mysql2"
+gem "paperclip"
+gem "bluecloth"
 
 # Gems used only for assets and not required
 # in production environments by default.
-gem 'sass-rails',   '~> 3.2.3'
-gem 'coffee-rails', '~> 3.2.1'
-gem 'jquery-datatables-rails'
+gem "sass-rails",   "~> 3.2.3"
+gem "coffee-rails", "~> 3.2.1"
+gem "jquery-datatables-rails"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer'
+# gem "therubyracer"
 
-gem 'uglifier', '>= 1.0.3'
+gem "uglifier", ">= 1.0.3"
 
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem "jquery-rails"
+gem "jquery-ui-rails"
 
 # To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+# gem "bcrypt-ruby", "~> 3.0.0"
 
 # To use Jbuilder templates for JSON
-# gem 'jbuilder'
+# gem "jbuilder"
 
 # Use unicorn as the app server
-# gem 'unicorn'
+# gem "unicorn"
 
 # Deploy with Capistrano
-# gem 'capistrano'
+# gem "capistrano"
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# gem "ruby-debug19", :require => "ruby-debug"
 
-gem 'therubyracer'
-gem 'execjs'
-gem 'net-ldap'
-gem 'twitter-bootstrap-rails'
-gem 'exception_notification', :require => 'exception_notifier'
-gem 'resque'
-gem 'resque_mailer'
-gem 'bcrypt-ruby'
-gem 'less-rails'
-gem 'public_activity'
+gem "therubyracer"
+gem "execjs"
+gem "net-ldap"
+gem "twitter-bootstrap-rails"
+gem "exception_notification", :require => "exception_notifier"
+gem "resque"
+gem "resque_mailer"
+gem "bcrypt-ruby"
+gem "less-rails"
+gem "public_activity"
 
 group :test do
-	gem 'rspec'
-	gem 'rspec-rails'
-	gem 'capybara'
-	gem 'guard'
-	gem 'guard-rspec'
+	gem "rspec"
+	gem "rspec-rails"
+	gem "capybara"
+	gem "guard"
+	gem "guard-rspec"
 end

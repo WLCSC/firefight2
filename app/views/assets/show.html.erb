@@ -35,7 +35,11 @@
 		<tr>
             <td>
                 <% if @asset.loaned? %>
-                    <%= link_to @asset.loaned_to.name, @asset.loaned_to %> 
+                    <% if @asset.loaned_to %>
+                        <%= link_to @asset.loaned_to.name, @asset.loaned_to %> 
+                    <% else %>
+                        <b>Loan Inconsistency</b> - <%= link_to "Loan", @asset.returns.where(:returned => false).first.loan %>
+                    <% end %>
                 <% else %>
                     Nobody
                 <% end %>

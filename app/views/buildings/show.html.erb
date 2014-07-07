@@ -2,7 +2,7 @@
 
 <% content_for :rooms do %>
 	<h3>Click on your room in the list below</h3>
-<%= render :partial => 'roomtable' %>
+	<%= render :partial => 'roomtable' %>
 <% end %>
 
 <% content_for :tickets do %>
@@ -35,35 +35,35 @@
 <h1><%= @building.name %></h1>
 
 <p>
-  <span class="address"><%= @building.address %></span>
+	<span class="address"><%= @building.address %></span>
 </p>
 
 <p>
-  <b>Default Consumable Storeroom:</b> <%= link_to @building.storeroom.name, @building.storeroom %>
+	<b>Default Consumable Storeroom:</b> <% if @building.storeroom %>%><%= link_to @building.storeroom.name, @building.storeroom %><% end %>
 </p>
 
 
 <% if current_user.admin? %>
-<% content_for :admin_tickets do %>
-    <%
+	<% content_for :admin_tickets do %>
+		<%
         q1 = @room.tickets.incomplete.where(:ticketqueue_id => current_user.administratable_queues.map{|q| q.id}).map{|t| t.id}
         q2 = @room.tickets.incomplete.where(:id => current_user.tickets.map{|t| t.id}).map{|t| t.id}
-    %>
-    <%= render :partial => 'tickets/tickettable', :locals => {:tickets => Ticket.where(:id => (q1 + q2))} %>
-<% end %>
+		%>
+		<%= render :partial => 'tickets/tickettable', :locals => {:tickets => Ticket.where(:id => (q1 + q2))} %>
+	<% end %>
 
 
-<%= tabify({:admin_tickets => "Open Tickets", :tickets => "All Open Tickets", :rooms => "Room List", :consumables => "Consumables"})  %>
+	<%= tabify({:admin_tickets => "Open Tickets", :tickets => "All Open Tickets", :rooms => "Room List", :consumables => "Consumables"})  %>
 <% else %>
 	<%= tabify rooms: "Room List", tickets: "Open Tickets" %>
 <% end %>
 
 <% content_for :sidebar do %>
-<% if current_user.admin? %>
-	
-	<li><%= link_to "New Room", new_room_path(:building_id => @building.id) %>
-	<li><%= link_to "Edit Building", edit_building_path(@building) %></li><% end %>
-	<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %></li>
+	<% if current_user.admin? %>
+		
+		<li><%= link_to "New Room", new_room_path(:building_id => @building.id) %>
+			<li><%= link_to "Edit Building", edit_building_path(@building) %></li><% end %>
+			<li><%= link_to "Add Shortcut", quick_shortcuts_path(:container_type => 'Building', :container_id => @building.id) %></li>
 
 <% end %>
 

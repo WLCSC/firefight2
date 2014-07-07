@@ -9,19 +9,23 @@
 	<% end %>
 <% else %>
 	<% content_for :set_building do %>
-	<%= form_for current_user do |f| %>
-		<p>You do not currently have your building assignments set.  Please choose those now.</p>
-	<div class="control-group">
-    <%= f.label :assignments, :class => 'control-label' %>
-    <div class="controls">
-	    <% Building.all.each do |b| %>
-		    <%= check_box_tag :building_ids, b.id, current_user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'check_box' %><%= label_tag b.id, b.name %>
-	    <% end %>
-    </div>
-  </div>
-		<%= f.submit "OK", :class => 'btn btn-primary' %>
+		<%= form_for current_user, class: "form-horizontal" do |f| %>
+			<p>You do not currently have your building assignments set.  Please choose those now.</p>
+			<div class="control-group">
+				<%= f.label :assignments, :class => 'control-label' %>
+				<div class="controls">
+					<% Building.all.each do |b| %>
+						<label class="checkbox">
+							<%= check_box_tag :building_ids, b.id, current_user.buildings.include?(b), :name => 'user[building_ids][]', :class => 'checkbox' %>
+							<%= b.name %>
+						</label>
+					<% end %>
+					
+					<%= f.submit "OK", :class => 'btn btn-primary' %>
+				</div>
+			</div>
+		<% end %>
 	<% end %>
-<% end %>
 <% end %>
 
 <% content_for :your_tickets do %>
@@ -40,40 +44,40 @@
 	<li><%= link_to "Consumables", consumables_path %></li>
 <% end %>
 
-	<% content_for :loans do %>
-<table class="table table-striped datatableable">
-	<thead>
-  <tr>
-    <th></th>
-    <th>Start date</th>
-    <th>End date</th>
-    <th>Use</th>
-    <th>Approved</th>
-    <th>User</th>
-    <th>Status</th>
-  </tr>
-</thead>
-<tbody>
-    <% current_user.loans.keep_if{|l| l.open}.each do |loan| %>
-  <tr>
-    <td><%= link_to loan.badge.html_safe, loan %></td>
-    <td><%= loan.start_date %></td>
-    <td><%= loan.end_date %></td>
-    <td><%= loan.use %></td>
-    <td><%= loan.approved ? "Yes" : "No" %></td>
-    <td><%= link_to loan.user.name, loan.user %></td>
-    <td><%= loan.statusify %></td>
-  </tr>
+<% content_for :loans do %>
+	<table class="table table-striped datatableable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Start date</th>
+				<th>End date</th>
+				<th>Use</th>
+				<th>Approved</th>
+				<th>User</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% current_user.loans.keep_if{|l| l.open}.each do |loan| %>
+				<tr>
+					<td><%= link_to loan.badge.html_safe, loan %></td>
+					<td><%= loan.start_date %></td>
+					<td><%= loan.end_date %></td>
+					<td><%= loan.use %></td>
+					<td><%= loan.approved ? "Yes" : "No" %></td>
+					<td><%= link_to loan.user.name, loan.user %></td>
+					<td><%= loan.statusify %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
 <% end %>
-</tbody>
-</table>
-	<% end %>
-	<% bmap = {}; current_user.buildings.each {|b| bmap[b.short.to_sym] = "Submit ticket for #{b.name}"} %>
-	<% if current_user.support? || current_user.admin? %>
-		<% tmap = {:your_tickets => "Your Tickets", :open_tickets => "Unassigned Tickets", :set_building => "Pick your default building"}.merge(bmap).merge( {:loans => "Your Loans"}) %>
-	<% else %>
-		<% tmap = {:set_building => "Pick your default building"}.merge(bmap).merge( {:your_tickets => "Your Tickets", :loans => "Your Loans"}) %>
-	<% end %>
+<% bmap = {}; current_user.buildings.each {|b| bmap[b.short.to_sym] = "Submit ticket for #{b.name}"} %>
+<% if current_user.support? || current_user.admin? %>
+	<% tmap = {:your_tickets => "Your Tickets", :open_tickets => "Unassigned Tickets", :set_building => "Pick your default building"}.merge(bmap).merge( {:loans => "Your Loans"}) %>
+<% else %>
+	<% tmap = {:set_building => "Pick your default building"}.merge(bmap).merge( {:your_tickets => "Your Tickets", :loans => "Your Loans"}) %>
+<% end %>
 
 <% if current_user.support %>
 	<table class="table table-narrow dashboard" width="80%">
