@@ -49,5 +49,11 @@ gem 'resque_mailer'
 gem 'bcrypt-ruby'
 gem 'less-rails'
 gem 'public_activity'
-gem 'guard'
-gem 'guard-rspec'
+
+group :test do
+	gem 'rspec'
+	gem 'rspec-rails'
+	gem 'capybara'
+	gem 'guard'
+	gem 'guard-rspec'
+end
