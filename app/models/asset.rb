@@ -1,6 +1,6 @@
 class Asset < ActiveRecord::Base
     include PublicActivity::Model
-    tracked owner: Proc.new{ |controller, model| controller.current_user }
+    #tracked owner: Proc.new{ |controller, model| controller.current_user }
 	belongs_to :room
 	has_one :building, :through => :room
 	has_one :manufacturer, :through => :model

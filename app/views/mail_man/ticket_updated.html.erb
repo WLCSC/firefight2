@@ -10,6 +10,7 @@
 <p>Recent comment from <%= c.user.name %>:<br/><%= c.content.html_safe %></p>
 
 <pre style="font-size: 14px;">
+  Queue:	<%= @ticket.ticketqueue.name %>
   Building:	<%= @ticket.room.building.name %>
   Room:		<%= @ticket.room.name %>
   Asset:	<%= @ticket.asset.tag %>

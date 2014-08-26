@@ -85,6 +85,9 @@ class ConsumablesController < ApplicationController
   # DELETE /consumables/1.json
   def destroy
     @consumable = Consumable.find(params[:id])
+    @consumable.inventories.each do |i|
+        i.delete
+    end
     @consumable.destroy
 
     respond_to do |format|
